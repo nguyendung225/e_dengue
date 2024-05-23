@@ -6,7 +6,9 @@
 .color-red {
     color: red !important;
 }
-
+.color-dark-red {
+    color: $color-dark-red !important
+}
 .color-white {
     color: var(--kt-white) !important;
 }
