@@ -44,4 +44,21 @@ export const allMenu: TMenu[] = [
       },
     ]
   },
+  {
+    title: "Quản lý ổ dịch",
+    to: "/danh-sach-o-dich",
+    name: "danh-sach-o-dich",
+    permission: PERMISSIONS.SU_CO,
+    ability: PERMISSION_ABILITY.VIEW,
+    subMenu: [
+      {
+        title: "Danh sách ổ dịch",
+        to: "/danh-sach-o-dich",
+        hasBullet: false,
+        icon: "/media/svg/icons/List ul.svg",
+        permission: PERMISSIONS.THONG_KE,
+        ability: PERMISSION_ABILITY.VIEW,
+      },
+    ]
+  },
 ]
