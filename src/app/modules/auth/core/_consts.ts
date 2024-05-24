@@ -1,5 +1,3 @@
-import { localStorageItem } from "../../utils/LocalStorage";
-
 const RESPONSE_STATUS_CODE = {
   SUCCESS: 200,
   CREATED: 201,
