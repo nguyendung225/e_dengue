@@ -1,4 +1,4 @@
-import { SearchObject } from "../models/TimKiemTruongHopBenhModels";
+import { SearchObject } from "../tim-kiem-truong-hop-benh/models/TimKiemTruongHopBenhModels";
 
 export const GENDER_OPTION = [
 	{ name: "Nam", code: 1 },
