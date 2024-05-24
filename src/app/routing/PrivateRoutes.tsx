@@ -8,6 +8,7 @@ import { PERMISSIONS, PERMISSION_ABILITY } from "../Constant";
 import { HomePage } from "../pages/Homepage/HomePage";
 import { MenuTestPage } from "../pages/MenuTestPage";
 import DanhSachTruongHopBenh from "../modules/quan-ly-truong-hop-benh/danh-sach-truong-hop-benh/DanhSachTruongHopBenh";
+import TimKiemTruongHopBenh from "../modules/quan-ly-truong-hop-benh/TimKiemTruongHopBenh/TimKiemTruongHopBenh";
 
 
 interface PrivateRouteProps {
@@ -41,6 +42,7 @@ const PrivateRoutes = () => {
         {/* Redirect to Dashboard after success login/registartion */}
         <Route path="auth/*" element={<Navigate to="quan-ly-ca-benh" />} />
         <Route path="/danh-sach-truong-hop-benh" element={<PrivateRoute auth={PERMISSIONS.SU_CO} ability={PERMISSION_ABILITY.VIEW} component={DanhSachTruongHopBenh} redirect="/danh-sach-truong-hop-benh" />} />
+        <Route path="/tim-kiem-truong-hop-benh" element={<PrivateRoute auth={PERMISSIONS.SU_CO} ability={PERMISSION_ABILITY.VIEW} component={TimKiemTruongHopBenh} redirect="/tim-kiem-truong-hop-benh" />} />
         {/* Pages */}
         <Route path="menu-test" element={<MenuTestPage />} />
         <Route path="*" element={<Navigate to="/error/404" />} />

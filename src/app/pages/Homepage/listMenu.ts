@@ -34,6 +34,14 @@ export const allMenu: TMenu[] = [
         permission: PERMISSIONS.THONG_KE,
         ability: PERMISSION_ABILITY.VIEW,
       },
+      {
+        title: "Tìm kiếm trường hợp bệnh ",
+        to: "/tim-kiem-truong-hop-benh",
+        hasBullet: false,
+        icon: "/media/svg/icons/search.svg",
+        permission: PERMISSIONS.THONG_KE,
+        ability: PERMISSION_ABILITY.VIEW,
+      },
     ]
   },
 ]

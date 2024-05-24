@@ -1,4 +1,4 @@
-import { KTSVG, Table } from "@oceantech/oceantech-ui";
+import { OCTKTSVG, OCTTable } from "@oceantech/oceantech-ui";
 import "./styles/danhSachThb.scss";
 import { TYPE } from "../../utils/Constant";
 import { danhSachThbColumns } from "./constants/constant";
@@ -13,7 +13,7 @@ const DanhSachTruongHopBenh = () => {
                 <div>
                     <div className="ds-header">
                         <div className="d-flex align-items-center">
-                            <KTSVG path={'/media/svg/icons/List ul.svg'} svgClassName="spaces w-14 h-14 mr-10" />
+                            <OCTKTSVG path={'/media/svg/icons/List ul.svg'} svgClassName="spaces w-14 h-14 mr-10" />
                             <span className="title">
                                 Danh sách
                             </span>
@@ -22,7 +22,7 @@ const DanhSachTruongHopBenh = () => {
                             className="button-primary"
                             onClick={() => { }}
                         >
-                            <KTSVG path='/media/svg/icons/plus.svg' svgClassName='spaces h-14 w-14 color-white' />
+                            <OCTKTSVG path='/media/svg/icons/plus.svg' svgClassName='spaces h-14 w-14 color-white' />
                             Thêm mới
                         </Button>
                     </div>
@@ -42,12 +42,12 @@ const DanhSachTruongHopBenh = () => {
                             className="button-primary"
                             onClick={() => {}}
                         >
-                            <KTSVG path='/media/svg/icons/search.svg' svgClassName='spaces h-14 w-14' />
+                            <OCTKTSVG path='/media/svg/icons/search.svg' svgClassName='spaces h-14 w-14' />
                             Tìm kiếm nâng cao
                         </Button>
                     </div>
                 </div>
-                <Table
+                <OCTTable
                     id="profile"
                     data={[]}
                     columns={danhSachThbColumns}
@@ -69,7 +69,7 @@ const DanhSachTruongHopBenh = () => {
             <div className="right-content-container">
                 <div className="tt-header">
                     <div className="title-wrapper">
-                        <KTSVG path={"/media/svg/icons/info-square.svg"} svgClassName="spaces w-14 h-14 mr-10" />
+                        <OCTKTSVG path={"/media/svg/icons/info-square.svg"} svgClassName="spaces w-14 h-14 mr-10" />
                         <span className="title">Thông tin trường hợp bệnh</span>
                     </div>
                     <div className="d-flex spaces gap-10">
@@ -83,21 +83,21 @@ const DanhSachTruongHopBenh = () => {
                             className="button-primary"
                             onClick={() => {}}
                         >
-                            <KTSVG path='/media/svg/icons/pencil-square.svg' svgClassName='spaces h-14 w-14 color-white' />
+                            <OCTKTSVG path='/media/svg/icons/pencil-square.svg' svgClassName='spaces h-14 w-14 color-white' />
                             Sửa
                         </Button>
                         <Button
                             className="button-delete"
                             onClick={() => {}}
                         >
-                            <KTSVG path='/media/svg/icons/trash.svg' svgClassName='spaces h-14 w-14 color-white' />
+                            <OCTKTSVG path='/media/svg/icons/trash.svg' svgClassName='spaces h-14 w-14 color-white' />
                             Xoá
                         </Button>
                         <Button
                             className="button-primary"
                             onClick={() => {}}
                         >
-                            <KTSVG path='/media/svg/icons/plus.svg' svgClassName='spaces h-14 w-14 color-white' />
+                            <OCTKTSVG path='/media/svg/icons/plus.svg' svgClassName='spaces h-14 w-14 color-white' />
                             Thêm
                         </Button>
                     </div>
