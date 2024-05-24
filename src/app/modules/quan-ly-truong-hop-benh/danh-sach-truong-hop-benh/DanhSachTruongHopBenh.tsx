@@ -5,8 +5,11 @@ import { danhSachThbColumns } from "./constants/constant";
 import { Button } from "react-bootstrap";
 import InputSearch from "../../component/input-field/InputSearch";
 import ThongTinThb from "./components/ThongTinThb";
+import NhapTruongHopBenhModal from './components/NhapTruongHopBenhModal';
+import { useState } from "react";
 
 const DanhSachTruongHopBenh = () => {
+    const [openTruongHopBenhForm, setOpenTruongHopBenhForm] = useState<boolean>(false)
     return (
         <div className="page-container">
             <div className="left-content-container">
@@ -20,7 +23,7 @@ const DanhSachTruongHopBenh = () => {
                         </div>
                         <Button
                             className="button-primary"
-                            onClick={() => { }}
+                            onClick={() => setOpenTruongHopBenhForm(true)}
                         >
                             <OCTKTSVG path='/media/svg/icons/plus.svg' svgClassName='spaces h-14 w-14 color-white' />
                             Thêm mới
@@ -106,6 +109,7 @@ const DanhSachTruongHopBenh = () => {
                     <ThongTinThb />
                 </div>
             </div>
+           {openTruongHopBenhForm && <NhapTruongHopBenhModal handleClose={() => setOpenTruongHopBenhForm(false)}/>}
         </div>
     )
 }
