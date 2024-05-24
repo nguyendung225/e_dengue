@@ -30,7 +30,7 @@ export const allMenu: TMenu[] = [
         title: "Danh sách trường hợp bệnh ",
         to: "/danh-sach-truong-hop-benh",
         hasBullet: false,
-        icon: "/media/svg/icons/statistic.svg",
+        icon: "/media/svg/icons/List ul.svg",
         permission: PERMISSIONS.THONG_KE,
         ability: PERMISSION_ABILITY.VIEW,
       },

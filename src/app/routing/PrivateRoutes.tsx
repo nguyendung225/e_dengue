@@ -7,7 +7,7 @@ import { MasterLayout } from "../../_metronic/layout/MasterLayout";
 import { PERMISSIONS, PERMISSION_ABILITY } from "../Constant";
 import { HomePage } from "../pages/Homepage/HomePage";
 import { MenuTestPage } from "../pages/MenuTestPage";
-import DanhSachTruongHopBenh from "../modules/quan-ly-truong-hop-benh/DanhSachTruongHopBenh";
+import DanhSachTruongHopBenh from "../modules/quan-ly-truong-hop-benh/danh-sach-truong-hop-benh/DanhSachTruongHopBenh";
 
 
 interface PrivateRouteProps {
