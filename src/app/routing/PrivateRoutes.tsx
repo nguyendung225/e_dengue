@@ -8,7 +8,7 @@ import { PERMISSIONS, PERMISSION_ABILITY } from "../Constant";
 import { HomePage } from "../pages/Homepage/HomePage";
 import { MenuTestPage } from "../pages/MenuTestPage";
 import DanhSachTruongHopBenh from "../modules/quan-ly-truong-hop-benh/danh-sach-truong-hop-benh/DanhSachTruongHopBenh";
-import TimKiemTruongHopBenh from "../modules/quan-ly-truong-hop-benh/TimKiemTruongHopBenh/TimKiemTruongHopBenh";
+import TimKiemTruongHopBenh from "../modules/quan-ly-truong-hop-benh/tim-kiem-truong-hop-benh/TimKiemTruongHopBenh";
 import DanhSachODich from "../modules/quan-ly-o-dich/DanhSachODich";
 
 

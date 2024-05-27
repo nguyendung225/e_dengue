@@ -3,19 +3,21 @@ import { Button, Col, Row } from "react-bootstrap";
 import { KTSVG } from "../../../../../_metronic/helpers";
 import LabelRequired from "../../../component/LabelRequired";
 import { Formik } from "formik";
-import Autocomplete from "../../../component/input-field/Autocomplete";
 import { GENDER_OPTION, SEARCH_OBJECT_INIT } from "../../const/constants";
-import { OCTTextValidator } from "@oceantech/oceantech-ui";
+import { OCTAutocomplete, OCTTextValidator } from "@oceantech/oceantech-ui";
 
-type Props = {};
+type Props = {
+  
+};
 
-const FilterSearchContainer = ({}: Props) => {
+const FilterSearchContainer = (props: Props) => {
   const [openSearchAdvance, setOpenSearchAdvance] = useState<boolean>(false);
 
   const handleSubmit = (values: any) => {};
 
   return (
     <>
+      <div className="section-container">
         <Formik initialValues={SEARCH_OBJECT_INIT} onSubmit={handleSubmit}>
           {({ values, errors, touched, handleSubmit, setFieldValue }) => {
             const handleChange = (name: string, value: any) => {
@@ -23,13 +25,13 @@ const FilterSearchContainer = ({}: Props) => {
             };
             return (
               <form onSubmit={handleSubmit}>
-                <div className="spaces mt-14 rounded">
-                  <div className="spaces my-10 fw-700 fs-16 color-dark-red text-uppercase">
+                <div className="spaces mb-14 pb-14 border-bottom rounded">
+                  <div className="spaces mb-14 fw-700 fs-16 color-dark-red text-uppercase">
                     Tìm kiếm trường hợp bệnh
                   </div>
                   <div>
                     <Row>
-                      <Col xs={12}  lg={9}>
+                      <Col xs={12} lg={9}>
                         <div className="flex flex-middle">
                           <OCTTextValidator
                             placeholder="Tìm kiếm theo họ tên/ mã số bệnh nhân/ CMND/ Số điện thoại"
@@ -52,7 +54,9 @@ const FilterSearchContainer = ({}: Props) => {
                           </Button>
                           <Button
                             className="button-primary spaces height-100 flex flex-middle"
-                            onClick={() => setOpenSearchAdvance((prev) => !prev)}
+                            onClick={() =>
+                              setOpenSearchAdvance((prev) => !prev)
+                            }
                           >
                             {openSearchAdvance ? (
                               <KTSVG
@@ -91,11 +95,11 @@ const FilterSearchContainer = ({}: Props) => {
                         label="Giới tính"
                         className="spaces fw-500"
                       />
-                      <Autocomplete
+                      <OCTAutocomplete
                         onChange={(selectedOption) =>
                           handleChange("gioiTinh", selectedOption?.code)
                         }
-                        className="spaces h-30 "
+                        className="spaces h-30  z-index-10"
                         name="gioiTinh"
                         options={GENDER_OPTION}
                         value={values?.gioiTinh}
@@ -103,16 +107,16 @@ const FilterSearchContainer = ({}: Props) => {
                         touched={touched?.gioiTinh}
                       />
                     </Col>
-                    <Col xs={12} sm={6} md={4} lg={2}>
+                    <Col xs={12} sm={6} md={4} lg={3} xl={2}>
                       <LabelRequired
                         label="Nghề nghiệp"
                         className="spaces fw-500"
                       />
-                      <Autocomplete
+                      <OCTAutocomplete
                         onChange={(selectedOption) =>
                           handleChange("gioiTinh", selectedOption?.code)
                         }
-                        className="spaces h-30 "
+                        className="spaces h-30  z-index-10"
                         name="gioiTinh"
                         options={GENDER_OPTION}
                         value={values?.gioiTinh}
@@ -120,16 +124,16 @@ const FilterSearchContainer = ({}: Props) => {
                         touched={touched?.gioiTinh}
                       />
                     </Col>
-                    <Col xs={12} sm={6} md={4} lg={2}>
+                    <Col xs={12} sm={6} md={4} lg={3} xl={2}>
                       <LabelRequired
                         label="Phân loại quản lý"
                         className="spaces fw-500"
                       />
-                      <Autocomplete
+                      <OCTAutocomplete
                         onChange={(selectedOption) =>
                           handleChange("gioiTinh", selectedOption?.code)
                         }
-                        className="spaces h-30 "
+                        className="spaces h-30  z-index-9"
                         name="gioiTinh"
                         options={GENDER_OPTION}
                         value={values?.gioiTinh}
@@ -137,16 +141,16 @@ const FilterSearchContainer = ({}: Props) => {
                         touched={touched?.gioiTinh}
                       />
                     </Col>
-                    <Col xs={12} sm={6} md={4} lg={2}>
+                    <Col xs={12} sm={6} md={4} lg={3} xl={2}>
                       <LabelRequired
                         label="Chọn bệnh"
                         className="spaces fw-500"
                       />
-                      <Autocomplete
+                      <OCTAutocomplete
                         onChange={(selectedOption) =>
                           handleChange("gioiTinh", selectedOption?.code)
                         }
-                        className="spaces h-30 "
+                        className="spaces h-30  z-index-8"
                         name="gioiTinh"
                         options={GENDER_OPTION}
                         value={values?.gioiTinh}
@@ -154,16 +158,16 @@ const FilterSearchContainer = ({}: Props) => {
                         touched={touched?.gioiTinh}
                       />
                     </Col>
-                    <Col xs={12} sm={6} md={4} lg={2}>
+                    <Col xs={12} sm={6} md={4} lg={3} xl={2}>
                       <LabelRequired
                         label="Tình trạng hiện nay"
                         className="spaces fw-500"
                       />
-                      <Autocomplete
+                      <OCTAutocomplete
                         onChange={(selectedOption) =>
                           handleChange("gioiTinh", selectedOption?.code)
                         }
-                        className="spaces h-30 "
+                        className="spaces h-30 z-index-7"
                         name="gioiTinh"
                         options={GENDER_OPTION}
                         value={values?.gioiTinh}
@@ -173,7 +177,7 @@ const FilterSearchContainer = ({}: Props) => {
                     </Col>
                   </Row>
                   <div className="location">
-                    <div className="spaces fs-16 fw-600 my-14 ">
+                    <div className="spaces fs-16 fw-600 my-14">
                       Nơi ở hiện nay của bệnh nhân/ Địa chỉ cơ sở báo cáo
                     </div>
                     <Row>
@@ -182,11 +186,11 @@ const FilterSearchContainer = ({}: Props) => {
                           label="Tỉnh/Thành phố"
                           className="spaces fw-500"
                         />
-                        <Autocomplete
+                        <OCTAutocomplete
                           onChange={(selectedOption) =>
                             handleChange("gioiTinh", selectedOption?.code)
                           }
-                          className="spaces h-30"
+                          className="spaces h-30 z-index-6"
                           name="gioiTinh"
                           options={GENDER_OPTION}
                           value={values?.gioiTinh}
@@ -199,11 +203,11 @@ const FilterSearchContainer = ({}: Props) => {
                           label="Huyện/Quận"
                           className="spaces fw-500"
                         />
-                        <Autocomplete
+                        <OCTAutocomplete
                           onChange={(selectedOption) =>
                             handleChange("gioiTinh", selectedOption?.code)
                           }
-                          className="spaces h-30 "
+                          className="spaces h-30 z-index-5"
                           name="gioiTinh"
                           options={GENDER_OPTION}
                           value={values?.gioiTinh}
@@ -216,11 +220,11 @@ const FilterSearchContainer = ({}: Props) => {
                           label="Xã/Phường"
                           className="spaces fw-500"
                         />
-                        <Autocomplete
+                        <OCTAutocomplete
                           onChange={(selectedOption) =>
                             handleChange("gioiTinh", selectedOption?.code)
                           }
-                          className="spaces h-30 "
+                          className="spaces h-30 z-index-4"
                           name="gioiTinh"
                           options={GENDER_OPTION}
                           value={values?.gioiTinh}
@@ -233,11 +237,11 @@ const FilterSearchContainer = ({}: Props) => {
                           label="Ngày nhập báo cáo từ"
                           className="spaces fw-500"
                         />
-                        <Autocomplete
+                        <OCTAutocomplete
                           onChange={(selectedOption) =>
                             setFieldValue("gioiTinh", selectedOption?.gioiTinh)
                           }
-                          className="spaces h-30 "
+                          className="spaces h-30 z-index-3"
                           name="gioiTinh"
                           options={GENDER_OPTION}
                           value={values?.gioiTinh}
@@ -257,11 +261,11 @@ const FilterSearchContainer = ({}: Props) => {
                           label="Cơ sở báo cáo"
                           className="spaces fw-500"
                         />
-                        <Autocomplete
+                        <OCTAutocomplete
                           onChange={(selectedOption) =>
                             handleChange("gioiTinh", selectedOption?.code)
                           }
-                          className="spaces h-30 "
+                          className="spaces h-30 z-index-2"
                           name="gioiTinh"
                           options={GENDER_OPTION}
                           value={values?.gioiTinh}
@@ -354,11 +358,11 @@ const FilterSearchContainer = ({}: Props) => {
                               label="Kết quả xét nghiệm"
                               className="spaces fw-500"
                             />
-                            <Autocomplete
+                            <OCTAutocomplete
                               onChange={(selectedOption) =>
                                 handleChange("gioiTinh", selectedOption?.code)
                               }
-                              className="spaces h-30 "
+                              className="spaces h-30 z-index-4"
                               name="gioiTinh"
                               options={GENDER_OPTION}
                               value={values?.gioiTinh}
@@ -375,11 +379,11 @@ const FilterSearchContainer = ({}: Props) => {
                               label="Đơn vị xét nghiệm"
                               className="spaces fw-500"
                             />
-                            <Autocomplete
+                            <OCTAutocomplete
                               onChange={(selectedOption) =>
                                 handleChange("gioiTinh", selectedOption?.code)
                               }
-                              className="spaces h-30 "
+                              className="spaces h-30 z-index-3"
                               name="gioiTinh"
                               options={GENDER_OPTION}
                               value={values?.gioiTinh}
@@ -392,11 +396,11 @@ const FilterSearchContainer = ({}: Props) => {
                               label="Cơ sở điều trị"
                               className="spaces fw-500"
                             />
-                            <Autocomplete
+                            <OCTAutocomplete
                               onChange={(selectedOption) =>
                                 handleChange("gioiTinh", selectedOption?.code)
                               }
-                              className="spaces h-30 "
+                              className="spaces h-30 z-index-2"
                               name="gioiTinh"
                               options={GENDER_OPTION}
                               value={values?.gioiTinh}
@@ -413,6 +417,7 @@ const FilterSearchContainer = ({}: Props) => {
             );
           }}
         </Formik>
+      </div>
     </>
   );
 };
