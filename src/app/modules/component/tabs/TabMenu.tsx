@@ -7,6 +7,7 @@ type TabMenuProps = {
     danhsachTabs: tab[];
     keyDanhSachTabs?: string;
     className?: string;
+    contentTabClassName?: string;
     defaultActiveKey?: string;
     setCurrentTab?: (key: string) => void;
 }
@@ -49,7 +50,10 @@ export const TabMenu: FC<TabMenuProps> = (props) => {
                 </div>
               }
             >
-              {item.component}
+                <div
+                    className={props.contentTabClassName}>
+                    {item.component}
+                </div>
             </Tab>
           );
         })}
