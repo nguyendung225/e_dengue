@@ -2,7 +2,7 @@ import { OCTTable } from "@oceantech/oceantech-ui";
 import { TYPE } from "../utils/Constant";
 import { dsOBenhColumns } from "./constants/constants";
 import FilterSearchBox from "./components/FilterSearch";
-import "./styles/danhSachODich.scss";
+import "./styles/quanLyODich.scss";
 
 const DanhSachODich = () => {
     return (

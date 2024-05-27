@@ -10,6 +10,7 @@ import { MenuTestPage } from "../pages/MenuTestPage";
 import DanhSachTruongHopBenh from "../modules/quan-ly-truong-hop-benh/danh-sach-truong-hop-benh/DanhSachTruongHopBenh";
 import TimKiemTruongHopBenh from "../modules/quan-ly-truong-hop-benh/tim-kiem-truong-hop-benh/TimKiemTruongHopBenh";
 import DanhSachODich from "../modules/quan-ly-o-dich/DanhSachODich";
+import ThemMoiODich from "../modules/quan-ly-o-dich/ThemMoiODich";
 
 
 interface PrivateRouteProps {
@@ -45,6 +46,7 @@ const PrivateRoutes = () => {
         <Route path="/danh-sach-truong-hop-benh" element={<PrivateRoute auth={PERMISSIONS.SU_CO} ability={PERMISSION_ABILITY.VIEW} component={DanhSachTruongHopBenh} redirect="/danh-sach-truong-hop-benh" />} />
         <Route path="/tim-kiem-truong-hop-benh" element={<PrivateRoute auth={PERMISSIONS.SU_CO} ability={PERMISSION_ABILITY.VIEW} component={TimKiemTruongHopBenh} redirect="/tim-kiem-truong-hop-benh" />} />
         <Route path="/danh-sach-o-dich" element={<PrivateRoute auth={PERMISSIONS.SU_CO} ability={PERMISSION_ABILITY.VIEW} component={DanhSachODich} redirect="/danh-sach-o-dich" />} />
+        <Route path="/them-moi-o-dich" element={<PrivateRoute auth={PERMISSIONS.SU_CO} ability={PERMISSION_ABILITY.VIEW} component={ThemMoiODich} redirect="/danh-sach-o-dich" />} />
         {/* Pages */}
         <Route path="menu-test" element={<MenuTestPage />} />
         <Route path="*" element={<Navigate to="/error/404" />} />
