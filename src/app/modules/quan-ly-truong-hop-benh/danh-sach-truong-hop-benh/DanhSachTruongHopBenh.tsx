@@ -7,9 +7,11 @@ import InputSearch from "../../component/input-field/InputSearch";
 import ThongTinThb from "./components/ThongTinThb";
 import NhapTruongHopBenhModal from './components/NhapTruongHopBenhModal';
 import { useState } from "react";
+import TimKiemTHBNangCaoModal from "./components/TimKiemTHBNangCaoModal";
 
 const DanhSachTruongHopBenh = () => {
     const [openTruongHopBenhForm, setOpenTruongHopBenhForm] = useState<boolean>(false)
+    const [openSearchAdvanceDialog, setOpenSearchAdvanceDialog] = useState<boolean>(false);
     return (
         <div className="page-container">
             <div className="left-content-container">
@@ -43,7 +45,7 @@ const DanhSachTruongHopBenh = () => {
                         </div>
                         <Button
                             className="button-primary"
-                            onClick={() => {}}
+                            onClick={() => setOpenSearchAdvanceDialog(true)}
                         >
                             <OCTKTSVG path='/media/svg/icons/search.svg' svgClassName='spaces h-14 w-14' />
                             Tìm kiếm nâng cao
@@ -110,6 +112,7 @@ const DanhSachTruongHopBenh = () => {
                 </div>
             </div>
            {openTruongHopBenhForm && <NhapTruongHopBenhModal handleClose={() => setOpenTruongHopBenhForm(false)}/>}
+           {openSearchAdvanceDialog && <TimKiemTHBNangCaoModal show={openSearchAdvanceDialog} handleClose={() => setOpenSearchAdvanceDialog(false)}/>}
         </div>
     )
 }

@@ -5,19 +5,18 @@ import LabelRequired from "../../../component/LabelRequired";
 import { Formik } from "formik";
 import { GENDER_OPTION, SEARCH_OBJECT_INIT } from "../../const/constants";
 import { OCTAutocomplete, OCTTextValidator } from "@oceantech/oceantech-ui";
+import { useLocation } from "react-router-dom";
 
-type Props = {
-  
-};
+type Props = {};
 
 const FilterSearchContainer = (props: Props) => {
   const [openSearchAdvance, setOpenSearchAdvance] = useState<boolean>(false);
+  const location = useLocation();
 
   const handleSubmit = (values: any) => {};
 
   return (
     <>
-      <div className="section-container">
         <Formik initialValues={SEARCH_OBJECT_INIT} onSubmit={handleSubmit}>
           {({ values, errors, touched, handleSubmit, setFieldValue }) => {
             const handleChange = (name: string, value: any) => {
@@ -25,64 +24,64 @@ const FilterSearchContainer = (props: Props) => {
             };
             return (
               <form onSubmit={handleSubmit}>
-                <div className="spaces mb-14 pb-14 border-bottom rounded">
-                  <div className="spaces mb-14 fw-700 fs-16 color-dark-red text-uppercase">
-                    Tìm kiếm trường hợp bệnh
-                  </div>
-                  <div>
-                    <Row>
-                      <Col xs={12} lg={9}>
-                        <div className="flex flex-middle">
-                          <OCTTextValidator
-                            placeholder="Tìm kiếm theo họ tên/ mã số bệnh nhân/ CMND/ Số điện thoại"
-                            onChange={(e: any) =>
-                              handleChange("keyword", e.target.value)
-                            }
-                            className="spaces width-100"
-                            value={values?.keyword}
-                          />
-                        </div>
-                      </Col>
-                      <Col xs={12} lg={3}>
-                        <div className="flex flex-middle flex-wrap gap-2 search-action">
-                          <Button className="button-primary spaces height-100 flex flex-middle">
-                            <KTSVG
-                              path="/media/svg/icons/search.svg"
-                              svgClassName="spaces h-14 w-14 color-white"
+                {location.pathname === "/tim-kiem-truong-hop-benh" && (
+                  <div className="spaces mt-14 rounded">
+                    <div className="spaces my-10 fw-700 fs-16 color-dark-red text-uppercase">
+                      Tìm kiếm trường hợp bệnh
+                    </div>
+                    <div>
+                      <Row>
+                        <Col xs={12} lg={9}>
+                          <div className="flex flex-middle">
+                            <OCTTextValidator
+                              placeholder="Tìm kiếm theo họ tên/ mã số bệnh nhân/ CMND/ Số điện thoại"
+                              onChange={(e: any) => handleChange("keyword", e.target.value)}
+                              className="spaces width-100"
+                              value={values?.keyword}
                             />
-                            Tìm kiếm
-                          </Button>
-                          <Button
-                            className="button-primary spaces height-100 flex flex-middle"
-                            onClick={() =>
-                              setOpenSearchAdvance((prev) => !prev)
-                            }
-                          >
-                            {openSearchAdvance ? (
+                          </div>
+                        </Col>
+                        <Col xs={12} lg={3}>
+                          <div className="flex flex-middle flex-wrap gap-2 search-action">
+                            <Button className="button-primary spaces height-100 flex flex-middle">
                               <KTSVG
-                                path="/media/svg/icons/chevron-up.svg"
+                                path="/media/svg/icons/search.svg"
                                 svgClassName="spaces h-14 w-14 color-white"
                               />
-                            ) : (
+                              Tìm kiếm
+                            </Button>
+                            <Button
+                              className="button-primary spaces height-100 flex flex-middle"
+                              onClick={() =>
+                                setOpenSearchAdvance((prev) => !prev)
+                              }
+                            >
+                              {openSearchAdvance ? (
+                                <KTSVG
+                                  path="/media/svg/icons/chevron-up.svg"
+                                  svgClassName="spaces h-14 w-14 color-white"
+                                />
+                              ) : (
+                                <KTSVG
+                                  path="/media/svg/icons/chevron-down.svg"
+                                  svgClassName="spaces h-14 w-14 color-white"
+                                />
+                              )}
+                              Nâng cao
+                            </Button>
+                            <Button className="button-primary spaces height-100 flex flex-middle">
                               <KTSVG
-                                path="/media/svg/icons/chevron-down.svg"
+                                path="/media/svg/icons/recycle.svg"
                                 svgClassName="spaces h-14 w-14 color-white"
                               />
-                            )}
-                            Nâng cao
-                          </Button>
-                          <Button className="button-primary spaces height-100 flex flex-middle">
-                            <KTSVG
-                              path="/media/svg/icons/recycle.svg"
-                              svgClassName="spaces h-14 w-14 color-white"
-                            />
-                            Chọn lại
-                          </Button>
-                        </div>
-                      </Col>
-                    </Row>
+                              Chọn lại
+                            </Button>
+                          </div>
+                        </Col>
+                      </Row>
+                    </div>
                   </div>
-                </div>
+                )}
 
                 <div className="spaces mt-14 form-search">
                   <Row>
@@ -99,7 +98,7 @@ const FilterSearchContainer = (props: Props) => {
                         onChange={(selectedOption) =>
                           handleChange("gioiTinh", selectedOption?.code)
                         }
-                        className="spaces h-30  z-index-10"
+                        className="spaces h-30 z-index-10"
                         name="gioiTinh"
                         options={GENDER_OPTION}
                         value={values?.gioiTinh}
@@ -116,7 +115,7 @@ const FilterSearchContainer = (props: Props) => {
                         onChange={(selectedOption) =>
                           handleChange("gioiTinh", selectedOption?.code)
                         }
-                        className="spaces h-30  z-index-10"
+                        className="spaces h-30 z-index-9"
                         name="gioiTinh"
                         options={GENDER_OPTION}
                         value={values?.gioiTinh}
@@ -133,7 +132,7 @@ const FilterSearchContainer = (props: Props) => {
                         onChange={(selectedOption) =>
                           handleChange("gioiTinh", selectedOption?.code)
                         }
-                        className="spaces h-30  z-index-9"
+                        className="spaces h-30 z-index-8"
                         name="gioiTinh"
                         options={GENDER_OPTION}
                         value={values?.gioiTinh}
@@ -150,7 +149,7 @@ const FilterSearchContainer = (props: Props) => {
                         onChange={(selectedOption) =>
                           handleChange("gioiTinh", selectedOption?.code)
                         }
-                        className="spaces h-30  z-index-8"
+                        className="spaces h-30 z-index-7"
                         name="gioiTinh"
                         options={GENDER_OPTION}
                         value={values?.gioiTinh}
@@ -167,7 +166,7 @@ const FilterSearchContainer = (props: Props) => {
                         onChange={(selectedOption) =>
                           handleChange("gioiTinh", selectedOption?.code)
                         }
-                        className="spaces h-30 z-index-7"
+                        className="spaces h-30 z-index-6"
                         name="gioiTinh"
                         options={GENDER_OPTION}
                         value={values?.gioiTinh}
@@ -177,30 +176,13 @@ const FilterSearchContainer = (props: Props) => {
                     </Col>
                   </Row>
                   <div className="location">
-                    <div className="spaces fs-16 fw-600 my-14">
+                    <div className="spaces fs-16 fw-600 my-14 ">
                       Nơi ở hiện nay của bệnh nhân/ Địa chỉ cơ sở báo cáo
                     </div>
                     <Row>
-                      <Col xs={12} sm={6} md={4} lg={2}>
+                      <Col xs={12} sm={6} md={4} lg={3} xl={2}>
                         <LabelRequired
                           label="Tỉnh/Thành phố"
-                          className="spaces fw-500"
-                        />
-                        <OCTAutocomplete
-                          onChange={(selectedOption) =>
-                            handleChange("gioiTinh", selectedOption?.code)
-                          }
-                          className="spaces h-30 z-index-6"
-                          name="gioiTinh"
-                          options={GENDER_OPTION}
-                          value={values?.gioiTinh}
-                          errors={errors?.gioiTinh}
-                          touched={touched?.gioiTinh}
-                        />
-                      </Col>
-                      <Col xs={12} sm={6} md={4} lg={2}>
-                        <LabelRequired
-                          label="Huyện/Quận"
                           className="spaces fw-500"
                         />
                         <OCTAutocomplete
@@ -215,7 +197,24 @@ const FilterSearchContainer = (props: Props) => {
                           touched={touched?.gioiTinh}
                         />
                       </Col>
-                      <Col xs={12} sm={6} md={4} lg={2}>
+                      <Col xs={12} sm={6} md={4} lg={3} xl={2}>
+                        <LabelRequired
+                          label="Huyện/Quận"
+                          className="spaces fw-500"
+                        />
+                        <OCTAutocomplete
+                          onChange={(selectedOption) =>
+                            handleChange("gioiTinh", selectedOption?.code)
+                          }
+                          className="spaces h-30  z-index-4"
+                          name="gioiTinh"
+                          options={GENDER_OPTION}
+                          value={values?.gioiTinh}
+                          errors={errors?.gioiTinh}
+                          touched={touched?.gioiTinh}
+                        />
+                      </Col>
+                      <Col xs={12} sm={6} md={4} lg={3} xl={2}>
                         <LabelRequired
                           label="Xã/Phường"
                           className="spaces fw-500"
@@ -224,7 +223,7 @@ const FilterSearchContainer = (props: Props) => {
                           onChange={(selectedOption) =>
                             handleChange("gioiTinh", selectedOption?.code)
                           }
-                          className="spaces h-30 z-index-4"
+                          className="spaces h-30  z-index-3"
                           name="gioiTinh"
                           options={GENDER_OPTION}
                           value={values?.gioiTinh}
@@ -232,7 +231,7 @@ const FilterSearchContainer = (props: Props) => {
                           touched={touched?.gioiTinh}
                         />
                       </Col>
-                      <Col xs={12} sm={6} md={4} lg={2}>
+                      <Col xs={12} sm={6} md={4} lg={3} xl={2}>
                         <LabelRequired
                           label="Ngày nhập báo cáo từ"
                           className="spaces fw-500"
@@ -241,7 +240,7 @@ const FilterSearchContainer = (props: Props) => {
                           onChange={(selectedOption) =>
                             setFieldValue("gioiTinh", selectedOption?.gioiTinh)
                           }
-                          className="spaces h-30 z-index-3"
+                          className="spaces h-30  z-index-2"
                           name="gioiTinh"
                           options={GENDER_OPTION}
                           value={values?.gioiTinh}
@@ -249,14 +248,14 @@ const FilterSearchContainer = (props: Props) => {
                           touched={touched?.gioiTinh}
                         />
                       </Col>
-                      <Col xs={12} sm={6} md={4} lg={2}>
+                      <Col xs={12} sm={6} md={4} lg={3} xl={2}>
                         <LabelRequired
                           label="Ngày nhập báo cáo đến"
                           className="fw-500"
                         />
                         <OCTTextValidator name="name" type="date" />
                       </Col>
-                      <Col xs={12} sm={6} md={4} lg={2}>
+                      <Col xs={12} sm={6} md={4} lg={3} xl={2}>
                         <LabelRequired
                           label="Cơ sở báo cáo"
                           className="spaces fw-500"
@@ -265,7 +264,7 @@ const FilterSearchContainer = (props: Props) => {
                           onChange={(selectedOption) =>
                             handleChange("gioiTinh", selectedOption?.code)
                           }
-                          className="spaces h-30 z-index-2"
+                          className="spaces h-30 z-index-1"
                           name="gioiTinh"
                           options={GENDER_OPTION}
                           value={values?.gioiTinh}
@@ -275,7 +274,7 @@ const FilterSearchContainer = (props: Props) => {
                       </Col>
                     </Row>
                   </div>
-                  {openSearchAdvance && (
+                  {(openSearchAdvance || location.pathname === "/danh-sach-truong-hop-benh") && (
                     <div className="searchAdvance">
                       <div className="spaces mt-14">
                         <Row>
@@ -417,7 +416,6 @@ const FilterSearchContainer = (props: Props) => {
             );
           }}
         </Formik>
-      </div>
     </>
   );
 };

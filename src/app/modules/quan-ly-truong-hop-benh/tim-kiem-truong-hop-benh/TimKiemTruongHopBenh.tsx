@@ -8,7 +8,9 @@ type Props = {};
 const TimKiemTruongHopBenh = (props: Props) => {
   return (
     <div className="search-container">
-      <FilterSearchContainer />
+      <div className="section-container">
+        <FilterSearchContainer />
+      </div>
       <div className="spaces mt-15 section-container">
         <div className="d-flex justify-content-between border-bottom align-items-center spaces pt-8 pb-14">
           <div className="spaces fw-700 fs-16 color-dark-red text-uppercase">
