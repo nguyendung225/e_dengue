@@ -5,6 +5,7 @@ import { SidebarMenu } from './sidebar-menu/SidebarMenu'
 import { KTSVG } from '../../../helpers'
 import { SidebarLogo } from './SidebarLogo'
 import { SidebarContext } from './SidebarContext'
+import { DrawerComponent, ToggleComponent } from '../../../assets/ts/components'
 
 const Sidebar = () => {
   const {config} = useLayout();
@@ -13,6 +14,13 @@ const Sidebar = () => {
   useEffect(() => {
     updateDOM(config)
     handleToggleClick()
+
+    const timeOut = setTimeout(() => {
+      ToggleComponent.reinitialization();
+      DrawerComponent.reinitialization();
+    }, 70);
+
+    return () => clearTimeout(timeOut);
   }, [config])
 
   if (!config.app?.sidebar?.display) {
