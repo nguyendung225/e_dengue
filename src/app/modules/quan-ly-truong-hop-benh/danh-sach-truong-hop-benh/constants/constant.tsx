@@ -1,4 +1,7 @@
 import * as Yup from "yup";
+import ThongTinHanhChinhTab from "../components/ThongTinHanhChinhTab";
+import ThongTinChanDoanTab from "../components/ThongTinChanDoanTab";
+import ThongTinGhiNhanTab from "../components/ThongTinGhiNhan";
 
 export const danhSachThbColumns = [
   {
@@ -140,3 +143,21 @@ export const tabConfig = {
     [KeyTab.TT_CHAN_DOAN]: { schema: chanDoanSchema, prevTab: KeyTab.TT_HANH_CHINH, nextTab: KeyTab.TT_GHI_NHAN },
     [KeyTab.TT_GHI_NHAN]: { schema: ghiNhanSchema, prevTab: KeyTab.TT_CHAN_DOAN, nextTab: null }
 };
+
+export const tabTruongHopBenh = [
+    {
+        eventKey: KeyTab.TT_HANH_CHINH,
+        title: "Thông tin hành chính",
+        component: <ThongTinHanhChinhTab />
+    },
+    {
+        eventKey: KeyTab.TT_CHAN_DOAN,
+        title: "Thông tin chẩn đoán",
+        component: <ThongTinChanDoanTab />
+    },
+    {
+        eventKey: KeyTab.TT_GHI_NHAN,
+        title: "Thông tin ghi nhận",
+        component: <ThongTinGhiNhanTab />
+    },
+];

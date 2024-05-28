@@ -2,11 +2,8 @@ import { Form, Formik } from "formik";
 import { useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import TabMenu from "../../../component/tabs/TabMenu";
-import { hanhChinhSchema, KeyTab, tabConfig } from "../constants/constant";
+import { hanhChinhSchema, KeyTab, tabConfig, tabTruongHopBenh } from "../constants/constant";
 import { initialTruongHopBenh, ITruongHopBenh } from "../model/Model";
-import ThongTinChanDoanTab from "./ThongTinChanDoanTab";
-import ThongTinGhiNhanTab from "./ThongTinGhiNhan";
-import ThongTinHanhChinhTab from "./ThongTinHanhChinhTab";
 
 type TProps = {
     handleClose: () => void;
@@ -35,23 +32,6 @@ const NhapTruongHopBenhModal = (props: TProps) => {
         }
     };
 
-    const tabList = [
-        {
-            eventKey: KeyTab.TT_HANH_CHINH,
-            title: "Thông tin hành chính",
-            component: <ThongTinHanhChinhTab />
-        },
-        {
-            eventKey: KeyTab.TT_CHAN_DOAN,
-            title: "Thông tin chẩn đoán",
-            component: <ThongTinChanDoanTab />
-        },
-        {
-            eventKey: KeyTab.TT_GHI_NHAN,
-            title: "Thông tin ghi nhận",
-            component: <ThongTinGhiNhanTab />
-        },
-    ];
 
     return (
         <Modal
@@ -77,7 +57,7 @@ const NhapTruongHopBenhModal = (props: TProps) => {
                     {formikProps => (
                         <Form>
                             <TabMenu
-                                danhsachTabs={tabList}
+                                danhsachTabs={tabTruongHopBenh}
                                 setCurrentTab={setActiveTab}
                                 defaultActiveKey={activeTab} 
                                 />
@@ -86,8 +66,14 @@ const NhapTruongHopBenhModal = (props: TProps) => {
                                     <div className='fw-bold'>Lưu ý các dấu <span className='text-danger'>* </span> là trường bắt buộc nhập</div>
                                 </div>
                                 <div className="d-flex gap-2">
-                                    <Button className="button-primary" onClick={() => setActiveTab(prevTab)}>Quay lại
-                                    </Button>
+                                    {
+                                        prevTab &&
+                                        <Button
+                                            className="button-primary"
+                                            onClick={() => setActiveTab(prevTab)}>
+                                            Quay lại
+                                        </Button>
+                                    }
                                     <Button
                                         className="button-primary"
                                         type="submit">

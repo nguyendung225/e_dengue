@@ -16,26 +16,25 @@ const ThongTinChanDoanTab = (props: Props) => {
                 <Col xl={4}>
                     <OCTAutocomplete
                         lable="Phân độ lâm sàng/ Phân loại thể bệnh"
-
                         options={[]}
                         isRequired
                     />
                 </Col>
             </Row>
             <Row >
-                <Col xl={2}>
+                <Col xl={3}>
                     <OCTAutocomplete
                         lable="Tình trạng hiện tại"
                         options={[]}
                     />
                 </Col>
-                <Col xl={2}>
+                <Col xl={3}>
                     <OCTTextValidator
                         lable="Ngày khởi phát"
                         type="date"
                     />
                 </Col>
-                <Col xl={2}>
+                <Col xl={3}>
                     <OCTTextValidator
                         lable="Ngày nhập viện/khám"
                         type="date"
@@ -53,7 +52,6 @@ const ThongTinChanDoanTab = (props: Props) => {
                         type="date"
                     />
                 </Col>
-                <Col xl={3} />
                 <Col xl={3}>
                     <OCTAutocomplete
                         lable="Phân loại chẩn đoán"
@@ -69,8 +67,7 @@ const ThongTinChanDoanTab = (props: Props) => {
                         handleChange={handleChange}
                     />
                 </Col>
-                {values?.layMauXetNghiemChanDoan === YES_NO_OPT[0].code && (<>
-                    <Col xl={3}>
+                <Col xl={3}>
                         <OCTAutocomplete
                             lable="Thông tin về tiêm, uống vắc xin"
                             options={[]}
@@ -78,6 +75,7 @@ const ThongTinChanDoanTab = (props: Props) => {
                         />
                     </Col>
                     <Col xl={3} />
+                {values?.layMauXetNghiemChanDoan === YES_NO_OPT[0].code && (<>                    
                     <Col xl={3}>
                         <OCTAutocomplete
                             lable="Loại xét nghiệm"
@@ -150,7 +148,7 @@ const ThongTinChanDoanTab = (props: Props) => {
                     <OCTTextValidator
                         lable="Tiền sử dịch tễ"
                         type="text"
-                        as="textArea"
+                        as="textarea"
                         rows={2}
                     />
                 </Col>
@@ -158,7 +156,7 @@ const ThongTinChanDoanTab = (props: Props) => {
                     <OCTTextValidator
                         lable="Ghi chú"
                         type="text"
-                        as="textArea"
+                        as="textarea"
                         rows={2}
                     />
                 </Col>
