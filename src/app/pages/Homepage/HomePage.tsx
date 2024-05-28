@@ -73,15 +73,23 @@ export function HomePage() {
         <div className="body-container">
           <Row>
             <Col xs={12}>
-              <h2 className="title-software">{"PHẦN MỀM QUẢN LÝ SCYK"}</h2>
+              <h2 className="title-software">{"PHẦN MỀM QUẢN LÝ E-DENGUE"}</h2>
             </Col>
           </Row>
           <Row>
             <Col xs={4}>
               <LinkButton
                 linkTo={"/danh-sach-truong-hop-benh"}
-                iconPath="/media/svg/icons/statistic.svg"
-                text={"Thống kê SCYK"}
+                iconPath="/media/svg/icons/person-lines-fill.svg"
+                text={"Danh sách trường hợp bệnh"}
+                hasAuthority={hasAuthority(PERMISSIONS.THONG_KE, PERMISSION_ABILITY.VIEW)}
+              />
+            </Col>
+            <Col xs={4}>
+              <LinkButton
+                linkTo={"/danh-sach-o-dich"}
+                iconPath="/media/svg/icons/list-ul.svg"
+                text={"Danh sách ổ dịch"}
                 hasAuthority={hasAuthority(PERMISSIONS.THONG_KE, PERMISSION_ABILITY.VIEW)}
               />
             </Col>

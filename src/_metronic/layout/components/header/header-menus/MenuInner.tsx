@@ -60,7 +60,7 @@ export function MenuInner() {
       <div className='header-brand'>
         <div className='header-brand-link w-100 flex flex-middle flex-center' >
           <Link to="/home" className='white spaces fs-16 fw-700 flex flex-middle' > 
-              E-DANGUE
+              E-DENGUE
           </Link>
         </div>
       </div>
