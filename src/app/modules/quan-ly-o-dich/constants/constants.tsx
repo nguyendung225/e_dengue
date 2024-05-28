@@ -1,4 +1,5 @@
 import { OCTAutocomplete, OCTTextValidator } from "@oceantech/oceantech-ui";
+import { ISearchObjModel } from "../models/quanLyODichModels";
 
 export const dsOBenhColumns = [
     {
@@ -328,3 +329,18 @@ export const dsBenhNhanColumns = [
         },
     },
 ]
+
+export const initSearchObj: ISearchObjModel = {
+    keyword: "",
+    tinhId: "",
+    huyenId: "",
+    xaId: "",
+    ngayKhoiPhatTuNgay: "",
+    ngayKhoiPhatDenNgay: "",
+    ngayTaoBaoCaoTuNgay: "",
+    ngayTaoBaoCaoDenNgay: "",
+    ngayKetThucTuNgay: "",
+    ngayKetThucDenNgay: "",
+    trangThaiId: "",
+    donViBaoCaoId: ""
+};
