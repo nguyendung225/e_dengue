@@ -1,6 +1,4 @@
-import { APIResponse } from "./models/models";
-import axios, { AxiosResponse } from "axios";
-import { paramsConfig } from "./utils/ParamsUtils";
+import axios from "axios";
 const API_URL = process.env.REACT_APP_API_URL;
 
 export const getListBenhChanDoan = () => {
@@ -9,7 +7,8 @@ export const getListBenhChanDoan = () => {
 }
 
 export const getListDmCapDoBenh = () => {
-    let url = API_URL + "dm-cap-do-benh/all";
+    let codeLoaiBenh = 37;
+    let url = API_URL + `dm-cap-do-benh/benh-chan-doan/${codeLoaiBenh}`;
     return axios.get(url);
 }
 
@@ -40,6 +39,16 @@ export const getListDmHoatDongPhongChongDich = () => {
 
 export const getListHuyen = () => {
     let url = API_URL + "huyen/all";
+    return axios.get(url);
+}
+
+export const getListHuyenByTinhId = (id: number | null) => {
+    let url = API_URL + `huyen/tinh/${id}`
+    return axios.get(url);
+}
+
+export const getListXaByHuyenId = (id: number | null) => {
+    let url = API_URL + `xa/huyen/${id}`
     return axios.get(url);
 }
 
@@ -85,5 +94,20 @@ export const getListVungMien = () => {
 
 export const getListXa = () => {
     let url = API_URL + "xa/all";
+    return axios.get(url);
+}
+
+export const getListDonViCongTac = (params: any) => {
+    let url = API_URL + `co-so/don-vi-cong-tac/${params?.keyword}`;
+    return axios.get(url);
+}
+
+export const getListCoSoXetNghiem = (params: any) => {
+    let url = API_URL + `co-so/xet-nghiem/${params?.keyword}`;
+    return axios.get(url);
+}
+
+export const getListCoSoDieuTri = (params: any) => {
+    let url = API_URL + `co-so/dieu-tri/${params?.keyword}`;
     return axios.get(url);
 }

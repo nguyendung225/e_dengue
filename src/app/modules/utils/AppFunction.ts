@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { KEY } from "./Constant"
+import moment from "moment";
 
 export const removeEventEnter = (e: any) => {
     if(e.key === KEY.ENTER){
@@ -51,3 +52,15 @@ export const RomanNumeralsConverter = (number: number) => {
   
     return result
   };
+
+
+    export const calculateAge = (birthdate: string | null) => {
+        const birth = moment(birthdate);
+        const today = moment();
+        let age = today.year() - birth.year();
+        if (today.month() > birth.month() || (today.month() === birth.month() && today.date() >= birth.date())) {
+            age++;
+        }
+
+        return age;
+    }

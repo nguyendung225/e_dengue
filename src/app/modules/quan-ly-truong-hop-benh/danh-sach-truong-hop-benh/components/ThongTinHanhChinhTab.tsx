@@ -1,17 +1,17 @@
-import { OCTAutocomplete, OCTTextValidator, } from '@oceantech/oceantech-ui';
+import { OCTAutocomplete, OCTTextValidator } from '@oceantech/oceantech-ui';
 import { useFormikContext } from 'formik';
 import { Form } from 'react-bootstrap';
 import { Col, Row } from '../../../component/Grid';
 import RadioGroup from '../../../component/input-field/RadioGroup';
+import { getListDanToc, getListHuyenByTinhId, getListNgheNghiep, getListTinh, getListXaByHuyenId } from '../../../services';
+import { calculateAge } from '../../../utils/AppFunction';
 import { GENDER_OPT } from '../constants/constant';
-import { ITruongHopBenh } from '../model/Model';
-import { getListDanToc, getListHuyen, getListNgheNghiep, getListTinh, getListXa } from '../../../services';
-import Autocomplete from '../../../component/input-field/Autocomplete';
+import { TruongHopBenh } from '../model/Model';
 type Props = {
 }
 
 const ThongTinHanhChinhTab = (props: Props) => {
-    const { values, handleChange, errors, touched, setFieldValue } = useFormikContext<ITruongHopBenh>()
+    const { values, handleChange, errors, touched, setFieldValue, setValues } = useFormikContext<TruongHopBenh>()
 
     return (
         <Row >
@@ -21,13 +21,12 @@ const ThongTinHanhChinhTab = (props: Props) => {
             <Col xl={3}>
                 <OCTTextValidator
                     lable="Họ tên"
-                    name="hoTen"
+                    name="doiTuongMacBenh.hoTen"
                     isRequired
-                    value={values.hoTen}
+                    value={values?.doiTuongMacBenh?.hoTen}
                     onChange={handleChange}
-                    errors={errors?.hoTen}
-                    touched={touched?.hoTen}
-
+                    errors={errors?.doiTuongMacBenh?.hoTen}
+                    touched={touched?.doiTuongMacBenh?.hoTen}
                 />
             </Col>
             <Col xl={2}>
@@ -35,51 +34,62 @@ const ThongTinHanhChinhTab = (props: Props) => {
                     lable="Ngày sinh"
                     type="date"
                     isRequired
-                    name="ngaySinh"
-                    value={values.ngaySinh}
+                    name="doiTuongMacBenh.ngaySinh"
+                    value={values?.doiTuongMacBenh?.ngaySinh}
                     onChange={handleChange}
-                    errors={errors?.ngaySinh}
-                    touched={touched?.ngaySinh}
+                    errors={errors?.doiTuongMacBenh?.ngaySinh}
+                    touched={touched?.doiTuongMacBenh?.ngaySinh}
                 />
-
             </Col>
             <Col xl={1}>
                 <OCTTextValidator
                     lable="Tuổi"
                     type="text"
+                    name="tuoi"
+                    value={calculateAge(values?.doiTuongMacBenh?.ngaySinh) || ""}
+                    disabled
                 />
-
             </Col>
             <Col xl={3}>
                 <RadioGroup
-                    name='gioiTinh'
+                    name='doiTuongMacBenh.gioiTinh'
                     isRequired
                     lable='Giới tính'
-                    value={values.gioiTinh}
+                    value={values.doiTuongMacBenh?.gioiTinh}
                     radioItemList={GENDER_OPT}
                     handleChange={handleChange}
                 />
             </Col>
             <Col xl={3}>
-                <Autocomplete
+                <OCTAutocomplete
                     lable="Nghề nghiệp"
                     searchFunction={getListNgheNghiep}
-                    getOptionLabel={(option)=>option.tenNghe}
+                    urlData='data.data'
+                    getOptionLabel={(option) => option.tenNghe}
                     options={[]}
-                    valueField='id'
+                    value={values.doiTuongMacBenh?.ngheNghiepId}
+                    onChange={(option) => {
+                        setFieldValue("doiTuongMacBenh.ngheNghiepId", option?.id)
+                    }}
                     searchObject={{}}
                     isRequired
+                    errors={errors.doiTuongMacBenh?.ngheNghiepId}
+                    touched={touched.doiTuongMacBenh?.ngheNghiepId}
                 />
             </Col>
             <Col xl={3}>
-                <Autocomplete
+                <OCTAutocomplete
                     lable="Dân tộc"
                     searchFunction={getListDanToc}
+                    urlData='data.data'
                     getOptionLabel={(option) => option.tenDanToc}
                     options={[]}
-                    valueField='id'
+                    value={values.doiTuongMacBenh?.danTocId}
+                    onChange={(option) => setFieldValue("doiTuongMacBenh.danTocId", option?.id)}
                     searchObject={{}}
                     isRequired
+                    errors={errors.doiTuongMacBenh?.danTocId}
+                    touched={touched.doiTuongMacBenh?.danTocId}
                 />
             </Col>
             <Col xl={3}>
@@ -87,24 +97,29 @@ const ThongTinHanhChinhTab = (props: Props) => {
                     lable="CCCD"
                     type="text"
                     isRequired
-                    name="cccd"
-                    value={values.cccd}
+                    name="doiTuongMacBenh.cmnd"
+                    value={values.doiTuongMacBenh?.cmnd}
                     onChange={handleChange}
-                    errors={errors?.cccd}
-                    touched={touched?.cccd}
-                    disabled={values.khongKhaiThacDuocCCCD}
+                    errors={errors?.doiTuongMacBenh?.cmnd}
+                    touched={touched?.doiTuongMacBenh?.cmnd}
+                    disabled={values.doiTuongMacBenh?.haveCmnd}
                 />
                 <Form.Check
                     className='mt-2'
-                    name='khongKhaiThacDuocCCCD'
+                    name='doiTuongMacBenh.haveCmnd'
                     label='Không khai thác được CCCD'
-                    checked={values.khongKhaiThacDuocCCCD}
+                    checked={!values.doiTuongMacBenh?.haveCmnd}
                     onChange={(event) => {
-                        setFieldValue("khongKhaiThacDuocCCCD", event.target.checked)
-                        setFieldValue("cccd","")
+                        setValues({
+                            ...values,
+                            doiTuongMacBenh: {
+                                ...values.doiTuongMacBenh,
+                                haveCmnd: !event.target.checked,
+                                cmnd: ""
+                            },
+                        });
 
                     }}
-
                 />
             </Col>
             <Col xl={3}>
@@ -112,30 +127,37 @@ const ThongTinHanhChinhTab = (props: Props) => {
                     lable="Điện thoại"
                     type="text"
                     isRequired
-                    name="dienThoai"
-                    value={values.dienThoai}
+                    name="doiTuongMacBenh.dienThoai"
+                    value={values.doiTuongMacBenh?.dienThoai}
                     onChange={handleChange}
-                    errors={errors?.dienThoai}
-                    touched={touched?.dienThoai}
-                    disabled={values.khongKhaiThacDuocSoDienThoai}
+                    errors={errors?.doiTuongMacBenh?.dienThoai}
+                    touched={touched?.doiTuongMacBenh?.dienThoai}
+                    disabled={values.doiTuongMacBenh?.haveDienThoai}
                 />
                 <Form.Check
                     className='mt-2'
                     label='Không khai thác được SĐT'
-                    name='khongKhaiThacDuocSoDienThoai'
-                    checked={values.khongKhaiThacDuocSoDienThoai}
-                    onChange={(event)=>{
-                        setFieldValue("khongKhaiThacDuocSoDienThoai", event.target.checked)
-                        setFieldValue("dienThoai","")
-
+                    name='doiTuongMacBenh.haveDienThoai'
+                    checked={!values.doiTuongMacBenh?.haveDienThoai}
+                    onChange={(event) => {
+                        setValues({
+                            ...values,
+                            doiTuongMacBenh: {
+                                ...values.doiTuongMacBenh,
+                                haveDienThoai: !event.target.checked,
+                                dienThoai: ""
+                            },
+                        });
                     }}
-
                 />
             </Col>
             <Col xl={3}>
                 <OCTTextValidator
                     lable="Nơi làm việc/Học tập"
                     type="text"
+                    name="doiTuongMacBenh.noiLamViecHocTap"
+                    value={values.doiTuongMacBenh?.noiLamViecHocTap}
+                    onChange={handleChange}
                 />
             </Col>
             <Col xs={12}>
@@ -145,63 +167,86 @@ const ThongTinHanhChinhTab = (props: Props) => {
                 <OCTTextValidator
                     lable="Địa chỉ hiện nay"
                     type="text"
-                    name="diaChiHienNay"
+                    name="doiTuongMacBenh.diaChiHienNay"
                     onChange={handleChange}
                     isRequired
-                    value={values.diaChiHienNay}
-                    errors={errors?.diaChiHienNay}
-                    touched={touched?.diaChiHienNay}
+                    value={values.doiTuongMacBenh?.diaChiHienNay}
+                    errors={errors?.doiTuongMacBenh?.diaChiHienNay}
+                    touched={touched?.doiTuongMacBenh?.diaChiHienNay}
                 />
             </Col>
             <Col xl={3}>
-            <Autocomplete
+                <OCTAutocomplete
                     lable="Tỉnh/TP hiện nay"
+                    menuPlacement="top"
                     searchFunction={getListTinh}
+                    urlData='data.data'
                     getOptionLabel={(option) => option.tenTinh}
                     options={[]}
-                    valueField='id'
-                    name='tinhTpHienNay'
+                    name='doiTuongMacBenh.tinhIdHienNay'
                     searchObject={{}}
-                    onChange={(option)=>{
-                        setFieldValue("tinhTpHienNay", option?.id)
-                        setFieldValue("phuongXaHienNay", null)
-                        setFieldValue("quanHuyenHienNay", null)
+                    onChange={(option) => {
+                        setValues({
+                            ...values,
+                            doiTuongMacBenh: {
+                                ...values.doiTuongMacBenh,
+                                tinhIdHienNay: option?.id,
+                                huyenIdHienNay: null,
+                                xaIdHienNay: null
+                            },
+                        })
                     }}
-                    value={values.tinhTpHienNay}
                     isRequired
+                    value={values.doiTuongMacBenh?.tinhIdHienNay}
+                    errors={errors.doiTuongMacBenh?.tinhIdHienNay}
+                    touched={touched.doiTuongMacBenh?.tinhIdHienNay}
                 />
             </Col>
             <Col xl={3}>
-            <Autocomplete
+                <OCTAutocomplete
+                    menuPlacement="top"
                     lable="Quận/Huyện hiện nay"
-                    searchFunction={getListHuyen}
+                    searchFunction={() => getListHuyenByTinhId(values.doiTuongMacBenh?.tinhIdHienNay)}
+                    urlData='data.data'
                     getOptionLabel={(option) => option.tenHuyen}
                     options={[]}
-                    valueField='id'
                     searchObject={{}}
-                    value={values.quanHuyenHienNay}
-                    isDisabled={!values.tinhTpHienNay}
-                    onChange={(option)=>{
-                        setFieldValue("quanHuyenHienNay", option?.id)
-                        setFieldValue("phuongXaHienNay", null)
+                    value={values.doiTuongMacBenh?.huyenIdHienNay}
+                    isDisabled={!values.doiTuongMacBenh?.tinhIdHienNay}
+                    onChange={(option) => {
+                        setValues({
+                            ...values,
+                            doiTuongMacBenh: {
+                                ...values.doiTuongMacBenh,
+                                huyenIdHienNay: option?.id,
+                                xaIdHienNay: null
+                            },
+                        })
                     }}
+                    dependencies={[values.doiTuongMacBenh?.tinhIdHienNay]}
                     isRequired
+                    errors={errors.doiTuongMacBenh?.huyenIdHienNay}
+                    touched={touched.doiTuongMacBenh?.huyenIdHienNay}
                 />
             </Col>
             <Col xl={3}>
-                 <Autocomplete
+                <OCTAutocomplete
+                    menuPlacement="top"
                     lable="Phường/Xã hiện nay"
-                    searchFunction={getListXa}
+                    searchFunction={() => getListXaByHuyenId(values.doiTuongMacBenh?.huyenIdHienNay)}
+                    urlData='data.data'
                     getOptionLabel={(option) => option.tenXa}
                     options={[]}
-                    valueField='id'
                     searchObject={{}}
-                    value={values.phuongXaHienNay}
-                    isDisabled={!values.quanHuyenHienNay}
-                    onChange={(option)=>{
-                        setFieldValue("phuongXaHienNay", option?.id)
+                    value={values.doiTuongMacBenh?.xaIdHienNay}
+                    isDisabled={!values.doiTuongMacBenh?.huyenIdHienNay}
+                    onChange={(option) => {
+                        setFieldValue("doiTuongMacBenh.xaIdHienNay", option?.xaId)
                     }}
+                    dependencies={[values?.doiTuongMacBenh?.huyenIdHienNay]}
                     isRequired
+                    errors={errors.doiTuongMacBenh?.xaIdHienNay}
+                    touched={touched.doiTuongMacBenh?.xaIdHienNay}
                 />
 
             </Col>
@@ -212,24 +257,76 @@ const ThongTinHanhChinhTab = (props: Props) => {
                 <OCTTextValidator
                     lable="Địa chỉ thường trú"
                     type="text"
+                    value={values.doiTuongMacBenh?.diaChiThuongTru}
+                    name="doiTuongMacBenh.diaChiThuongTru"
+                    onChange={handleChange}
+
                 />
             </Col>
             <Col xl={3}>
                 <OCTAutocomplete
-                    lable="Tỉnh/TP thường trú"
+                    lable="Tỉnh/TP thường chú"
+                    menuPlacement="top"
+                    searchFunction={getListTinh}
+                    urlData='data.data'
+                    getOptionLabel={(option) => option.tenTinh}
                     options={[]}
+                    name='doiTuongMacBenh.tinhIdThuongTru'
+                    searchObject={{}}
+                    onChange={(option) => {
+                        setValues({
+                            ...values,
+                            doiTuongMacBenh: {
+                                ...values.doiTuongMacBenh,
+                                tinhIdThuongTru: option?.id,
+                                huyenIdThuongTru: null,
+                                xaIdThuongTru: null
+                            },
+                        })
+                    }}
+                    value={values.doiTuongMacBenh?.tinhIdThuongTru}
+
                 />
             </Col>
             <Col xl={3}>
                 <OCTAutocomplete
-                    lable="Quận/Huyện thường trú"
+                    menuPlacement="top"
+                    lable="Quận/Huyện thường chú"
+                    searchFunction={() => getListHuyenByTinhId(values.doiTuongMacBenh?.tinhIdThuongTru)}
+                    urlData='data.data'
+                    getOptionLabel={(option) => option.tenHuyen}
                     options={[]}
+                    searchObject={{}}
+                    value={values.doiTuongMacBenh?.huyenIdThuongTru}
+                    isDisabled={!values.doiTuongMacBenh?.tinhIdThuongTru}
+                    onChange={(option) => {
+                        setValues({
+                            ...values,
+                            doiTuongMacBenh: {
+                                ...values.doiTuongMacBenh,
+                                huyenIdThuongTru: option?.id,
+                                xaIdThuongTru: null
+                            },
+                        })
+                    }}
+                    dependencies={[values.doiTuongMacBenh?.tinhIdThuongTru]}
                 />
             </Col>
             <Col xl={3}>
                 <OCTAutocomplete
+                    menuPlacement="top"
                     lable="Phường/Xã thường trú"
+                    searchFunction={() => getListXaByHuyenId(values.doiTuongMacBenh?.huyenIdThuongTru)}
+                    urlData='data.data'
+                    getOptionLabel={(option) => option.tenXa}
                     options={[]}
+                    searchObject={{}}
+                    value={values.doiTuongMacBenh?.xaIdThuongTru}
+                    isDisabled={!values.doiTuongMacBenh?.huyenIdThuongTru}
+                    onChange={(option) => {
+                        setFieldValue("doiTuongMacBenh.xaIdThuongTru", option?.xaId)
+                    }}
+                    dependencies={[values.doiTuongMacBenh?.huyenIdThuongTru]}
                 />
             </Col>
         </Row>

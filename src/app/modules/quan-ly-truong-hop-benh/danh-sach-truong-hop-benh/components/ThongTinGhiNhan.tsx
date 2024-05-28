@@ -1,12 +1,15 @@
 import { OCTAutocomplete, OCTTextValidator, } from '@oceantech/oceantech-ui';
 import { useFormikContext } from 'formik';
 import { Col, Row } from '../../../component/Grid';
-import { ITruongHopBenh } from '../model/Model';
+import AsyncAutoComplete from '../../../component/input-field/AsyncAutoComplete';
+import { getListCoSoDieuTri, getListDonViCongTac } from '../../../services';
+import { DIA_DIEM_DIEU_TRI } from '../constants/constant';
+import { TruongHopBenh } from '../model/Model';
 type Props = {
 }
 
 const ThongTinGhiNhanTab = (props: Props) => {
-    const { values, handleChange, errors, touched } = useFormikContext<ITruongHopBenh>()
+    const { values, handleChange, errors, touched, setFieldValue, setValues } = useFormikContext<TruongHopBenh>()
 
     return (
         <>
@@ -19,11 +22,11 @@ const ThongTinGhiNhanTab = (props: Props) => {
                         lable="Tên người báo cáo"
                         type="text"
                         isRequired
-                        name="tenNguoiBaoCao"
-                        values={values.tenNguoiBaoCao}
+                        name="truongHopBenh.tenNguoiBaoCao"
+                        value={values.truongHopBenh?.tenNguoiBaoCao}
                         onChange={handleChange}
-                        errors={errors?.tenNguoiBaoCao}
-                        touched={touched?.tenNguoiBaoCao}
+                        errors={errors?.truongHopBenh?.tenNguoiBaoCao}
+                        touched={touched?.truongHopBenh?.tenNguoiBaoCao}
                     />
                 </Col>
                 <Col xs={6}>
@@ -31,6 +34,11 @@ const ThongTinGhiNhanTab = (props: Props) => {
                         lable="Điện thoại"
                         type="text"
                         isRequired
+                        name="truongHopBenh.dienThoaiNguoiBaoCao"
+                        value={values.truongHopBenh?.dienThoaiNguoiBaoCao}
+                        onChange={handleChange}
+                        errors={errors?.truongHopBenh?.dienThoaiNguoiBaoCao}
+                        touched={touched?.truongHopBenh?.dienThoaiNguoiBaoCao}
                     />
                 </Col>
                 <Col xs={6}>
@@ -38,13 +46,30 @@ const ThongTinGhiNhanTab = (props: Props) => {
                         lable="Email"
                         type="text"
                         isRequired
+                        name="truongHopBenh.emailNguoiBaoCao"
+                        value={values.truongHopBenh?.emailNguoiBaoCao}
+                        onChange={handleChange}
+                        errors={errors?.truongHopBenh?.emailNguoiBaoCao}
+                        touched={touched?.truongHopBenh?.emailNguoiBaoCao}
                     />
                 </Col>
                 <Col xs={6}>
-                    <OCTTextValidator
-                        lable="Đơn vị công tác"
-                        type="text"
-                        isRequired
+                    <AsyncAutoComplete
+                        params={{}}
+                        required
+                        label='Đơn vị công tác'
+                        displayField='tenCoSo'
+                        service={getListDonViCongTac}
+                        handleChange={(value) => setValues({
+                            ...values,
+                            truongHopBenh: {
+                                ...values.truongHopBenh,
+                                donViCongTacNbc: value,
+                                donViCongTacNbcId: value?.id
+                            }
+                        })}
+                        nameErrorMessage={errors?.truongHopBenh?.donViCongTacNbc as string}
+                        value={values.truongHopBenh?.donViCongTacNbc}
                     />
                 </Col>
                 <Col xl={6}>
@@ -56,26 +81,55 @@ const ThongTinGhiNhanTab = (props: Props) => {
                 <Col xl={2}>
                     <OCTAutocomplete
                         lable="Địa điểm"
-                        options={[]}
+                        options={DIA_DIEM_DIEU_TRI}
                         isRequired
+                        name="truongHopBenh.noiPhatHien"
+                        value={values.truongHopBenh?.noiPhatHien}
+                        onChange={(option) => setFieldValue("truongHopBenh.noiPhatHien", option?.code)}
+                        errors={errors?.truongHopBenh?.noiPhatHien}
+                        touched={touched?.truongHopBenh?.noiPhatHien}
                     />
                 </Col>
                 <Col xl={4}>
-                    <OCTAutocomplete
-                        lable="Cơ sở điều trị"
-                        options={[]}
-                        isRequired
+                    <AsyncAutoComplete
+                        params={{}}
+                        required
+                        label="Cơ sở điều trị"
+                        displayField='tenCoSo'
+                        service={getListCoSoDieuTri}
+                        handleChange={(value) => setValues({
+                            ...values,
+                            truongHopBenh: {
+                                ...values.truongHopBenh,
+                                coSoDieuTri: value,
+                                coSoDieuTriId: value?.id
+                            }
+                        })}
+                        nameErrorMessage={errors?.truongHopBenh?.coSoDieuTri as string}
+                        value={values.truongHopBenh?.coSoDieuTri}
                     />
                 </Col>
                 <Col xl={4}>
-                    <OCTAutocomplete
-                        lable="Trạm y tế"
-                        options={[]}
-                        isRequired
+                    <AsyncAutoComplete
+                        params={{}}
+                        required
+                        displayField='tenCoSo'
+                        label="Trạm y tế"
+                        service={getListDonViCongTac}
+                        handleChange={(value) => setValues({
+                            ...values,
+                            truongHopBenh: {
+                                ...values.truongHopBenh,
+                                coSoQuanLy: value,
+                                coSoQuanLyId: value?.id
+                            }
+                        })}
+                        nameErrorMessage={errors?.truongHopBenh?.coSoQuanLy as string}
+                        value={values.truongHopBenh?.coSoQuanLy}
                     />
                 </Col>
-            </Row></>
-
+            </Row>
+        </>
     )
 }
 

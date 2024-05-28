@@ -1,9 +1,11 @@
-import { Form, Formik } from "formik";
+import { Form, Formik, FormikHelpers } from "formik";
 import { useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import TabMenu from "../../../component/tabs/TabMenu";
 import { hanhChinhSchema, KeyTab, tabConfig, tabTruongHopBenh } from "../constants/constant";
-import { initialTruongHopBenh, ITruongHopBenh } from "../model/Model";
+import { initTruongHopBenh, TruongHopBenh } from "../model/Model";
+import { AddTruongHopBenh } from "../servives/Services";
+import { toast } from "react-toastify";
 
 type TProps = {
     handleClose: () => void;
@@ -23,15 +25,16 @@ const NhapTruongHopBenhModal = (props: TProps) => {
     }, [activeTab]);
 
 
-    const handleSubmit = async (values: ITruongHopBenh) => {
+    const handleSubmit = async (values: TruongHopBenh,  formikHelpers: FormikHelpers<TruongHopBenh>) => {
         const { nextTab } = tabConfig[activeTab] || {};
         if (nextTab) {
             setActiveTab(nextTab);
         } else {
+            await AddTruongHopBenh(values)
+            toast.success("Thêm mới thành công trường hợp bệnh thành công");
             handleClose();
         }
     };
-
 
     return (
         <Modal
@@ -50,7 +53,7 @@ const NhapTruongHopBenhModal = (props: TProps) => {
             </Modal.Header>
             <Modal.Body>
                 <Formik
-                    initialValues={initialTruongHopBenh}
+                    initialValues={initTruongHopBenh}
                     validationSchema={validationSchema}
                     onSubmit={handleSubmit}
                 >
