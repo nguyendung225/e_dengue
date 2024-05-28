@@ -3,15 +3,18 @@ import { TYPE } from "../utils/Constant";
 import { dsOBenhColumns } from "./constants/constants";
 import FilterSearchBox from "./components/FilterSearch";
 import "./styles/quanLyODich.scss";
+import { useState } from "react";
 
 const DanhSachODich = () => {
+    const [oDichList, setODichList] = useState([]);
+
     return (
         <div className="spaces mt-15">
             <div className="section-container">
                 <div className="spaces mb-15 fs-18 fw-bold text-uppercase color-dark-red">
                     Tìm kiếm ổ dịch
                 </div>
-                <FilterSearchBox />
+                <FilterSearchBox setODichList={setODichList}/>
             </div>
             <div className="section-container spaces mt-15">
                 <div className="spaces fs-18 fw-bold text-uppercase color-dark-red">
@@ -19,7 +22,7 @@ const DanhSachODich = () => {
                 </div>
                 <OCTTable
                     id="profile"
-                    data={[]}
+                    data={oDichList}
                     columns={dsOBenhColumns}
                     // searchObject={searchObject}
                     // setSearchObject={setSearchObject}

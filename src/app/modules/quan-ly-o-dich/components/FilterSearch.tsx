@@ -1,43 +1,69 @@
+import * as Yup from "yup";
 import { Formik } from "formik";
 import LabelRequired from "../../component/LabelRequired";
 import { Button, Col, Row } from "react-bootstrap";
 import { OCTAutocomplete, OCTKTSVG, OCTTextValidator } from "@oceantech/oceantech-ui";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
+import { getListHuyen, getListTinh, getListXa } from "../../services";
+import { initSearchObj } from "../constants/constants";
+import { ISearchObjModel } from "../models/quanLyODichModels";
 
-export const FilterSearchBox = () => {
+type TProps = {
+    setODichList: Dispatch<SetStateAction<never[]>>;
+}
+
+export const FilterSearchBox = ({ setODichList }: TProps) => {
     const [shouldOpenAdvanceSearch, setShouldOpenAdvanceSearch] = useState<boolean>(false);
 
-    const handleSearch = () => {
+    const validationSchema = Yup.object().shape({
+        ngayKhoiPhatTuNgay: Yup.date()
+            .max(new Date(), "Không được lớn hơn ngày hiện tại"),
+        ngayKhoiPhatDenNgay: Yup.date()
+            .min(Yup.ref("ngayKhoiPhatTuNgay"), "Ngày khởi phát đến phải lớn hơn ngày bắt đầu")
+            .max(new Date(), "Không được lớn hơn ngày hiện tại"),
+        ngayTaoBaoCaoTuNgay: Yup.date()
+            .max(new Date(), "Không được lớn hơn ngày hiện tại"),
+        ngayTaoBaoCaoDenNgay: Yup.date()
+            .min(Yup.ref("ngayTaoBaoCaoTuNgay"), "Ngày khởi phát đến phải lớn hơn ngày bắt đầu")
+            .max(new Date(), "Không được lớn hơn ngày hiện tại"),
+        ngayKetThucTuNgay: Yup.date()
+            .max(new Date(), "Không được lớn hơn ngày hiện tại"),
+        ngayKetThucDenNgay: Yup.date()
+            .min(Yup.ref("ngayKetThucTuNgay"), "Ngày khởi phát đến phải lớn hơn ngày bắt đầu")
+            .max(new Date(), "Không được lớn hơn ngày hiện tại"),
+    });
 
+    const handleSearch = (values: ISearchObjModel) => {
+        // Xử lý call api tìm kiếm
     }
 
     return (
         <>
             <Formik
-                initialValues={{}}
+                validationSchema={validationSchema}
+                initialValues={initSearchObj}
                 onSubmit={handleSearch}
             >
                 {({
                     errors,
                     values,
                     touched,
-                    handleChange,
                     handleSubmit,
+                    handleChange,
                     setFieldValue,
                 }) => {
-
                     return (
-                        <form onSubmit={handleSearch}>
-                            <div className="">
+                        <form onSubmit={handleSubmit}>
+                            <div>
                                 <Row className="border-bottom spaces pb-15">
                                     <Col xs={6} sm={6} md={6} lg={6}>
                                         <OCTTextValidator
                                             className="d-flex"
                                             placeholder="Nhập tên ổ dịch muốn tìm"
-                                            name="denNgay"
+                                            name="keyword"
                                             type="text"
-                                        //    value={values?.denNgay || ""}
-                                        //    onChange={(e: any) => handleChange("denNgay", e.target.value)}
+                                            value={values?.keyword}
+                                            onChange={handleChange}
                                         />
                                     </Col>
                                     <Col xs={6} sm={6} md={3} lg={3}>
@@ -83,8 +109,13 @@ export const FilterSearchBox = () => {
                                                 />
                                                 <OCTAutocomplete
                                                     className="spaces h-25 min-w-256"
-                                                    name="trangThai"
+                                                    urlData="data.data"
+                                                    name="tinhId"
                                                     options={[]}
+                                                    searchFunction={getListTinh}
+                                                    getOptionLabel={(option) => option.tenTinh}
+                                                    searchObject={{}}
+                                                    onChange={(value) => setFieldValue("tinhId", value?.id)}
                                                 />
                                             </Col>
                                             <Col xs={12} sm={6} md={3} lg={3} className="spaces mt-5">
@@ -94,8 +125,13 @@ export const FilterSearchBox = () => {
                                                 />
                                                 <OCTAutocomplete
                                                     className="spaces h-25 min-w-256"
-                                                    name="trangThai"
+                                                    urlData="data.data"
+                                                    name="huyenId"
                                                     options={[]}
+                                                    searchFunction={getListHuyen}
+                                                    getOptionLabel={(option) => option.tenHuyen}
+                                                    searchObject={{}}
+                                                    onChange={(value) => setFieldValue("huyenId", value?.id)}
                                                 />
                                             </Col>
                                             <Col xs={12} sm={6} md={3} lg={3} className="spaces mt-5">
@@ -105,8 +141,13 @@ export const FilterSearchBox = () => {
                                                 />
                                                 <OCTAutocomplete
                                                     className="spaces h-25 min-w-256"
-                                                    name="trangThai"
+                                                    urlData="data.data"
+                                                    name="xaId"
                                                     options={[]}
+                                                    searchFunction={getListXa}
+                                                    getOptionLabel={(option) => option.tenXa}
+                                                    searchObject={{}}
+                                                    onChange={(value) => setFieldValue("xaId", value?.id)}
                                                 />
                                             </Col>
                                         </Row>
@@ -120,6 +161,10 @@ export const FilterSearchBox = () => {
                                                     className="spaces flex-1"
                                                     name="ngayKhoiPhatTuNgay"
                                                     type="date"
+                                                    value={values?.ngayKhoiPhatTuNgay}
+                                                    onChange={handleChange}
+                                                    errors={errors?.ngayKhoiPhatTuNgay}
+                                                    touched={touched?.ngayKhoiPhatTuNgay}
                                                 />
                                             </Col>
                                             <Col xs={12} sm={6} md={3} lg={3} className="spaces mt-5">
@@ -131,6 +176,10 @@ export const FilterSearchBox = () => {
                                                     className="spaces flex-1"
                                                     name="ngayKhoiPhatDenNgay"
                                                     type="date"
+                                                    value={values?.ngayKhoiPhatDenNgay}
+                                                    onChange={handleChange}
+                                                    errors={errors?.ngayKhoiPhatDenNgay}
+                                                    touched={touched?.ngayKhoiPhatDenNgay}
                                                 />
                                             </Col>
                                             <Col xs={12} sm={6} md={3} lg={3} className="spaces mt-5">
@@ -142,6 +191,10 @@ export const FilterSearchBox = () => {
                                                     className="spaces flex-1"
                                                     name="ngayTaoBaoCaoTuNgay"
                                                     type="date"
+                                                    value={values?.ngayTaoBaoCaoTuNgay}
+                                                    onChange={handleChange}
+                                                    errors={errors?.ngayTaoBaoCaoTuNgay}
+                                                    touched={touched?.ngayTaoBaoCaoTuNgay}
                                                 />
                                             </Col>
                                             <Col xs={12} sm={6} md={3} lg={3} className="spaces mt-5">
@@ -153,6 +206,10 @@ export const FilterSearchBox = () => {
                                                     className="spaces flex-1"
                                                     name="ngayTaoBaoCaoDenNgay"
                                                     type="date"
+                                                    value={values?.ngayTaoBaoCaoDenNgay}
+                                                    onChange={handleChange}
+                                                    errors={errors?.ngayTaoBaoCaoDenNgay}
+                                                    touched={touched?.ngayTaoBaoCaoDenNgay}
                                                 />
                                             </Col>
                                         </Row>
@@ -166,6 +223,10 @@ export const FilterSearchBox = () => {
                                                     className="spaces flex-1"
                                                     name="ngayKetThucTuNgay"
                                                     type="date"
+                                                    value={values?.ngayKetThucTuNgay}
+                                                    onChange={handleChange}
+                                                    errors={errors?.ngayKetThucTuNgay}
+                                                    touched={touched?.ngayKetThucTuNgay}
                                                 />
                                             </Col>
                                             <Col xs={12} sm={6} md={3} lg={3} className="spaces mt-5">
@@ -177,6 +238,10 @@ export const FilterSearchBox = () => {
                                                     className="spaces flex-1"
                                                     name="ngayKetThucDenNgay"
                                                     type="date"
+                                                    value={values?.ngayKetThucDenNgay}
+                                                    onChange={handleChange}
+                                                    errors={errors?.ngayKetThucDenNgay}
+                                                    touched={touched?.ngayKetThucDenNgay}
                                                 />
                                             </Col>
                                             <Col xs={12} sm={6} md={3} lg={3} className="spaces mt-5">
@@ -186,8 +251,13 @@ export const FilterSearchBox = () => {
                                                 />
                                                 <OCTAutocomplete
                                                     className="spaces h-25 min-w-256"
-                                                    name="trangThai"
+                                                    urlData="data.data"
+                                                    name="trangThaiId"
                                                     options={[]}
+                                                    // searchFunction={getListDmTinhTrangHienTai}
+                                                    // getOptionLabel={(option) => option.tenTrangThai}
+                                                    searchObject={{}}
+                                                    onChange={(value) => setFieldValue("trangThaiId", value?.id)}
                                                 />
                                             </Col>
                                             <Col xs={12} sm={6} md={3} lg={3} className="spaces mt-5">
@@ -197,8 +267,13 @@ export const FilterSearchBox = () => {
                                                 />
                                                 <OCTAutocomplete
                                                     className="spaces h-25 min-w-256"
-                                                    name="trangThai"
+                                                    urlData="data.data"
+                                                    name="donViBaoCaoId"
                                                     options={[]}
+                                                    // searchFunction={getListDmDonViThucHienXetNghiem}
+                                                    // getOptionLabel={(option) => option.tenDonViBaoCao}
+                                                    searchObject={{}}
+                                                    onChange={(value) => setFieldValue("donViBaoCaoId", value?.id)}
                                                 />
                                             </Col>
                                         </Row>
