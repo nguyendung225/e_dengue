@@ -1,3 +1,7 @@
+import moment from "moment";
+import { SearchObject } from "../../models/TimKiemTruongHopBenhModels";
+import { renderStatusThb } from "../../../utils/FormatUtils";
+
 export const truongHopBenhColumns = [
   {
     name: "STT",
@@ -6,27 +10,27 @@ export const truongHopBenhColumns = [
   },
   {
     name: "Họ và tên",
-    field: "hovaven",
+    field: "hoTen",
     headerStyle: {
-      minWidth: "120px",
+      minWidth: "140px",
     },
     cellStyle: {
-      textAlign: "center",
+      textAlign: "left",
     },
   },
   {
     name: "Tên bệnh",
-    field: "tenbenh",
+    field: "tenBenh",
     headerStyle: {
       minWidth: "120px",
     },
     cellStyle: {
-      textAlign: "center",
+      textAlign: "left",
     },
   },
   {
     name: "Chuẩn đoán",
-    field: "chuandoan",
+    field: "TenChanDoan",
     headerStyle: {
       minWidth: "120px",
     },
@@ -36,17 +40,21 @@ export const truongHopBenhColumns = [
   },
   {
     name: "Tình trạng hiện tại",
-    field: "tinhtranghientai",
+    field: "TinhTrangHienNay",
     headerStyle: {
       minWidth: "120px",
     },
     cellStyle: {
-      textAlign: "center",
+      textAlign: "left",
     },
+    render: (rowData: any) =>
+      TINH_TRANG_HIEN_NAY.find(
+        (item) => item.code === rowData?.tinhTrangHienNay
+      )?.name,
   },
   {
     name: "Tỉnh",
-    field: "tinh",
+    field: "tenTinh",
     headerStyle: {
       minWidth: "120px",
     },
@@ -56,7 +64,7 @@ export const truongHopBenhColumns = [
   },
   {
     name: "Huyện",
-    field: "huyen",
+    field: "tenHuyen",
     headerStyle: {
       minWidth: "120px",
     },
@@ -66,7 +74,7 @@ export const truongHopBenhColumns = [
   },
   {
     name: "Xã",
-    field: "xa",
+    field: "tenXa",
     headerStyle: {
       minWidth: "120px",
     },
@@ -76,62 +84,183 @@ export const truongHopBenhColumns = [
   },
   {
     name: "Cơ sở điều trị",
-    field: "cosodieutri",
+    field: "TenCoSoGhiNhan",
     headerStyle: {
       minWidth: "120px",
     },
     cellStyle: {
-      textAlign: "center",
+      textAlign: "left",
     },
   },
   {
     name: "Cơ sở ghi nhận",
-    field: "cosoghinhan",
+    field: "TenCoSoDieuTri",
     headerStyle: {
       minWidth: "120px",
     },
     cellStyle: {
-      textAlign: "center",
+      textAlign: "left",
     },
   },
   {
     name: "Ngày khỏi phát",
-    field: "ngaykhoiphat",
+    field: "ngayKhoiPhat",
     headerStyle: {
       minWidth: "120px",
     },
     cellStyle: {
       textAlign: "center",
     },
+    render: (rowData: any) => rowData.ngayKhoiPhat && moment(rowData.ngayKhoiPhat).format("DD-MM-YYYY"),
   },
   {
     name: "Ngày nhập viện",
-    field: "ngaynhapvien",
+    field: "ngayNhapVien",
     headerStyle: {
       minWidth: "120px",
     },
     cellStyle: {
       textAlign: "center",
     },
+    render: (rowData: any) => rowData.ngayNhapVien && moment(rowData.ngayNhapVien).format("DD-MM-YYYY"),
   },
   {
     name: "Ngày báo cáo",
-    field: "ngaybaocao",
+    field: "ngayNopBcDieuTra",
     headerStyle: {
       minWidth: "120px",
     },
     cellStyle: {
       textAlign: "center",
     },
+    render: (rowData: any) => rowData.ngayNopBcDieuTra && moment(rowData.ngayNopBcDieuTra).format("DD-MM-YYYY"),
   },
   {
     name: "TT",
-    field: "tt",
+    field: "luuStatus",
     headerStyle: {
-      minWidth: "120px",
+      minWidth: "50px",
     },
     cellStyle: {
       textAlign: "center",
     },
+    render: (rowData: any) =>  renderStatusThb(rowData.luuStatus)
+  },
+];
+
+export const GENDER_OPTION = [
+  { name: "Nam", code: 0 },
+  { name: "Nữ ", code: 1 },
+  { name: "Khác", code: 2 },
+];
+
+export const SEARCH_OBJECT_INIT: SearchObject = {
+  Keyword: "",
+  ThoiGianBatDau: null,
+  ThoiGianKetThuc: null,
+  BenhIds: null,
+  ListTrangThai: null,
+  TinhId: null,
+  HuyenId: null,
+  XaId: null,
+  HoTen: "",
+  GioiTinh: null,
+  NgheNghiepId: null,
+  TuNgayKhoiPhat: null,
+  DenNgayKhoiPhat: null,
+  TuNgayNhapVien: null,
+  DenNgayNhapVien: null,
+  TuNgayRaVien: null,
+  DenNgayRaVien: null,
+  KqXetNghiem: null,
+  TuNgayLayMau: null,
+  DenNgayLayMau: null,
+  DonViThucHienXn: null,
+  TuNgayTraKetQuaXn: null,
+  DenNgayTraKetQuaXn: null,
+  CoSoDieuTriId: null,
+  IsNopTroLen: null,
+  pageNumber: 1,
+  pageSize: 10,
+  PhanLoai: null,
+  TinhTrangHienNay: null,
+  NgayNhapBaoCaoTu: null,
+  NgayNhapBaoCaoDen: null,
+  coSoCreateId: null,
+};
+
+export const TINH_TRANG_HIEN_NAY = [
+  {
+    code: 0,
+    name: "Điều trị ngoại trú",
+  },
+  {
+    code: 1,
+    name: "Điều trị nội trú",
+  },
+  {
+    code: 2,
+    name: "Ra viện",
+  },
+  {
+    code: 3,
+    name: "Chuyển viện",
+  },
+  {
+    code: 3,
+    name: "Tình trạng khác",
+  },
+];
+
+export const LIST_TRANG_THAI = [
+  {
+    code: 0,
+    name: "nặng",
+  },
+  {
+    code: 1,
+    name: "Khỏi bệnh",
+  },
+  {
+    code: 2,
+    name: "Bình thường",
+  },
+];
+
+export const KQ_XET_NGHIEM = [
+  {
+    code: 0,
+    name: "Dương tính",
+  },
+  {
+    code: 1,
+    name: "Âm tính",
+  },
+  {
+    code: 2,
+    name: "Chưa có kết quả",
+  },
+  {
+    code: 3,
+    name: "Kết quả không thực hiện",
+  },
+];
+
+export const PHAN_LOAI_QUAN_LY = [
+  {
+    code: 0,
+    name: "Cơ sở tự nhập",
+  },
+  {
+    code: 1,
+    name: "Chuyến đến",
+  },
+  {
+    code: 2,
+    name: "Chuyến đi",
+  },
+  {
+    code: 3,
+    name: "Cơ sở quản lý",
   },
 ];

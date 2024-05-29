@@ -1,6 +1,6 @@
 import moment from "moment";
-import { GENDER, MEDICAL_INCIDENT_REPORT_STATUS, NUMBER_EXCEPT_THIS_SYMBOLS } from "./Constant";
-import { Col, Form, FormCheck, Row } from 'react-bootstrap';
+import { GENDER, MEDICAL_INCIDENT_REPORT_STATUS, NUMBER_EXCEPT_THIS_SYMBOLS, STATUS_THB } from "./Constant";
+import { OCTKTSVG } from "@oceantech/oceantech-ui";
 
 export const convertNumberPrice = (value: any) => {
     let number = Number(value ? value : 0)
@@ -144,6 +144,26 @@ export const renderMedicalIncidentReportStatus = (reportStatus: number) => {
         case MEDICAL_INCIDENT_REPORT_STATUS.DA_KET_LUAN:
             return (<i className="bi bi-circle-fill spaces fs-10 color-purple"></i>);
     }
+}
+
+export const renderStatusThb = (statusThb:number) => {
+    switch (statusThb) {
+        case STATUS_THB.ONTIME:
+            return (
+                <OCTKTSVG
+                    path="/media/svg/icons/exclamation-circle-fill.svg"
+                    svgClassName="spaces w-20 color-red"
+                />
+            );
+        case STATUS_THB.OVERTIME:
+            return (
+                <OCTKTSVG
+                    path="/media/svg/icons/check-circle-fill.svg"
+                    svgClassName="spaces w-20 mr-4 color-green"
+                />
+            );
+    }
+        
 }
 
 export const convertLabelByCode = (options: any, code: number | string = "") => {
