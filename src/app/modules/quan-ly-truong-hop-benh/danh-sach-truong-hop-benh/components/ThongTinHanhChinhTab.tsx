@@ -102,7 +102,7 @@ const ThongTinHanhChinhTab = (props: Props) => {
                     onChange={handleChange}
                     errors={errors?.doiTuongMacBenh?.cmnd}
                     touched={touched?.doiTuongMacBenh?.cmnd}
-                    disabled={values.doiTuongMacBenh?.haveCmnd}
+                    disabled={!values.doiTuongMacBenh?.haveCmnd}
                 />
                 <Form.Check
                     className='mt-2'
@@ -132,7 +132,7 @@ const ThongTinHanhChinhTab = (props: Props) => {
                     onChange={handleChange}
                     errors={errors?.doiTuongMacBenh?.dienThoai}
                     touched={touched?.doiTuongMacBenh?.dienThoai}
-                    disabled={values.doiTuongMacBenh?.haveDienThoai}
+                    disabled={!values.doiTuongMacBenh?.haveDienThoai}
                 />
                 <Form.Check
                     className='mt-2'

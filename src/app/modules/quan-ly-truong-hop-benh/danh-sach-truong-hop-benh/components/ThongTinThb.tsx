@@ -1,14 +1,20 @@
 import { Form, Formik } from "formik"
 import { TabMenu } from "../../../component/tabs/TabMenu"
 import { tabTruongHopBenh } from "../constants/constant"
-import { initTruongHopBenh } from "../model/Model"
+import { TruongHopBenh } from "../model/Model"
 
-const ThongTinThb = () => {
+type IProps = {
+    dataRow: TruongHopBenh
+}
+
+const ThongTinThb = ({ dataRow }: IProps) => {
+
     return (
         <>
             <Formik
-                initialValues={initTruongHopBenh}
+                initialValues={dataRow}
                 onSubmit={() => { }}
+                enableReinitialize
             >
                 {formikProps => (
                     <Form>

@@ -2,7 +2,32 @@ import * as Yup from "yup";
 import ThongTinHanhChinhTab from "../components/ThongTinHanhChinhTab";
 import ThongTinChanDoanTab from "../components/ThongTinChanDoanTab";
 import ThongTinGhiNhanTab from "../components/ThongTinGhiNhan";
+import { convertGenderToString, formatDateToString } from "../../../utils/FormatUtils";
 import { CURENT_STATUS, TYPE_TEST_CODE } from "../config/config";
+import { OCTKTSVG } from "@oceantech/oceantech-ui";
+
+const TRANG_THAI_PHAN_HOI = {
+    QUA_7_NGAY_CHUA_XN: -1,
+    CHUA_XAC_NHAN: 0,
+    DA_XN_DUNG: 1,
+    XN_SAI_THONG_TIN_HANH_CHINH: 2,
+    XN_SAI_THONG_TIN_CHAN_DOAN: 3,
+}
+
+const randerTrangThaiPhanHoi = (trangThaiPhanHoi: number) => {
+    switch(trangThaiPhanHoi) {
+        case TRANG_THAI_PHAN_HOI.DA_XN_DUNG:
+            return <OCTKTSVG path="/media/svg/icons/check-circle-fill.svg" svgClassName="spaces w-16 h-16 mr-10 color-bright-cyan"/>
+        case TRANG_THAI_PHAN_HOI.QUA_7_NGAY_CHUA_XN: 
+            return <OCTKTSVG path="/media/svg/icons/exclamation-triangle-fill.svg" svgClassName="spaces w-16 h-16 mr-10 color-dark-red"/>
+        case TRANG_THAI_PHAN_HOI.CHUA_XAC_NHAN:
+            return <OCTKTSVG path="/media/svg/icons/exclamation-triangle-fill.svg" svgClassName="spaces w-16 h-16 mr-10 color-dark-orange"/>
+        case TRANG_THAI_PHAN_HOI.XN_SAI_THONG_TIN_HANH_CHINH:
+            return <OCTKTSVG path="/media/svg/icons/question-circle-fill.svg" svgClassName="spaces w-16 h-16 mr-10 color-steel-blue"/>
+        case TRANG_THAI_PHAN_HOI.XN_SAI_THONG_TIN_CHAN_DOAN: 
+            return <OCTKTSVG path="/media/svg/icons/question-circle-fill.svg" svgClassName="spaces w-16 h-16 mr-10 color-green"/>
+    }
+}
 
 export const danhSachThbColumns = [
   {
@@ -12,12 +37,12 @@ export const danhSachThbColumns = [
   },
   {
     name: "Họ và tên",
-    field: "hoVaTen",
+    field: "hoTen",
     headerStyle: {
-      minWidth: "120px"
+      minWidth: "140px"
     },
     cellStyle: {
-      textAlign: "center",
+      textAlign: "left",
     },
   },
   {
@@ -26,31 +51,29 @@ export const danhSachThbColumns = [
     headerStyle: {
       minWidth: "60px"
     },
-  },
-  {
-    name: "Tên bệnh",
-    field: "tenBenh",
-    headerStyle: {
-      minWidth: "140px"
-    },
-    cellStyle: {
-      minWidth: "200px",
-      textAlign: "left",
-    },
+    render: (row: any) => (
+      <span>{convertGenderToString(row?.gioiTinh)}</span>
+    )
   },
   {
     name: "Ngày trả KQXN",
-    field: "ngayTraKQXN",
+    field: "ngayTraKetQuaXn",
     headerStyle: {
       minWidth: "120px"
     },
+    render: (row: any) => (
+      <span>{formatDateToString(row?.ngayTraKetQuaXn)}</span>
+    )
   },
   {
     name: "Trạng thái",
-    field: "birthDate",
+    field: "",
     headerStyle: {
       minWidth: "100px"
     },
+    render: (row: any) => (
+        <>{randerTrangThaiPhanHoi(row?.trangThaiPhanHoi)}</>
+    )
   }
 ]
 

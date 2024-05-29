@@ -1,19 +1,20 @@
 import { Form, Formik, FormikHelpers } from "formik";
 import { useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
+import { toast } from "react-toastify";
 import TabMenu from "../../../component/tabs/TabMenu";
 import { hanhChinhSchema, KeyTab, tabConfig, tabTruongHopBenh } from "../constants/constant";
-import { initTruongHopBenh, TruongHopBenh } from "../model/Model";
+import { TruongHopBenh } from "../model/Model";
 import { AddTruongHopBenh } from "../servives/Services";
-import { toast } from "react-toastify";
 
 type TProps = {
     handleClose: () => void;
     dataRow?: any;
+    updatePageData: () => void;
 };
 
 const NhapTruongHopBenhModal = (props: TProps) => {
-    const { dataRow, handleClose } = props;
+    const { dataRow, handleClose, updatePageData } = props;
     const [activeTab, setActiveTab] = useState(KeyTab.TT_HANH_CHINH)
     const [validationSchema, setValidationSchema] = useState(hanhChinhSchema);
     const [prevTab, setPrevTab] = useState<any>(null)
@@ -32,6 +33,7 @@ const NhapTruongHopBenhModal = (props: TProps) => {
         } else {
             await AddTruongHopBenh(values)
             toast.success("Thêm mới thành công trường hợp bệnh thành công");
+            updatePageData();
             handleClose();
         }
     };
@@ -47,13 +49,13 @@ const NhapTruongHopBenhModal = (props: TProps) => {
             <Modal.Header closeButton>
                 <Modal.Title>
                     <span className="spaces pl-16">
-                        {dataRow?.name ? "#Cập nhật" : "#Thêm mới"} trường hợp bệnh
+                        {dataRow?.truongHopBenh.truongHopBenhId ? "#Cập nhật" : "#Thêm mới"} trường hợp bệnh
                     </span>
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Formik
-                    initialValues={initTruongHopBenh}
+                    initialValues={dataRow}
                     validationSchema={validationSchema}
                     onSubmit={handleSubmit}
                 >

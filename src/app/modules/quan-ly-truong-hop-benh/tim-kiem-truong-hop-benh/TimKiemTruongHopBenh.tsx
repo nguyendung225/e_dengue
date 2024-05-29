@@ -2,27 +2,25 @@ import FilterSearchContainer from "./components/FilterSearchContainer";
 import { Button } from "react-bootstrap";
 import "./styles/TimKiemTruongHopBenh.scss";
 import { OCTKTSVG, OCTTable } from "@oceantech/oceantech-ui";
-import { truongHopBenhColumns } from "./constants/constants";
-import { searchByPage } from "./services/TimKiemThbServices";
+import { SEARCH_OBJECT_INIT, truongHopBenhColumns } from "./constants/constants";
+import { searchThbByPage } from "./services/TimKiemThbServices";
 import { useContext, useEffect, useState } from "react";
 import AppContext from "../../../AppContext";
-import { SearchObject } from "../models/TimKiemTruongHopBenhModels";
+import { SearchObjectModel } from "../models/TimKiemTruongHopBenhModels";
 import { toast } from "react-toastify";
+import SearchAdvanceForm from "./components/SearchAdvanceForm";
 type Props = {};
 
 const TimKiemTruongHopBenh = (props: Props) => {
   const { setPageLoading } = useContext(AppContext);
-  const [listDataTHB, setlistDataTHB] = useState<SearchObject[]>([]);
+  const [listDataTHB, setlistDataTHB] = useState<SearchObjectModel[]>([]);
   const [configTable, setConfigTable] = useState<any>({});
-  const [searchObj, setSearchObj] = useState<SearchObject>({
-    pageNumber: 1,
-    pageSize: 10,
-  });
+  const [searchObj, setSearchObj] = useState<SearchObjectModel>(SEARCH_OBJECT_INIT);
 
-  const updatePageData = async (searchData: SearchObject) => {
+  const updatePageData = async (searchData: SearchObjectModel) => {
     try {
       setPageLoading(true);
-      const { data } = await searchByPage(searchData);
+      const { data } = await searchThbByPage(searchData);
       setConfigTable({
         totalElement: data.data.total,
         totalPages: data.data.totalPages,
@@ -30,6 +28,7 @@ const TimKiemTruongHopBenh = (props: Props) => {
       });
       setlistDataTHB(data?.data?.data || []);
     } catch (error) {
+      console.error(error);
       toast.error(error as string);
     } finally {
       setPageLoading(false);
@@ -37,15 +36,32 @@ const TimKiemTruongHopBenh = (props: Props) => {
   };
 
   useEffect(() => {
-    updatePageData(searchObj);
+    const searchObjTemp: SearchObjectModel = {
+      ...searchObj,
+      gioiTinh: searchObj.gioiTinh?.code,
+      ngheNghiepId: searchObj.ngheNghiepId?.id,
+      phanLoai: searchObj.phanLoai?.code,
+      listTinhTrangHienNay: searchObj.listTinhTrangHienNay?.map((item: any) => item?.code),
+      tinhId: searchObj.tinhId?.id,
+      huyenId: searchObj.huyenId?.id,
+      xaId: searchObj.xaId?.id,
+      coSoCreateId: searchObj.coSoCreateId?.id,
+      kqXetNghiem: searchObj.kqXetNghiem?.id,
+      donViThucHienXn: searchObj.donViThucHienXn?.id,
+      coSoDieuTriId: searchObj.coSoDieuTriId?.id
+    }
+    updatePageData(searchObjTemp);
   }, [searchObj]);
 
   return (
     <div className="search-container">
       <div className="section-container">
         <FilterSearchContainer
-          setSearchObj={setSearchObj}
-        />
+          searchObject={searchObj}
+          setSearchObject={setSearchObj}
+        >
+          <SearchAdvanceForm />
+        </FilterSearchContainer>
       </div>
       <div className="spaces mt-15 section-container">
         <div className="d-flex justify-content-between border-bottom align-items-center spaces pt-8 pb-14">

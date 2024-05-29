@@ -1,5 +1,5 @@
 import moment from "moment";
-import { SearchObject } from "../../models/TimKiemTruongHopBenhModels";
+import { SearchObjectModel } from "../../models/TimKiemTruongHopBenhModels";
 import { renderStatusThb } from "../../../utils/FormatUtils";
 
 export const truongHopBenhColumns = [
@@ -13,16 +13,6 @@ export const truongHopBenhColumns = [
     field: "hoTen",
     headerStyle: {
       minWidth: "140px",
-    },
-    cellStyle: {
-      textAlign: "left",
-    },
-  },
-  {
-    name: "Tên bệnh",
-    field: "tenBenh",
-    headerStyle: {
-      minWidth: "120px",
     },
     cellStyle: {
       textAlign: "left",
@@ -151,41 +141,40 @@ export const truongHopBenhColumns = [
 export const GENDER_OPTION = [
   { name: "Nam", code: 0 },
   { name: "Nữ ", code: 1 },
-  { name: "Khác", code: 2 },
 ];
 
-export const SEARCH_OBJECT_INIT: SearchObject = {
-  Keyword: "",
-  ThoiGianBatDau: null,
-  ThoiGianKetThuc: null,
-  BenhIds: null,
-  ListTrangThai: null,
-  TinhId: null,
-  HuyenId: null,
-  XaId: null,
-  HoTen: "",
-  GioiTinh: null,
-  NgheNghiepId: null,
-  TuNgayKhoiPhat: null,
-  DenNgayKhoiPhat: null,
-  TuNgayNhapVien: null,
-  DenNgayNhapVien: null,
-  TuNgayRaVien: null,
-  DenNgayRaVien: null,
-  KqXetNghiem: null,
-  TuNgayLayMau: null,
-  DenNgayLayMau: null,
-  DonViThucHienXn: null,
-  TuNgayTraKetQuaXn: null,
-  DenNgayTraKetQuaXn: null,
-  CoSoDieuTriId: null,
-  IsNopTroLen: null,
+export const SEARCH_OBJECT_INIT: SearchObjectModel = {
+  keyword: "",
+  thoiGianBatDau: null,
+  thoiGianKetThuc: null,
+  benhIds: null,
+  listTrangThai: null,
+  tinhId: null,
+  huyenId: null,
+  xaId: null,
+  hoTen: "",
+  gioiTinh: null,
+  ngheNghiepId: null,
+  tuNgayKhoiPhat: null,
+  denNgayKhoiPhat: null,
+  tuNgayNhapVien: null,
+  denNgayNhapVien: null,
+  tuNgayRaVien: null,
+  denNgayRaVien: null,
+  kqXetNghiem: null,
+  tuNgayLayMau: null,
+  denNgayLayMau: null,
+  donViThucHienXn: null,
+  tuNgayTraKetQuaXn: null,
+  denNgayTraKetQuaXn: null,
+  coSoDieuTriId: null,
+  isNopTroLen: null,
   pageNumber: 1,
   pageSize: 10,
-  PhanLoai: null,
-  TinhTrangHienNay: null,
-  NgayNhapBaoCaoTu: null,
-  NgayNhapBaoCaoDen: null,
+  phanLoai: null,
+  listTinhTrangHienNay: [],
+  tuNgayNhapBaoCao: moment().subtract(1, 'months').startOf('month').format('YYYY-MM-DD'),
+  denNgayNhapBaoCao: moment().endOf('month').format('YYYY-MM-DD'),
   coSoCreateId: null,
 };
 
@@ -204,10 +193,14 @@ export const TINH_TRANG_HIEN_NAY = [
   },
   {
     code: 3,
+    name: "Tử Vong",
+  },
+  {
+    code: 4,
     name: "Chuyển viện",
   },
   {
-    code: 3,
+    code: 5,
     name: "Tình trạng khác",
   },
 ];
@@ -242,25 +235,29 @@ export const KQ_XET_NGHIEM = [
   },
   {
     code: 3,
-    name: "Kết quả không thực hiện",
+    name: "Không thực hiện",
   },
 ];
 
 export const PHAN_LOAI_QUAN_LY = [
   {
     code: 0,
-    name: "Cơ sở tự nhập",
+    name: "Tất cả",
   },
   {
     code: 1,
-    name: "Chuyến đến",
+    name: "Cơ sở tự nhập",
   },
   {
     code: 2,
-    name: "Chuyến đi",
+    name: "Chuyến đến",
   },
   {
     code: 3,
+    name: "Chuyến đi",
+  },
+  {
+    code: 4,
     name: "Cơ sở quản lý",
   },
 ];
