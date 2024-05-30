@@ -332,6 +332,11 @@ export const MEDICAL_INCIDENT_REPORT_STATUS =  {
     DA_KET_LUAN: 8
 }
 
+export const STATUS_THB = {
+    ONTIME: 0,
+    OVERTIME: 1
+}
+
 export const printStyles = {
 	box_square: {
 		display: "inline-block",

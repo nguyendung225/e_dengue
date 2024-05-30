@@ -3,13 +3,49 @@ import { Button } from "react-bootstrap";
 import "./styles/TimKiemTruongHopBenh.scss";
 import { OCTKTSVG, OCTTable } from "@oceantech/oceantech-ui";
 import { truongHopBenhColumns } from "./constants/constants";
+import { searchByPage } from "./services/TimKiemThbServices";
+import { useContext, useEffect, useState } from "react";
+import AppContext from "../../../AppContext";
+import { SearchObject } from "../models/TimKiemTruongHopBenhModels";
+import { toast } from "react-toastify";
 type Props = {};
 
 const TimKiemTruongHopBenh = (props: Props) => {
+  const { setPageLoading } = useContext(AppContext);
+  const [listDataTHB, setlistDataTHB] = useState<SearchObject[]>([]);
+  const [configTable, setConfigTable] = useState<any>({});
+  const [searchObj, setSearchObj] = useState<SearchObject>({
+    pageNumber: 1,
+    pageSize: 10,
+  });
+
+  const updatePageData = async (searchData: SearchObject) => {
+    try {
+      setPageLoading(true);
+      const { data } = await searchByPage(searchData);
+      setConfigTable({
+        totalElement: data.data.total,
+        totalPages: data.data.totalPages,
+        numberOfElements: data.data.numberOfElements,
+      });
+      setlistDataTHB(data?.data?.data || []);
+    } catch (error) {
+      toast.error(error as string);
+    } finally {
+      setPageLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    updatePageData(searchObj);
+  }, [searchObj]);
+
   return (
     <div className="search-container">
       <div className="section-container">
-        <FilterSearchContainer />
+        <FilterSearchContainer
+          setSearchObj={setSearchObj}
+        />
       </div>
       <div className="spaces mt-15 section-container">
         <div className="d-flex justify-content-between border-bottom align-items-center spaces pt-8 pb-14">
@@ -34,7 +70,16 @@ const TimKiemTruongHopBenh = (props: Props) => {
           </div>
         </div>
 
-        <OCTTable data={[]} columns={truongHopBenhColumns} noToolbar={true} />
+        <OCTTable
+          data={listDataTHB}
+          columns={truongHopBenhColumns}
+          noToolbar={true}
+          totalElements={configTable?.totalElement}
+          totalPages={configTable?.totalPages}
+          numberOfElements={configTable.numberOfElements}
+          searchObject={searchObj}
+          setSearchObject={setSearchObj}
+        />
 
         <div className="bg-white border-top spaces mt-10 py-14 px-10">
           <div className="fw-600">Chú thích:</div>
