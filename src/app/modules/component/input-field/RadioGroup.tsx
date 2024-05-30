@@ -20,6 +20,7 @@ type TRadioItem = {
     radioItemList: TRadioItem[];
     handleChange: (value: any) => void;
     otherField?: any;
+    disabledFields?: Array<string | number>;
   };
 
 function RadioGroup(props: TProps) {
@@ -36,15 +37,23 @@ function RadioGroup(props: TProps) {
                 </span>
             )}
             <>
-                <Radio.Group onChange={onChange} value={props?.value} size="large" name={props?.name} className={props?.groupContainerClassName}>
+                <Radio.Group
+                    onChange={onChange}
+                    value={props?.value}
+                    size="large"
+                    name={props?.name}
+                    className={props?.groupContainerClassName}>
                     {props.radioItemList.map((radioItem) => (
-                        <Radio className={props?.labelClassName} key={radioItem?.code} value={radioItem?.code}>
-                            <div className='d-flex justify-content-between gap-2'> 
+                        <Radio
+                            disabled={props?.disabledFields?.includes(radioItem?.code)}
+                            className={props?.labelClassName}
+                            key={radioItem?.code}
+                            value={radioItem?.code}>
+                            <div className='d-flex justify-content-between gap-2'>
                                 {radioItem?.name}
                                 {(props.otherField && radioItem?.code === props?.value) && props?.otherField}
                             </div>
                         </Radio>
-                        
                     ))}
                 </Radio.Group>
             </>

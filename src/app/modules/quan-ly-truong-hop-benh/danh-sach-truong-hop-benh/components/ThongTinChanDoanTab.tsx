@@ -1,14 +1,76 @@
 import { OCTAutocomplete, OCTTextValidator, } from '@oceantech/oceantech-ui';
 import { useFormikContext } from 'formik';
 import { Col, Row } from '../../../component/Grid';
+import AsyncAutoComplete from '../../../component/input-field/AsyncAutoComplete';
 import RadioGroup from '../../../component/input-field/RadioGroup';
-import { YES_NO_OPT } from '../constants/constant';
-import { ITruongHopBenh } from '../model/Model';
+import { getListCoSoDieuTri, getListDmCapDoBenh, getListDmTinhTrangHienTai } from '../../../services';
+import { CONFIG_BY_CURRENT_STATUS, CONFIG_BY_TYPE_TEST } from '../config/config';
+import { KHONG_LAY_MAU_XN, KQ_XET_NGHIEM, LAY_MAU_XN, LOAI_XET_NGHIEM, PCLD_XAC_DINH_PHONG_XET_NGHIEM, PHAN_LOAI_CHAN_DOAN, SU_DUNG_VAXIN, YES_NO_OPT } from '../constants/constant';
+import { TruongHopBenh } from '../model/Model';
 type Props = {
 }
 
 const ThongTinChanDoanTab = (props: Props) => {
-    const { values, handleChange, errors, touched } = useFormikContext<ITruongHopBenh>()
+    const { values, handleChange, errors, touched, setFieldValue, setValues } = useFormikContext<TruongHopBenh>()
+
+    const handleChangePhanLoaiChanDoan = (option: any) => {
+        const newValue: TruongHopBenh = {
+            ...values, truongHopBenh: {
+                ...values.truongHopBenh,
+                phanLoaiChanDoan: option?.code,
+                layMauXetNghiem: option?.code === PCLD_XAC_DINH_PHONG_XET_NGHIEM ? LAY_MAU_XN : values?.truongHopBenh?.layMauXetNghiem
+            }
+        }
+        setValues(newValue)
+    }
+
+    const handleChangeTinhTrangHienNay = (option: any) => {
+        const newValue: TruongHopBenh = {
+            ...values, truongHopBenh: {
+                ...values.truongHopBenh,
+                tinhTrangHienNay: option?.id,
+                chanDoanRaVien: "",
+                benhVienChuyenToiId: null,
+                benhVienChuyenToi: null,
+                tinhTrangKhac: null
+            }
+        }
+        setValues(newValue)
+    }
+
+    const handleChangeLoaiXetNghiem = (option: any) => {
+        const newValue: TruongHopBenh = {
+            ...values, truongHopBenh: {
+                ...values.truongHopBenh,
+                loaiXetNghiem: option?.code,
+                dinhLoaiXetNghiemKhac: "",
+                loaiXetNghiemKhac: "",
+            }
+        }
+        setValues(newValue)
+    }
+
+    const handleChangeLayMauXN = (event: any) => {
+        const newValue: TruongHopBenh = {
+            ...values, truongHopBenh: {
+                ...values.truongHopBenh,
+                layMauXetNghiem: event?.target?.value,
+                loaiXetNghiem: null,
+                dinhLoaiXetNghiemKhac: "",
+                loaiXetNghiemKhac: "",
+                ketQuaXetNghiem: null,
+                ngayThucHienXn: null,
+                ngayTraKetQuaXn: null,
+                donViXetNghiem: null,
+                donViXetNghiemObject: null,
+            }
+        }
+        setValues(newValue)
+    }
+
+    const configByStatus = CONFIG_BY_CURRENT_STATUS[values?.truongHopBenh?.tinhTrangHienNay as any]
+    const configByTypeTest = CONFIG_BY_TYPE_TEST[values?.truongHopBenh?.loaiXetNghiem as any]
+    const disabledFieldLayMauXN = values?.truongHopBenh?.phanLoaiChanDoan === PCLD_XAC_DINH_PHONG_XET_NGHIEM ? [KHONG_LAY_MAU_XN] : []
 
     return (
         <>
@@ -16,132 +78,245 @@ const ThongTinChanDoanTab = (props: Props) => {
                 <Col xl={4}>
                     <OCTAutocomplete
                         lable="Phân độ lâm sàng/ Phân loại thể bệnh"
+                        searchFunction={getListDmCapDoBenh}
+                        urlData='data.data'
+                        getOptionLabel={(option) => option.tenCapDo}
                         options={[]}
-                        isRequired
+                        value={values.truongHopBenh?.capDoBenhId}
+                        onChange={(option) => setFieldValue("truongHopBenh.capDoBenhId", option?.id)}
+                        searchObject={{}}
                     />
                 </Col>
             </Row>
             <Row >
-                <Col xl={3}>
+                <Col xl={2}>
                     <OCTAutocomplete
                         lable="Tình trạng hiện tại"
+                        searchFunction={getListDmTinhTrangHienTai}
+                        urlData='data.data'
+                        getOptionLabel={(option) => option.loaiTinhTrangBenhNhan}
                         options={[]}
+                        value={values.truongHopBenh?.tinhTrangHienNay}
+                        onChange={handleChangeTinhTrangHienNay}
+                        searchObject={{}}
+                        isRequired
+                        errors={errors.truongHopBenh?.tinhTrangHienNay}
+                        touched={touched.truongHopBenh?.tinhTrangHienNay}
                     />
                 </Col>
-                <Col xl={3}>
+                <Col xl={2}>
                     <OCTTextValidator
                         lable="Ngày khởi phát"
                         type="date"
+                        name="truongHopBenh.ngayKhoiPhat"
+                        value={values.truongHopBenh?.ngayKhoiPhat}
+                        onChange={handleChange}
+                        isRequired={configByStatus?.ngayKhoiPhat?.require}
                     />
                 </Col>
-                <Col xl={3}>
+                <Col xl={2}>
                     <OCTTextValidator
                         lable="Ngày nhập viện/khám"
                         type="date"
                         isRequired
-                        name="ngayNhapVienKham"
-                        values={values.ngayNhapVienKham}
+                        name="truongHopBenh.ngayNhapVien"
+                        value={values.truongHopBenh?.ngayNhapVien}
                         onChange={handleChange}
-                        errors={errors?.ngayNhapVienKham}
-                        touched={touched?.ngayNhapVienKham}
+                        errors={errors?.truongHopBenh?.ngayNhapVien}
+                        touched={touched?.truongHopBenh?.ngayNhapVien}
                     />
                 </Col>
                 <Col xl={3}>
                     <OCTTextValidator
                         lable="Ngày ra viện/chuyển viện/tử vong"
                         type="date"
+                        name="truongHopBenh.ngayRaVien"
+                        onChange={handleChange}
+                        value={values.truongHopBenh?.ngayRaVien}
+                        disabled={configByStatus?.ngayRaVienChuyenVienTuVong?.disabled}
+                        isRequired={configByStatus?.ngayRaVienChuyenVienTuVong?.require}
+                        errors={errors?.truongHopBenh?.ngayRaVien}
+                        touched={touched?.truongHopBenh?.ngayRaVien}
                     />
+                </Col>
+                <Col xl={3}>
+                    {configByStatus?.chanDoanRaVien && (
+                        <OCTTextValidator
+                            lable="Chẩn đoán ra viện"
+                            type="text"
+                            isRequired
+                            name="truongHopBenh.chanDoanRaVien"
+                            value={values.truongHopBenh?.chanDoanRaVien}
+                            onChange={handleChange}
+                            errors={errors?.truongHopBenh?.chanDoanRaVien}
+                            touched={touched?.truongHopBenh?.chanDoanRaVien}
+                        />
+                    )}
+                    {configByStatus?.chuyenToi && (
+                        <AsyncAutoComplete
+                            params={{}}
+                            required
+                            displayField='tenCoSo'
+                            label="Chuyển tới"
+                            service={getListCoSoDieuTri}
+                            handleChange={(value) => setValues({
+                                ...values,
+                                truongHopBenh: {
+                                    ...values.truongHopBenh,
+                                    benhVienChuyenToi: value,
+                                    benhVienChuyenToiId: value?.id
+                                }
+                            })}
+                            nameErrorMessage={errors?.truongHopBenh?.benhVienChuyenToiId}
+                            value={values.truongHopBenh?.benhVienChuyenToi}
+                        />
+                    )}
+                    {configByStatus?.tinhTrangKhac && (
+                        <OCTTextValidator
+                            lable="Tình trạng khác"
+                            type="text"
+                            isRequired
+                            name="truongHopBenh.tinhTrangKhac"
+                            value={values.truongHopBenh?.tinhTrangKhac}
+                            onChange={handleChange}
+                            errors={errors?.truongHopBenh?.tinhTrangKhac}
+                            touched={touched?.truongHopBenh?.tinhTrangKhac}
+                        />
+                    )}
                 </Col>
                 <Col xl={3}>
                     <OCTAutocomplete
                         lable="Phân loại chẩn đoán"
-                        options={[]}
+                        options={PHAN_LOAI_CHAN_DOAN}
+                        value={values?.truongHopBenh?.phanLoaiChanDoan}
+                        onChange={handleChangePhanLoaiChanDoan}
+                        isRequired
+                        errors={errors?.truongHopBenh?.phanLoaiChanDoan}
+                        touched={touched?.truongHopBenh?.phanLoaiChanDoan}
                     />
                 </Col>
                 <Col xl={3}>
                     <RadioGroup
-                        name='layMauXetNghiemChanDoan'
+                        name='truongHopBenh.layMauXetNghiem'
                         lable='Lấy mẫu xét nghiệm chẩn đoán'
-                        value={values?.layMauXetNghiemChanDoan}
+                        value={values?.truongHopBenh?.layMauXetNghiem}
                         radioItemList={YES_NO_OPT}
-                        handleChange={handleChange}
+                        handleChange={handleChangeLayMauXN}
+                        disabledFields={disabledFieldLayMauXN}
                     />
                 </Col>
                 <Col xl={3}>
-                        <OCTAutocomplete
-                            lable="Thông tin về tiêm, uống vắc xin"
-                            options={[]}
-                            isRequired
-                        />
-                    </Col>
-                    <Col xl={3} />
-                {values?.layMauXetNghiemChanDoan === YES_NO_OPT[0].code && (<>                    
+                    <OCTAutocomplete
+                        lable="Thông tin về tiêm, uống vắc xin"
+                        options={SU_DUNG_VAXIN}
+                        isDisabled
+                        value={values?.truongHopBenh?.suDungVacXin}
+                    />
+                </Col>
+                <Col xl={3} />
+                {values?.truongHopBenh?.layMauXetNghiem === LAY_MAU_XN && (<>
                     <Col xl={3}>
                         <OCTAutocomplete
                             lable="Loại xét nghiệm"
-                            options={[]}
+                            options={LOAI_XET_NGHIEM}
+                            value={values?.truongHopBenh?.loaiXetNghiem}
+                            onChange={handleChangeLoaiXetNghiem}
                         />
                     </Col>
                     <Col xl={3}>
-                        <OCTTextValidator
-                            lable="Tên xét nghiệm"
-                            type="text"
-                            isRequired
-                            name="tenXetNghiem"
-                            values={values.tenXetNghiem}
-                            onChange={handleChange}
-                            errors={errors?.tenXetNghiem}
-                            touched={touched?.tenXetNghiem}
-                        />
+                        {configByTypeTest?.dinhLoai && (
+                            <OCTTextValidator
+                                lable="Đinh loại"
+                                type="text"
+                                name="truongHopBenh.dinhLoaiXetNghiemKhac"
+                                value={values?.truongHopBenh?.dinhLoaiXetNghiemKhac}
+                                onChange={handleChange}
+                            />
+                        )}
                     </Col>
                     <Col xl={3}>
-                        <OCTTextValidator
-                            lable="Đinh loại"
-                            type="text"
-                        />
+                        {configByTypeTest?.tenXetNghiemKhac && (
+                            <OCTTextValidator
+                                lable="Tên xét nghiệm"
+                                type="text"
+                                isRequired
+                                name="truongHopBenh.loaiXetNghiemKhac"
+                                value={values?.truongHopBenh?.loaiXetNghiemKhac}
+                                onChange={handleChange}
+                                errors={errors?.truongHopBenh?.loaiXetNghiemKhac}
+                                touched={touched?.truongHopBenh?.loaiXetNghiemKhac}
+                            />
+                        )}
                     </Col>
                     <Col xl={3} />
                     <Col xl={3}>
                         <OCTAutocomplete
                             lable="Kết quả xét nghiệm"
-                            options={[]}
+                            options={KQ_XET_NGHIEM}
+                            value={values?.truongHopBenh?.ketQuaXetNghiem}
+                            onChange={(option) => setFieldValue("truongHopBenh.ketQuaXetNghiem", option?.code)}
                         />
                     </Col>
                     <Col xl={3}>
                         <OCTTextValidator
                             lable="Ngày lấy mẫu"
                             type="date"
-                            name="ngayLayMau"
+                            name="truongHopBenh.ngayThucHienXn"
                             isRequired
-                            values={values.ngayLayMau}
+                            value={values?.truongHopBenh?.ngayThucHienXn}
                             onChange={handleChange}
-                            errors={errors?.ngayLayMau}
-                            touched={touched?.ngayLayMau}
+                            errors={errors?.truongHopBenh?.ngayThucHienXn}
+                            touched={touched?.truongHopBenh?.ngayThucHienXn}
+
                         />
                     </Col>
                     <Col xl={3}>
                         <OCTTextValidator
                             lable="Ngày trả kết quả"
                             type="date"
+                            name="truongHopBenh.ngayTraKetQuaXn"
+                            value={values?.truongHopBenh?.ngayTraKetQuaXn}
+                            onChange={handleChange}
                         />
                     </Col>
                     <Col xl={3}>
-                        <OCTTextValidator
-                            lable="Đơn vị xét nghiệm"
-                            type="date"
-                        />
+                        <AsyncAutoComplete
+                        params={{}}
+                        required
+                        displayField='tenCoSo'
+                        label="Đơn vị xét nghiệm"
+                        service={getListCoSoDieuTri}
+                        handleChange={(value) => setValues({
+                            ...values,
+                            truongHopBenh: {
+                                ...values.truongHopBenh,
+                                donViXetNghiemObject: value,
+                                donViXetNghiem: value?.id
+                            }
+                        })}
+                        nameErrorMessage={errors?.truongHopBenh?.donViXetNghiem}
+                        value={values.truongHopBenh?.donViXetNghiemObject}
+                    />
                     </Col>
                 </>)}
                 <Col xl={6}>
                     <OCTTextValidator
                         lable="Chẩn đoán bệnh kèm theo"
                         type="text"
+                        value={values?.truongHopBenh?.benhChanDoanPhu}
+                        name={"truongHopBenh.benhChanDoanPhu"}
+                        onChange={handleChange}
+
+
                     />
                 </Col>
                 <Col xl={6}>
                     <OCTTextValidator
                         lable="Chẩn đoán biến chứng"
                         type="text"
+                        value={values?.truongHopBenh?.chanDoanBienChung}
+                        name={"truongHopBenh.chanDoanBienChung"}
+                        onChange={handleChange}
                     />
                 </Col>
                 <Col xl={6}>
@@ -150,6 +325,9 @@ const ThongTinChanDoanTab = (props: Props) => {
                         type="text"
                         as="textarea"
                         rows={2}
+                        value={values?.truongHopBenh?.tienSuDichTe}
+                        name={"truongHopBenh.tienSuDichTe"}
+                        onChange={handleChange}
                     />
                 </Col>
                 <Col xl={6}>
@@ -158,6 +336,9 @@ const ThongTinChanDoanTab = (props: Props) => {
                         type="text"
                         as="textarea"
                         rows={2}
+                        value={values?.truongHopBenh?.ghiChu}
+                        name={"truongHopBenh.ghiChu"}
+                        onChange={handleChange}
                     />
                 </Col>
             </Row>

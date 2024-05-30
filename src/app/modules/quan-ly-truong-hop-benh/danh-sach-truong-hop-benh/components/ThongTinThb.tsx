@@ -1,13 +1,13 @@
 import { Form, Formik } from "formik"
 import { TabMenu } from "../../../component/tabs/TabMenu"
 import { tabTruongHopBenh } from "../constants/constant"
-import { initialTruongHopBenh } from "../model/Model"
+import { initTruongHopBenh } from "../model/Model"
 
 const ThongTinThb = () => {
     return (
         <>
             <Formik
-                initialValues={initialTruongHopBenh}
+                initialValues={initTruongHopBenh}
                 onSubmit={() => { }}
             >
                 {formikProps => (
