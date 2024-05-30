@@ -142,3 +142,19 @@ export const initTruongHopBenh: TruongHopBenh = {
     truongHopBenh: initialtruongHopBenh,
     doiTuongMacBenh: initialdoiTuongMacBenh
 };
+
+export interface BenhReport {
+    truongHopBenhId: number | null;
+    hoTenNguoiBaoCao: string | null;
+    trangThaiXacNhanThb: number | null;
+    dienThoaiNguoiBaoCao: string | null;
+    moTa: string | null;
+}
+
+export const initialBenhReport: BenhReport = {
+    truongHopBenhId: null,
+    hoTenNguoiBaoCao: null,
+    trangThaiXacNhanThb: null,
+    dienThoaiNguoiBaoCao: null,
+    moTa: null
+};
