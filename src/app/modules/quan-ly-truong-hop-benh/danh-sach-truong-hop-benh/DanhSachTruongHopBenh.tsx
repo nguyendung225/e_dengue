@@ -8,10 +8,12 @@ import ThongTinThb from "./components/ThongTinThb";
 import NhapTruongHopBenhModal from './components/NhapTruongHopBenhModal';
 import { useState } from "react";
 import TimKiemTHBNangCaoModal from "./components/TimKiemTHBNangCaoModal";
+import ModalXacNhanTHB from "./components/ModalXacNhanTHB";
 
 const DanhSachTruongHopBenh = () => {
     const [openTruongHopBenhForm, setOpenTruongHopBenhForm] = useState<boolean>(false)
     const [openSearchAdvanceDialog, setOpenSearchAdvanceDialog] = useState<boolean>(false);
+    const [openXacNhanTHB, setOpenXacNhanTHB] = useState<boolean>(false)
     return (
         <div className="page-container">
             <div className="left-content-container">
@@ -80,7 +82,7 @@ const DanhSachTruongHopBenh = () => {
                     <div className="d-flex spaces gap-10">
                         <Button
                             className="button-primary"
-                            onClick={() => {}}
+                            onClick={() => setOpenXacNhanTHB(true)}
                         >
                             Xác nhận
                         </Button>
@@ -113,6 +115,7 @@ const DanhSachTruongHopBenh = () => {
             </div>
            {openTruongHopBenhForm && <NhapTruongHopBenhModal handleClose={() => setOpenTruongHopBenhForm(false)}/>}
            {openSearchAdvanceDialog && <TimKiemTHBNangCaoModal show={openSearchAdvanceDialog} handleClose={() => setOpenSearchAdvanceDialog(false)}/>}
+           {openXacNhanTHB && <ModalXacNhanTHB handleClose={() => setOpenXacNhanTHB(false)}/>}
         </div>
     )
 }
