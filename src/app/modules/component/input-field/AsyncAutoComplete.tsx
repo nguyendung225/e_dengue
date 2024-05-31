@@ -96,7 +96,7 @@ const AsyncAutoComplete: FC<ComboboxProps> = (props) => {
     ).current;
 
     const loadOptions = (inputValue: string, callback: (options: any[]) => void) => {
-        if (inputValue) {
+        if (inputValue?.length >= 2) { // do dai input lon hon 2 moi bat dau call API 
             debouncedFetchOptions(inputValue, callback);
         } else {
             callback([]);

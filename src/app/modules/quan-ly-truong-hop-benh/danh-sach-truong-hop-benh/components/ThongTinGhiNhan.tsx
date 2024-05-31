@@ -60,14 +60,7 @@ const ThongTinGhiNhanTab = (props: Props) => {
                         label='Đơn vị công tác'
                         displayField='tenCoSo'
                         service={getListDonViCongTac}
-                        handleChange={(value) => setValues({
-                            ...values,
-                            truongHopBenh: {
-                                ...values.truongHopBenh,
-                                donViCongTacNbc: value,
-                                donViCongTacNbcId: value?.id
-                            }
-                        })}
+                        handleChange={(value) => setFieldValue("truongHopBenh.donViCongTacNbc", value)}
                         nameErrorMessage={errors?.truongHopBenh?.donViCongTacNbc as string}
                         value={values.truongHopBenh?.donViCongTacNbc}
                     />
@@ -83,6 +76,7 @@ const ThongTinGhiNhanTab = (props: Props) => {
                         lable="Địa điểm"
                         options={DIA_DIEM_DIEU_TRI}
                         isRequired
+                        valueSearch="code"
                         name="truongHopBenh.noiPhatHien"
                         value={values.truongHopBenh?.noiPhatHien}
                         onChange={(option) => setFieldValue("truongHopBenh.noiPhatHien", option?.code)}
@@ -97,14 +91,7 @@ const ThongTinGhiNhanTab = (props: Props) => {
                         label="Cơ sở điều trị"
                         displayField='tenCoSo'
                         service={getListCoSoDieuTri}
-                        handleChange={(value) => setValues({
-                            ...values,
-                            truongHopBenh: {
-                                ...values.truongHopBenh,
-                                coSoDieuTri: value,
-                                coSoDieuTriId: value?.id
-                            }
-                        })}
+                        handleChange={(value) =>setFieldValue("truongHopBenh.coSoDieuTri", value)}
                         nameErrorMessage={errors?.truongHopBenh?.coSoDieuTri as string}
                         value={values.truongHopBenh?.coSoDieuTri}
                     />
@@ -115,15 +102,8 @@ const ThongTinGhiNhanTab = (props: Props) => {
                         required
                         displayField='tenCoSo'
                         label="Trạm y tế"
-                        service={getListDonViCongTac}
-                        handleChange={(value) => setValues({
-                            ...values,
-                            truongHopBenh: {
-                                ...values.truongHopBenh,
-                                coSoQuanLy: value,
-                                coSoQuanLyId: value?.id
-                            }
-                        })}
+                        service={getListCoSoDieuTri}
+                        handleChange={(value) => setFieldValue("truongHopBenh.coSoQuanLy", value)}
                         nameErrorMessage={errors?.truongHopBenh?.coSoQuanLy as string}
                         value={values.truongHopBenh?.coSoQuanLy}
                     />

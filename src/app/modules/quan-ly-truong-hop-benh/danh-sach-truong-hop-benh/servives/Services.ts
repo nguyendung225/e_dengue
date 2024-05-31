@@ -12,3 +12,27 @@ export const getThongTinTruongHopBenh = (id: string) => {
     let url = API_URL + `truong-hop-benh/${id}`;
     return axios.get(url)
 }
+
+export const getThongTinTienSuBenh = (id: number) => {
+    let url = API_URL + `truong-hop-benh/${id}/tien-su-benh`;
+    return axios.get(url)
+}
+export const getThongTinXacNhan = (id: number) => {
+    let url = API_URL + `truong-hop-benh/${id}/lich-su-xac-nhan`;
+    return axios.get(url)
+}
+
+export const getThongTinTheoDoi = (id: number) => {
+    let url = API_URL + `truong-hop-benh/${id}/lich-su-theo-doi`;
+    return axios.get(url)
+}
+
+export const deleteTruongHopBenh = (id: number) => {
+    let url = API_URL + `truong-hop-benh/${id}`;
+    return axios.delete(url)
+}
+
+export const updateTruongHopBenh = (id: number, data: TruongHopBenh) => {
+    let url = API_URL + `truong-hop-benh/${id}`;
+    return axios.put(url, data)
+}

@@ -5,6 +5,10 @@ import ThongTinGhiNhanTab from "../components/ThongTinGhiNhan";
 import { convertGenderToString, formatDateToString } from "../../../utils/FormatUtils";
 import { CURENT_STATUS, TYPE_TEST_CODE } from "../config/config";
 import { OCTKTSVG } from "@oceantech/oceantech-ui";
+import TienSuBenh from "../components/TienSuBenhTab";
+import moment from "moment";
+import LichSuTheoDoi from "../components/LichSuTheoDoi";
+import LichSuXacNhan from "../components/LichSuXacNhan";
 
 const TRANG_THAI_PHAN_HOI = {
     QUA_7_NGAY_CHUA_XN: -1,
@@ -100,7 +104,6 @@ export const GENDER_OPT = [
         code: 0,
         name: "Nam",
     },
-
     {
         code: 1,
         name: "Nữ",
@@ -118,8 +121,16 @@ export const YES_NO_OPT = [
     },
 ]
 
+export const SU_DUNG_VAXIN = [
+    { code: 0, name: 'Có tiêm, uống' },
+    { code: 1, name: 'Không' },
+    { code: 2, name: 'Không rõ' },
+]
+
 export const LAY_MAU_XN = YES_NO_OPT[0].code;
 export const KHONG_LAY_MAU_XN = YES_NO_OPT[1].code;
+export const CO_SU_DUNG_VAXIN = SU_DUNG_VAXIN[0]?.code
+
 
 export const KeyTab = {
     TT_HANH_CHINH: "0",
@@ -131,11 +142,11 @@ export const hanhChinhSchema = Yup.object().shape({
     doiTuongMacBenh: Yup.object().shape({
         hoTen: Yup.string().required("Bắt buộc nhập").nullable(),
         ngaySinh: Yup.string().nullable().required("Bắt buộc nhập"),
-        danTocId: Yup.number().nullable().required("Bắt buộc nhập"),
-        ngheNghiepId: Yup.number().nullable().required("Bắt buộc nhập"),
-        tinhIdHienNay: Yup.number().nullable().required("Bắt buộc nhập"),
-        huyenIdHienNay: Yup.number().nullable().required("Bắt buộc nhập"),
-        xaIdHienNay: Yup.number().nullable().required("Bắt buộc nhập"),
+        danToc: Yup.object().nullable().required("Bắt buộc nhập"),
+        ngheNghiep: Yup.object().nullable().required("Bắt buộc nhập"),
+        tinhHienNay: Yup.object().nullable().required("Bắt buộc nhập"),
+        huyenHienNay: Yup.object().nullable().required("Bắt buộc nhập"),
+        xaHienNay: Yup.object().nullable().required("Bắt buộc nhập"),
         cmnd: Yup.string().when("haveCmnd", {
             is: true,
             then: Yup.string().nullable().required("Bắt buộc nhập"),
@@ -155,15 +166,16 @@ export const chanDoanSchema = hanhChinhSchema.shape({
         tinhTrangHienNay: Yup.string().required("Bắt buộc nhập").nullable(),
         ngayNhapVien: Yup.string().required("Bắt buộc nhập").nullable(),
         phanLoaiChanDoan: Yup.string().required("Bắt buộc nhập").nullable(),
+        ngayKhoiPhat: Yup.string().required("Bắt buộc nhập").nullable(),
         ngayThucHienXn: Yup.string().when("layMauXetNghiem", {
             is: LAY_MAU_XN,
             then: Yup.string().nullable().required("Bắt buộc nhập"),
             otherwise: Yup.string().nullable().notRequired()
         }),
-        donViXetNghiem: Yup.string().when("layMauXetNghiem", {
+        donViXetNghiemObject: Yup.object().when("layMauXetNghiem", {
             is: LAY_MAU_XN,
-            then: Yup.string().nullable().required("Bắt buộc nhập"),
-            otherwise: Yup.string().nullable().notRequired()
+            then: Yup.object().nullable().required("Bắt buộc nhập"),
+            otherwise: Yup.object().nullable().notRequired()
         }),
         loaiXetNghiemKhac: Yup.string().when("loaiXetNghiem", {
             is: TYPE_TEST_CODE.LOAI_KHAC,
@@ -177,14 +189,20 @@ export const chanDoanSchema = hanhChinhSchema.shape({
             otherwise: Yup.string().nullable().notRequired()
 
         }),
-        benhVienChuyenToiId: Yup.string().when("tinhTrangHienNay", {
+        benhVienChuyenToi: Yup.object().when("tinhTrangHienNay", {
             is: `${CURENT_STATUS.CHUYEN_VIEN}`,
-            then: Yup.string().nullable().required("Bắt buộc nhập"),
-            otherwise: Yup.string().nullable().notRequired()
+            then: Yup.object().nullable().required("Bắt buộc nhập"),
+            otherwise: Yup.object().nullable().notRequired()
 
         }),
         chanDoanRaVien: Yup.string().when("tinhTrangHienNay", {
             is: `${CURENT_STATUS.RA_VIEN}`,
+            then: Yup.string().nullable().required("Bắt buộc nhập"),
+            otherwise: Yup.string().nullable().notRequired()
+
+        }),
+        soLanSuDung: Yup.string().when("suDungVacXin", {
+            is: CO_SU_DUNG_VAXIN,
             then: Yup.string().nullable().required("Bắt buộc nhập"),
             otherwise: Yup.string().nullable().notRequired()
 
@@ -194,7 +212,8 @@ export const chanDoanSchema = hanhChinhSchema.shape({
 });
 
 export const ghiNhanSchema = chanDoanSchema.shape({
-    truongHopBenh: chanDoanSchema.fields.truongHopBenh.shape({
+    truongHopBenh: Yup.object().shape({
+        ...(hanhChinhSchema.fields.truongHopBenh as Yup.ObjectSchema<any>)?.fields,
         tenNguoiBaoCao: Yup.string().required("Bắt buộc nhập").nullable(),
         dienThoaiNguoiBaoCao: Yup.string().required("Bắt buộc nhập").nullable(),
         emailNguoiBaoCao: Yup.string().required("Bắt buộc nhập").nullable(),
@@ -229,6 +248,38 @@ export const tabTruongHopBenh = [
         component: <ThongTinGhiNhanTab />
     },
 ];
+export const tabThongTinTruongHopBenh = [
+    {
+        eventKey: "0",
+        title: "Thông tin hành chính",
+        component: <ThongTinHanhChinhTab />
+    },
+    {
+        eventKey: "1",
+        title: "Thông tin chẩn đoán",
+        component: <ThongTinChanDoanTab />
+    },
+    {
+        eventKey: "2",
+        title: "Thông tin ghi nhận",
+        component: <ThongTinGhiNhanTab />
+    },
+    {
+        eventKey: "3",
+        title: "Tiền sử bệnh",
+        component: <TienSuBenh />
+    },
+    {
+        eventKey: "4",
+        title: "Lịch sử theo dõi",
+        component: <LichSuTheoDoi />
+    },
+    {
+        eventKey: "5",
+        title: "Lịch sử xác nhận",
+        component: <LichSuXacNhan />
+    },
+];
 
 export const PHAN_LOAI_CHAN_DOAN = [
     { code: 0, name: 'Nghi Ngờ' },
@@ -252,11 +303,6 @@ export const KQ_XET_NGHIEM = [
     { code: 3, name: 'Không Thực Hiện' }
 ];
 
-export const SU_DUNG_VAXIN = [
-    { code: 0, name: 'Có tiêm, uống' },
-    { code: 1, name: 'Không' },
-    { code: 2, name: 'Không rõ' },
-]
 
 export const DIA_DIEM_DIEU_TRI = [
     { code: 0, name: 'Trạm y tế' },
@@ -279,3 +325,198 @@ export const columnsDSCoSo = [
         field: "diaChi",
     },
 ]
+
+export const TINH_TRANG_HIEN_NAY = [
+    {
+        code: 0,
+        name: "Điều trị ngoại trú",
+    },
+    {
+        code: 1,
+        name: "Điều trị nội trú",
+    },
+    {
+        code: 2,
+        name: "Ra viện",
+    },
+    {
+        code: 3,
+        name: "Tử vong",
+    },
+    {
+        code: 4,
+        name: "Chuyên viện",
+    },
+    {
+        code: 5,
+        name: "Tình trạng khác",
+    },
+]
+
+export const TienSuBenhColumns = [
+    {
+        name: "#",
+        field: "",
+        render: (row: any, index: number, stt: number) => <span>{stt}</span>
+    },
+    {
+        name: "Ngày cập nhật",
+        field: "ngayCapNhat",
+        headerStyle: {
+            minWidth: "120px"
+        },
+        cellStyle: {
+            textAlign: "center",
+        },
+        render: (row: any, index: number, stt: number) => <span>{moment(row?.ngayCapNhat).format("DD/MM/YYYY")}</span>
+    },
+    {
+        name: "Tên bệnh",
+        field: "tenBenh",
+        headerStyle: {
+            minWidth: "60px"
+        },
+    },
+    {
+        name: "Cơ sở điều trị",
+        field: "coSoDieuTri",
+        headerStyle: {
+            minWidth: "140px"
+        },
+        cellStyle: {
+            minWidth: "200px",
+            textAlign: "left",
+        },
+    },
+    {
+        name: "Tình trạng",
+        field: "tinhTrang",
+        headerStyle: {
+            minWidth: "120px"
+        },
+    },
+]
+export const LichSuXacNhanColumns = [
+    {
+        name: "#",
+        field: "",
+        render: (row: any, index: number, stt: number) => <span>{stt}</span>
+    },
+    {
+        name: "Ngày cập nhật",
+        field: "ngayCapNhat",
+        headerStyle: {
+            minWidth: "120px"
+        },
+        cellStyle: {
+            textAlign: "center",
+        },
+        render: (row: any, index: number, stt: number) => <span>{moment(row?.ngayCapNhat).format("DD/MM/YYYY")}</span>
+    },
+    {
+        name: "Trạng thái",
+        field: "trangThai",
+        headerStyle: {
+            minWidth: "120px"
+        },
+    },
+    {
+        name: "Mô tả",
+        field: "moTa",
+        headerStyle: {
+            minWidth: "120px"
+        },
+        cellStyle: {
+            minWidth: "200px",
+            textAlign: "left",
+        },
+    },
+    {
+        name: "Cơ sở xác nhận",
+        field: "tenCoSoXacNhan",
+        headerStyle: {
+            minWidth: "150px"
+        },
+    },
+    {
+        name: "Người xác nhận",
+        field: "tenNbc",
+        headerStyle: {
+            minWidth: "120px"
+        },
+    },
+    {
+        name: "Email",
+        field: "emailNbc",
+        headerStyle: {
+            minWidth: "120px"
+        },
+    },
+]
+
+
+export const LichSuTheoDoiColumns = [
+    {
+        name: "#",
+        field: "",
+        render: (row: any, index: number, stt: number) => <span>{stt}</span>
+    },
+    {
+        name: "Ngày cập nhật",
+        field: "ngayCapNhat",
+        headerStyle: {
+            minWidth: "120px"
+        },
+        cellStyle: {
+            textAlign: "center",
+        },
+        render: (row: any, index: number, stt: number) => <span>{moment(row?.ngayCapNhat).format("DD/MM/YYYY")}</span>
+    },
+    {
+        name: "Cơ sở cập nhật",
+        field: "coSoCapNhat",
+        headerStyle: {
+            minWidth: "150px"
+        },
+    },
+    {
+        name: "Tên bệnh",
+        field: "tenBenh",
+        headerStyle: {
+            minWidth: "140px"
+        },
+        cellStyle: {
+            minWidth: "200px",
+            textAlign: "left",
+        },
+    },
+    {
+        name: "Tình trạng",
+        field: "tinhTrang",
+        headerStyle: {
+            minWidth: "120px"
+        },
+    },
+    {
+        name: "Họ tên NBC",
+        field: "hoTenNbc",
+        headerStyle: {
+            minWidth: "120px"
+        },
+    },
+    {
+        name: "Điện thoại NBC",
+        field: "dienThoaiNbc",
+        headerStyle: {
+            minWidth: "120px"
+        },
+    },
+    {
+        name: "Email",
+        field: "emailNbc",
+        headerStyle: {
+            minWidth: "120px"
+        },
+    },
+]
+

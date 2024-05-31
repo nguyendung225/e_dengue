@@ -3,9 +3,9 @@ import { useFormikContext } from 'formik';
 import { Col, Row } from '../../../component/Grid';
 import AsyncAutoComplete from '../../../component/input-field/AsyncAutoComplete';
 import RadioGroup from '../../../component/input-field/RadioGroup';
-import { getListCoSoDieuTri, getListDmCapDoBenh, getListDmTinhTrangHienTai } from '../../../services';
+import { getListCoSoDieuTri, getListDmCapDoBenh } from '../../../services';
 import { CONFIG_BY_CURRENT_STATUS, CONFIG_BY_TYPE_TEST } from '../config/config';
-import { KHONG_LAY_MAU_XN, KQ_XET_NGHIEM, LAY_MAU_XN, LOAI_XET_NGHIEM, PCLD_XAC_DINH_PHONG_XET_NGHIEM, PHAN_LOAI_CHAN_DOAN, SU_DUNG_VAXIN, YES_NO_OPT } from '../constants/constant';
+import { CO_SU_DUNG_VAXIN, KHONG_LAY_MAU_XN, KQ_XET_NGHIEM, LAY_MAU_XN, LOAI_XET_NGHIEM, PCLD_XAC_DINH_PHONG_XET_NGHIEM, PHAN_LOAI_CHAN_DOAN, SU_DUNG_VAXIN, TINH_TRANG_HIEN_NAY, YES_NO_OPT } from '../constants/constant';
 import { TruongHopBenh } from '../model/Model';
 type Props = {
 }
@@ -28,7 +28,7 @@ const ThongTinChanDoanTab = (props: Props) => {
         const newValue: TruongHopBenh = {
             ...values, truongHopBenh: {
                 ...values.truongHopBenh,
-                tinhTrangHienNay: option?.id,
+                tinhTrangHienNay: option?.code,
                 chanDoanRaVien: "",
                 benhVienChuyenToiId: null,
                 benhVienChuyenToi: null,
@@ -83,7 +83,7 @@ const ThongTinChanDoanTab = (props: Props) => {
                         getOptionLabel={(option) => option.tenCapDo}
                         options={[]}
                         value={values.truongHopBenh?.capDoBenhId}
-                        onChange={(option) => setFieldValue("truongHopBenh.capDoBenhId", option?.id)}
+                        onChange={(option) => setFieldValue("truongHopBenh.capDoBenh", option)}
                         searchObject={{}}
                     />
                 </Col>
@@ -92,13 +92,10 @@ const ThongTinChanDoanTab = (props: Props) => {
                 <Col xl={2}>
                     <OCTAutocomplete
                         lable="Tình trạng hiện tại"
-                        searchFunction={getListDmTinhTrangHienTai}
-                        urlData='data.data'
-                        getOptionLabel={(option) => option.loaiTinhTrangBenhNhan}
-                        options={[]}
+                        options={TINH_TRANG_HIEN_NAY}
+                        valueSearch={"code"}
                         value={values.truongHopBenh?.tinhTrangHienNay}
                         onChange={handleChangeTinhTrangHienNay}
-                        searchObject={{}}
                         isRequired
                         errors={errors.truongHopBenh?.tinhTrangHienNay}
                         touched={touched.truongHopBenh?.tinhTrangHienNay}
@@ -112,11 +109,13 @@ const ThongTinChanDoanTab = (props: Props) => {
                         value={values.truongHopBenh?.ngayKhoiPhat}
                         onChange={handleChange}
                         isRequired={configByStatus?.ngayKhoiPhat?.require}
+                        errors={errors?.truongHopBenh?.ngayKhoiPhat}
+                        touched={touched?.truongHopBenh?.ngayKhoiPhat}
                     />
                 </Col>
                 <Col xl={2}>
                     <OCTTextValidator
-                        lable="Ngày nhập viện/khám"
+                        lable="Ngày N.Viện/khám"
                         type="date"
                         isRequired
                         name="truongHopBenh.ngayNhapVien"
@@ -159,15 +158,8 @@ const ThongTinChanDoanTab = (props: Props) => {
                             displayField='tenCoSo'
                             label="Chuyển tới"
                             service={getListCoSoDieuTri}
-                            handleChange={(value) => setValues({
-                                ...values,
-                                truongHopBenh: {
-                                    ...values.truongHopBenh,
-                                    benhVienChuyenToi: value,
-                                    benhVienChuyenToiId: value?.id
-                                }
-                            })}
-                            nameErrorMessage={errors?.truongHopBenh?.benhVienChuyenToiId}
+                            handleChange={(value) => setFieldValue('truongHopBenh.benhVienChuyenToi', value)}
+                            nameErrorMessage={errors?.truongHopBenh?.benhVienChuyenToi as string}
                             value={values.truongHopBenh?.benhVienChuyenToi}
                         />
                     )}
@@ -188,6 +180,7 @@ const ThongTinChanDoanTab = (props: Props) => {
                     <OCTAutocomplete
                         lable="Phân loại chẩn đoán"
                         options={PHAN_LOAI_CHAN_DOAN}
+                        valueSearch={"code"}
                         value={values?.truongHopBenh?.phanLoaiChanDoan}
                         onChange={handleChangePhanLoaiChanDoan}
                         isRequired
@@ -209,15 +202,32 @@ const ThongTinChanDoanTab = (props: Props) => {
                     <OCTAutocomplete
                         lable="Thông tin về tiêm, uống vắc xin"
                         options={SU_DUNG_VAXIN}
-                        isDisabled
+                        valueSearch={"code"}
                         value={values?.truongHopBenh?.suDungVacXin}
+                        onChange={(option) => setFieldValue("truongHopBenh.suDungVacXin", option?.code)}
                     />
                 </Col>
-                <Col xl={3} />
+                <Col xl={3} >
+                    {
+                        values?.truongHopBenh?.suDungVacXin === CO_SU_DUNG_VAXIN && (
+                            <OCTTextValidator
+                                lable="Số lần tiêm, uống"
+                                type="text"
+                                name="truongHopBenh.soLanSuDung"
+                                value={values?.truongHopBenh?.soLanSuDung}
+                                onChange={handleChange}
+                                isRequired
+                                errors={errors?.truongHopBenh?.soLanSuDung}
+                                touched={touched?.truongHopBenh?.soLanSuDung}
+                            />
+                        )
+                    }
+                </Col >
                 {values?.truongHopBenh?.layMauXetNghiem === LAY_MAU_XN && (<>
                     <Col xl={3}>
                         <OCTAutocomplete
                             lable="Loại xét nghiệm"
+                            valueSearch={"code"}
                             options={LOAI_XET_NGHIEM}
                             value={values?.truongHopBenh?.loaiXetNghiem}
                             onChange={handleChangeLoaiXetNghiem}
@@ -253,6 +263,7 @@ const ThongTinChanDoanTab = (props: Props) => {
                         <OCTAutocomplete
                             lable="Kết quả xét nghiệm"
                             options={KQ_XET_NGHIEM}
+                            valueSearch={"code"}
                             value={values?.truongHopBenh?.ketQuaXetNghiem}
                             onChange={(option) => setFieldValue("truongHopBenh.ketQuaXetNghiem", option?.code)}
                         />
@@ -286,15 +297,8 @@ const ThongTinChanDoanTab = (props: Props) => {
                         displayField='tenCoSo'
                         label="Đơn vị xét nghiệm"
                         service={getListCoSoDieuTri}
-                        handleChange={(value) => setValues({
-                            ...values,
-                            truongHopBenh: {
-                                ...values.truongHopBenh,
-                                donViXetNghiemObject: value,
-                                donViXetNghiem: value?.id
-                            }
-                        })}
-                        nameErrorMessage={errors?.truongHopBenh?.donViXetNghiem}
+                        handleChange={(value) => setFieldValue("truongHopBenh.donViXetNghiemObject", value)}
+                        nameErrorMessage={errors?.truongHopBenh?.donViXetNghiemObject as string}
                         value={values.truongHopBenh?.donViXetNghiemObject}
                     />
                     </Col>

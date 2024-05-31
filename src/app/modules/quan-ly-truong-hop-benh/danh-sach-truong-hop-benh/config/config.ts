@@ -11,7 +11,7 @@ export const CONFIG_BY_CURRENT_STATUS = {
     [CURENT_STATUS.DT_NGOAI_TRU]: {
         ngayKhoiPhat: {
             disabled: false,
-            require: false,
+            require: true,
         },
         ngayNhapVienKham: {
             disabled: false,
