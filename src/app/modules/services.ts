@@ -42,12 +42,12 @@ export const getListHuyen = () => {
     return axios.get(url);
 }
 
-export const getListHuyenByTinhId = (id: number | null) => {
+export const getListHuyenByTinhId = (id: number | string | null) => {
     let url = API_URL + `huyen/tinh/${id}`
     return axios.get(url);
 }
 
-export const getListXaByHuyenId = (id: number | null) => {
+export const getListXaByHuyenId = (id: number | string | null) => {
     let url = API_URL + `xa/huyen/${id}`
     return axios.get(url);
 }

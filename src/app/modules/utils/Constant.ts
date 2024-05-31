@@ -316,9 +316,8 @@ export const STATUS_ACTION = {
 
 // ----------------------------------------------
 export const GENDER = {
-    MALE: 1,
-    FEMALE: 2,
-    ORTHER: 3,
+    MALE: 0,
+    FEMALE: 1,
 }
 
 export const MEDICAL_INCIDENT_REPORT_STATUS =  {

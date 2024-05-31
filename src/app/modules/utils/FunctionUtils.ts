@@ -108,23 +108,23 @@ export const formatDateParam = (date) => {
 };
 
 export const checkMenuByPermissions = (): TMenu[] => {
-//   const checkedMenu: TMenu[] = [];
-//   allMenu.forEach((menu) => {
-//     const filteredSubMenu: TSubMenu[] = [];
-//     if (hasAuthority(menu.permission, menu.ability)) {
-//       menu.subMenu.forEach((subMenu) => {
-//         if (hasAuthority(subMenu.permission, subMenu.ability)) {
-//           filteredSubMenu.push(subMenu);
-//         }
-//       });
-//       const checkedMenuItems: TMenu = {
-//         ...menu,
-//         subMenu: filteredSubMenu,
-//       };
-//       checkedMenu.push(checkedMenuItems);
-//     }
-//   });
-//   return checkedMenu; //khi có phân quyền sẽ check
+  const checkedMenu: TMenu[] = [];
+  allMenu.forEach((menu) => {
+    const filteredSubMenu: TSubMenu[] = [];
+    if (hasAuthority(menu.permission, menu.ability)) {
+      menu.subMenu.forEach((subMenu) => {
+        if (hasAuthority(subMenu.permission, subMenu.ability)) {
+          filteredSubMenu.push(subMenu);
+        }
+      });
+      const checkedMenuItems: TMenu = {
+        ...menu,
+        subMenu: filteredSubMenu,
+      };
+      checkedMenu.push(checkedMenuItems);
+    }
+  });
+  // return checkedMenu; //khi có phân quyền sẽ check
   return allMenu;
 };
 

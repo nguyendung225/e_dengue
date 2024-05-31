@@ -6,14 +6,156 @@ import { Button } from "react-bootstrap";
 import InputSearch from "../../component/input-field/InputSearch";
 import ThongTinThb from "./components/ThongTinThb";
 import NhapTruongHopBenhModal from './components/NhapTruongHopBenhModal';
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import TimKiemTHBNangCaoModal from "./components/TimKiemTHBNangCaoModal";
+import { toast } from "react-toastify";
+import AppContext from "../../../AppContext";
 import ModalXacNhanTHB from "./components/ModalXacNhanTHB";
+import { SearchObjectModel } from "../models/TimKiemTruongHopBenhModels";
+import { searchThbByPage } from "../tim-kiem-truong-hop-benh/services/TimKiemThbServices";
+import { initTruongHopBenh, TruongHopBenh } from "./model/Model";
+import { getThongTinTruongHopBenh } from "./servives/Services";
+import { SEARCH_OBJECT_INIT } from "../tim-kiem-truong-hop-benh/constants/constants";
 
 const DanhSachTruongHopBenh = () => {
-    const [openTruongHopBenhForm, setOpenTruongHopBenhForm] = useState<boolean>(false)
+    const { setPageLoading } = useContext(AppContext);
+    const [openTruongHopBenhForm, setOpenTruongHopBenhForm] = useState<boolean>(false);
     const [openSearchAdvanceDialog, setOpenSearchAdvanceDialog] = useState<boolean>(false);
-    const [openXacNhanTHB, setOpenXacNhanTHB] = useState<boolean>(false)
+    const [shouldOpenXacNhanThbDialog, setShouldOpenXacNhanThbDialog] = useState<boolean>(false);
+    const [truongHopBenhList, setTruongHopBenhList] = useState<any>([]);
+    const [searchObject, setSearchObject] = useState<SearchObjectModel>(SEARCH_OBJECT_INIT);
+    const [dataRow, setDataRow] = useState<TruongHopBenh>(initTruongHopBenh);
+    const [dataForm, setDataForm] = useState<TruongHopBenh>(dataRow);
+    const [configTable, setConfigTable] = useState<any>({});
+    const [searchKeyword, setsSearchKeyword] = useState<string>("");
+
+    const getTruongHopBenhList = async () => {
+        try {
+            setPageLoading(true);
+            const searchObjTemp: SearchObjectModel = {
+                ...searchObject,
+                gioiTinh: searchObject.gioiTinh?.code,
+                ngheNghiepId: searchObject.ngheNghiepId?.id,
+                phanLoai: searchObject.phanLoai?.code,
+                listTinhTrangHienNay: searchObject.listTinhTrangHienNay?.map((item: any) => item.code),
+                tinhId: searchObject.tinhId?.id,
+                huyenId: searchObject.huyenId?.id,
+                xaId: searchObject.xaId?.id,
+                coSoCreateId: searchObject.coSoCreateId?.id,
+                kqXetNghiem: searchObject.kqXetNghiem?.id,
+                donViThucHienXn: searchObject.donViThucHienXn?.id,
+                coSoDieuTriId: searchObject.coSoDieuTriId?.id
+            }
+            const { data } = await searchThbByPage(searchObjTemp);
+            const dataTemp = data?.data?.data.map((item: any, index: number) => {
+                return index === 0 ? {...item, isChecked: true} : item;
+            })
+            setTruongHopBenhList(dataTemp);
+            getThongTinChiTietTHB(dataTemp?.[0]?.truongHopBenhId);
+            setConfigTable({
+                totalPages: data?.data?.totalPages,
+                totalElements: data?.data?.total,
+                numberOfElements:  data?.data?.numberOfElements,
+            })
+        } catch (error) {
+            console.error(error);
+            toast.error(error as string);
+        } finally {
+            setPageLoading(false);
+        }
+    }
+
+    const formatData = (data: any) => {
+        let newData = {
+            truongHopBenh: {
+                ...data?.truongHopBenh,
+                capDoBenhId: {
+                    code: data?.truongHopBenh.capDoBenhId,
+                    tenCapDo: data?.truongHopBenh.capDoBenhTen
+                },
+                benhVienChuyenToiId: {
+                    code: data?.truongHopBenh.benhVienChuyenToiId,
+                    tenCoSo: data?.truongHopBenh.benhVienChuyenToiTen
+                },
+                donViXetNghiemObject: {
+                    code: data?.truongHopBenh.donViXetNghiem,
+                    tenCoSo: data?.truongHopBenh.donViXetNghiemTen
+                },
+                donViCongTacNbc: {
+                    code: data?.truongHopBenh.donViCongTacNbcId,
+                    tenCoSo: data?.truongHopBenh.donViCongTacNbcTen
+                },
+                coSoDieuTri: {
+                    code: data?.truongHopBenh.coSoDieuTriId,
+                    tenCoSo: data?.truongHopBenh.coSoDieuTriTen
+                },
+                coSoQuanLy: {
+                    code: data?.truongHopBenh.coSoQuanLyId,
+                    tenCoSo: data?.truongHopBenh.coSoQuanLyTen
+                }
+            },
+            doiTuongMacBenh: {
+                ...data?.doiTuongMacBenh,
+                ngheNghiepId: {
+                    code: data?.doiTuongMacBenh.ngheNghiepId,
+                    tenNghe: data?.doiTuongMacBenh.ngheNghiepTen
+                },
+                danTocId: {
+                    code: data?.doiTuongMacBenh.danTocId,
+                    tenDanToc: data?.doiTuongMacBenh.danTocTen
+                },
+                tinhIdHienNay: {
+                    code: data?.doiTuongMacBenh.tinhIdHienNay,
+                    tenTinh: data?.doiTuongMacBenh.tinhTenHienNay
+                },
+                huyenIdHienNay: {
+                    code: data?.doiTuongMacBenh.huyenIdHienNay,
+                    tenHuyen: data?.doiTuongMacBenh.huyenTenHienNay
+                },
+                xaIdHienNay: {
+                    code: data?.doiTuongMacBenh.xaIdHienNay,
+                    tenXa: data?.doiTuongMacBenh.xaTenHienNay
+                },
+                tinhIdThuongTru: {
+                    code: data?.doiTuongMacBenh.tinhIdThuongTru,
+                    tenTinh: data?.doiTuongMacBenh.tinhTenThuongTru
+                },
+                huyenIdThuongTru: {
+                    code: data?.doiTuongMacBenh.huyenIdThuongTru,
+                    tenHuyen: data?.doiTuongMacBenh.huyenTenThuongTru
+                },
+                xaIdThuongTru: {
+                    code: data?.doiTuongMacBenh.xaIdThuongTru,
+                    tenXa: data?.doiTuongMacBenh.xaTenThuongTru
+                }
+            }
+
+        };
+        return newData
+    }
+
+    const getThongTinChiTietTHB = async (id: string) => {
+        try {
+            setPageLoading(true);
+            const rest = await getThongTinTruongHopBenh(id);
+            setDataRow(formatData(rest.data.data));
+        } catch (error) {
+
+        }
+        finally {
+            setPageLoading(false);
+        }
+    }
+
+    const handleSelectTHB = (row: any[]) => {
+        getThongTinChiTietTHB(row[0]?.truongHopBenhId);
+    }
+
+    useEffect(() => {
+        getTruongHopBenhList();
+    }, [searchObject])
+
+
     return (
         <div className="page-container">
             <div className="left-content-container">
@@ -27,7 +169,10 @@ const DanhSachTruongHopBenh = () => {
                         </div>
                         <Button
                             className="button-primary"
-                            onClick={() => setOpenTruongHopBenhForm(true)}
+                            onClick={() => {
+                                setDataForm(initTruongHopBenh)
+                                setOpenTruongHopBenhForm(true)
+                            }}
                         >
                             <OCTKTSVG path='/media/svg/icons/plus.svg' svgClassName='spaces h-14 w-14 color-white' />
                             Thêm mới
@@ -37,12 +182,12 @@ const DanhSachTruongHopBenh = () => {
                         <div className="box-search">
                             <InputSearch
                                 placeholder="Tìm kiếm theo họ tên/ mã số bệnh nhân/ CMND/ Số điện thoại"
-                                handleChange={(e) => {
-                                    // handleChangeSearchObj({ ...searchObj, keyword: e.target.value })
-                                }}
+                                handleChange={(e) => setsSearchKeyword(e.target.value)}
                                 className="spaces h-32"
-                                // value={searchObj?.keyword}
-                                handleSearch={() => {}}
+                                value={searchKeyword}
+                                handleSearch={() => {
+                                    setSearchObject({ ...searchObject, keyword: searchKeyword })
+                                }}
                             />
                         </div>
                         <Button
@@ -55,23 +200,46 @@ const DanhSachTruongHopBenh = () => {
                     </div>
                 </div>
                 <OCTTable
-                    id="profile"
-                    data={[]}
+                    id="danh-sach-thb"
+                    data={truongHopBenhList}
                     columns={danhSachThbColumns}
-                    // searchObject={searchObject}
-                    // setSearchObject={setSearchObject}
+                    searchObject={searchObject}
+                    setSearchObject={setSearchObject}
                     type={TYPE.SINGLE}
                     fixedColumnsCount={0}
+                    setDataChecked={handleSelectTHB}
                     notDelete={true}
                     notEdit={true}
                     noToolbar={true}
-                    // totalPages={totalPage}
-                    // totalElements={totalElements}
-                    // numberOfElements={numberOfElements}
-                    // dataChecked={dataChecked}
-                    // setDataChecked={setDataChecked}
+                    totalPages={configTable?.totalPages}
+                    totalElements={configTable?.totalElements}
+                    numberOfElements={configTable?.numberOfElements}
+                    uniquePrefix="truongHopBenhId"
                     unSelectedAll={true}
                 />
+                <div className="spaces px-10">
+                    <strong>Chú thích: </strong>
+                    <div className="d-flex align-items-center spaces mt-4 line-height-16">
+                        <OCTKTSVG path="/media/svg/icons/check-circle-fill.svg" svgClassName="spaces w-16 h-16 mr-10 color-bright-cyan"/>
+                        <span>Đã xác nhận</span>
+                    </div>
+                    <div className="d-flex align-items-center spaces mt-4 line-height-16">
+                        <OCTKTSVG path="/media/svg/icons/exclamation-triangle-fill.svg" svgClassName="spaces w-16 h-16 mr-10 color-dark-orange"/>
+                        <span>Chờ xác nhận</span>
+                    </div>
+                    <div className="d-flex align-items-center spaces mt-4 line-height-16">
+                        <OCTKTSVG path="/media/svg/icons/exclamation-triangle-fill.svg" svgClassName="spaces w-16 h-16 mr-10 color-dark-red"/>
+                        <span>Quá 7 ngày chưa xác nhận</span>
+                    </div>
+                    <div className="d-flex align-items-center spaces mt-4 line-height-16">
+                        <OCTKTSVG path="/media/svg/icons/question-circle-fill.svg" svgClassName="spaces w-16 h-16 mr-10 color-steel-blue"/>
+                        <span>Sai thông tin hành chính</span>
+                    </div>
+                    <div className="d-flex align-items-center spaces mt-4 line-height-16">
+                        <OCTKTSVG path="/media/svg/icons/question-circle-fill.svg" svgClassName="spaces w-16 h-16 mr-10 color-green"/>
+                        <span>Sai thông tin chẩn đoán</span>
+                    </div>
+                </div>
             </div>
             <div className="right-content-container">
                 <div className="tt-header">
@@ -82,7 +250,7 @@ const DanhSachTruongHopBenh = () => {
                     <div className="d-flex spaces gap-10">
                         <Button
                             className="button-primary"
-                            onClick={() => setOpenXacNhanTHB(true)}
+                            onClick={() => setShouldOpenXacNhanThbDialog(true)}
                         >
                             Xác nhận
                         </Button>
@@ -110,12 +278,30 @@ const DanhSachTruongHopBenh = () => {
                     </div>
                 </div>
                 <div className="tt-tabs">
-                    <ThongTinThb />
+                    <ThongTinThb dataRow={dataRow} />
                 </div>
             </div>
-           {openTruongHopBenhForm && <NhapTruongHopBenhModal handleClose={() => setOpenTruongHopBenhForm(false)}/>}
-           {openSearchAdvanceDialog && <TimKiemTHBNangCaoModal show={openSearchAdvanceDialog} handleClose={() => setOpenSearchAdvanceDialog(false)}/>}
-           {openXacNhanTHB && <ModalXacNhanTHB handleClose={() => setOpenXacNhanTHB(false)}/>}
+
+            {openTruongHopBenhForm && (
+                <NhapTruongHopBenhModal 
+                    handleClose={() => setOpenTruongHopBenhForm(false)}
+                    dataRow={dataForm}
+                    updatePageData={getTruongHopBenhList}
+                />
+            )}
+
+            {openSearchAdvanceDialog && (
+                <TimKiemTHBNangCaoModal 
+                    show={openSearchAdvanceDialog}
+                    searchObject={searchObject}
+                    setSearchObject={setSearchObject}
+                    handleClose={() => setOpenSearchAdvanceDialog(false)} 
+                />
+            )}
+
+            {shouldOpenXacNhanThbDialog && (
+                <ModalXacNhanTHB handleClose={() => setShouldOpenXacNhanThbDialog(false)} />
+            )}
         </div>
     )
 }
