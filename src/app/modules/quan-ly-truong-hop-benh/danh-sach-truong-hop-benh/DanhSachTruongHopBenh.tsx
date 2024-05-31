@@ -14,12 +14,14 @@ import ModalXacNhanTHB from "./components/ModalXacNhanTHB";
 import { SearchObjectModel } from "../models/TimKiemTruongHopBenhModels";
 import { searchThbByPage } from "../tim-kiem-truong-hop-benh/services/TimKiemThbServices";
 import { initTruongHopBenh, TruongHopBenh } from "./model/Model";
-import { getThongTinTruongHopBenh } from "./servives/Services";
+import { deleteTruongHopBenh, getThongTinTruongHopBenh } from "./servives/Services";
 import { SEARCH_OBJECT_INIT } from "../tim-kiem-truong-hop-benh/constants/constants";
+import ConfirmDialog from "../../component/confirm-dialog/ConfirmDialog";
 
 const DanhSachTruongHopBenh = () => {
     const { setPageLoading } = useContext(AppContext);
     const [openTruongHopBenhForm, setOpenTruongHopBenhForm] = useState<boolean>(false);
+    const [openDeleteTruongHopBenh, setOpenDeleteTruongHopBenh] = useState<boolean>(false);
     const [openSearchAdvanceDialog, setOpenSearchAdvanceDialog] = useState<boolean>(false);
     const [shouldOpenXacNhanThbDialog, setShouldOpenXacNhanThbDialog] = useState<boolean>(false);
     const [truongHopBenhList, setTruongHopBenhList] = useState<any>([]);
@@ -65,67 +67,82 @@ const DanhSachTruongHopBenh = () => {
         }
     }
 
+    const handleDeleteTruongHopBenh = async () => {
+        const id = dataRow?.truongHopBenh?.truongHopBenhId
+        try {
+            setPageLoading(true);
+            id && await deleteTruongHopBenh(id);
+            getTruongHopBenhList();
+            setOpenDeleteTruongHopBenh(false);
+        } catch (error) {
+            console.error(error);
+            toast.error(error as string);
+        } finally {
+            setPageLoading(false);
+        }
+    }
+
     const formatData = (data: any) => {
         let newData = {
             truongHopBenh: {
                 ...data?.truongHopBenh,
-                capDoBenhId: {
-                    code: data?.truongHopBenh.capDoBenhId,
+                capDoBenh: {
+                    id: data?.truongHopBenh.capDoBenhId,
                     tenCapDo: data?.truongHopBenh.capDoBenhTen
                 },
-                benhVienChuyenToiId: {
-                    code: data?.truongHopBenh.benhVienChuyenToiId,
+                benhVienChuyenToi: {
+                    id: data?.truongHopBenh.benhVienChuyenToiId,
                     tenCoSo: data?.truongHopBenh.benhVienChuyenToiTen
                 },
                 donViXetNghiemObject: {
-                    code: data?.truongHopBenh.donViXetNghiem,
+                    id: data?.truongHopBenh.donViXetNghiem,
                     tenCoSo: data?.truongHopBenh.donViXetNghiemTen
                 },
                 donViCongTacNbc: {
-                    code: data?.truongHopBenh.donViCongTacNbcId,
+                    id: data?.truongHopBenh.donViCongTacNbcId,
                     tenCoSo: data?.truongHopBenh.donViCongTacNbcTen
                 },
                 coSoDieuTri: {
-                    code: data?.truongHopBenh.coSoDieuTriId,
+                    id: data?.truongHopBenh.coSoDieuTriId,
                     tenCoSo: data?.truongHopBenh.coSoDieuTriTen
                 },
                 coSoQuanLy: {
-                    code: data?.truongHopBenh.coSoQuanLyId,
+                    id: data?.truongHopBenh.coSoQuanLyId,
                     tenCoSo: data?.truongHopBenh.coSoQuanLyTen
                 }
             },
             doiTuongMacBenh: {
                 ...data?.doiTuongMacBenh,
-                ngheNghiepId: {
-                    code: data?.doiTuongMacBenh.ngheNghiepId,
+                ngheNghiep: {
+                    id: data?.doiTuongMacBenh.ngheNghiepId,
                     tenNghe: data?.doiTuongMacBenh.ngheNghiepTen
                 },
-                danTocId: {
-                    code: data?.doiTuongMacBenh.danTocId,
+                danToc: {
+                    id: data?.doiTuongMacBenh.danTocId,
                     tenDanToc: data?.doiTuongMacBenh.danTocTen
                 },
-                tinhIdHienNay: {
-                    code: data?.doiTuongMacBenh.tinhIdHienNay,
+                tinhHienNay: {
+                    id: data?.doiTuongMacBenh.tinhIdHienNay,
                     tenTinh: data?.doiTuongMacBenh.tinhTenHienNay
                 },
-                huyenIdHienNay: {
-                    code: data?.doiTuongMacBenh.huyenIdHienNay,
+                huyenHienNay: {
+                    id: data?.doiTuongMacBenh.huyenIdHienNay,
                     tenHuyen: data?.doiTuongMacBenh.huyenTenHienNay
                 },
-                xaIdHienNay: {
-                    code: data?.doiTuongMacBenh.xaIdHienNay,
+                xaHienNay: {
+                    xaId: data?.doiTuongMacBenh.xaIdHienNay,
                     tenXa: data?.doiTuongMacBenh.xaTenHienNay
                 },
-                tinhIdThuongTru: {
-                    code: data?.doiTuongMacBenh.tinhIdThuongTru,
+                tinhThuongTru: {
+                    id: data?.doiTuongMacBenh.tinhIdThuongTru,
                     tenTinh: data?.doiTuongMacBenh.tinhTenThuongTru
                 },
-                huyenIdThuongTru: {
-                    code: data?.doiTuongMacBenh.huyenIdThuongTru,
+                huyenThuongTru: {
+                    id: data?.doiTuongMacBenh.huyenIdThuongTru,
                     tenHuyen: data?.doiTuongMacBenh.huyenTenThuongTru
                 },
-                xaIdThuongTru: {
-                    code: data?.doiTuongMacBenh.xaIdThuongTru,
+                xaThuongTru: {
+                    xaId: data?.doiTuongMacBenh.xaIdThuongTru,
                     tenXa: data?.doiTuongMacBenh.xaTenThuongTru
                 }
             }
@@ -256,14 +273,17 @@ const DanhSachTruongHopBenh = () => {
                         </Button>
                         <Button
                             className="button-primary"
-                            onClick={() => {}}
+                            onClick={() => {
+                                setDataForm(dataRow)
+                                setOpenTruongHopBenhForm(true)
+                            }}
                         >
                             <OCTKTSVG path='/media/svg/icons/pencil-square.svg' svgClassName='spaces h-14 w-14 color-white' />
                             Sửa
                         </Button>
                         <Button
                             className="button-delete"
-                            onClick={() => {}}
+                            onClick={() => setOpenDeleteTruongHopBenh(true)}
                         >
                             <OCTKTSVG path='/media/svg/icons/trash.svg' svgClassName='spaces h-14 w-14 color-white' />
                             Xoá
@@ -302,6 +322,21 @@ const DanhSachTruongHopBenh = () => {
             {shouldOpenXacNhanThbDialog && (
                 <ModalXacNhanTHB handleClose={() => setShouldOpenXacNhanThbDialog(false)} />
             )}
+            {
+                openDeleteTruongHopBenh && (
+                    <ConfirmDialog
+                        show={openDeleteTruongHopBenh}
+                        onCloseClick={() => setOpenDeleteTruongHopBenh(false)}
+                        onCancelClick={() => setOpenDeleteTruongHopBenh(false)}
+                        onYesClick={handleDeleteTruongHopBenh}
+                        title="Xóa trường hợp bệnh"
+                        message="Xác nhận xóa trường hợp bệnh"
+                        yes="Xóa"
+                        cancel="Hủy"
+                    />
+
+                )
+            }
         </div>
     )
 }

@@ -1,6 +1,7 @@
 import moment from "moment";
 import { SearchObjectModel } from "../../models/TimKiemTruongHopBenhModels";
 import { renderStatusThb } from "../../../utils/FormatUtils";
+import { PHAN_LOAI_CHAN_DOAN } from "../../danh-sach-truong-hop-benh/constants/constant";
 
 export const truongHopBenhColumns = [
   {
@@ -20,7 +21,7 @@ export const truongHopBenhColumns = [
   },
   {
     name: "Chuẩn đoán",
-    field: "TenChanDoan",
+    field: "tenChanDoan",
     headerStyle: {
       minWidth: "120px",
     },
@@ -30,17 +31,13 @@ export const truongHopBenhColumns = [
   },
   {
     name: "Tình trạng hiện tại",
-    field: "TinhTrangHienNay",
+    field: "tinhTrangHienNay",
     headerStyle: {
       minWidth: "120px",
     },
     cellStyle: {
       textAlign: "left",
     },
-    render: (rowData: any) =>
-      TINH_TRANG_HIEN_NAY.find(
-        (item) => item.code === rowData?.tinhTrangHienNay
-      )?.name,
   },
   {
     name: "Tỉnh",
@@ -74,7 +71,7 @@ export const truongHopBenhColumns = [
   },
   {
     name: "Cơ sở điều trị",
-    field: "TenCoSoGhiNhan",
+    field: "tenCoSoDieuTri",
     headerStyle: {
       minWidth: "120px",
     },
@@ -84,7 +81,7 @@ export const truongHopBenhColumns = [
   },
   {
     name: "Cơ sở ghi nhận",
-    field: "TenCoSoDieuTri",
+    field: "tenCoSoGhiNhan",
     headerStyle: {
       minWidth: "120px",
     },
@@ -116,14 +113,14 @@ export const truongHopBenhColumns = [
   },
   {
     name: "Ngày báo cáo",
-    field: "ngayNopBcDieuTra",
+    field: "ngayTao",
     headerStyle: {
       minWidth: "120px",
     },
     cellStyle: {
       textAlign: "center",
     },
-    render: (rowData: any) => rowData.ngayNopBcDieuTra && moment(rowData.ngayNopBcDieuTra).format("DD-MM-YYYY"),
+    render: (rowData: any) => rowData.ngayTao && moment(rowData.ngayTao).format("DD-MM-YYYY"),
   },
   {
     name: "TT",

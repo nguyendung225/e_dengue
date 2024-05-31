@@ -28,7 +28,7 @@ const AppRoutes: FC = () => {
           <Route path='error/*' element={<ErrorsPage />} />
           <Route path='logout' element={<Logout />} />
           <Route path='/*' element={<PrivateRoutes />} />
-          <Route index element={<Navigate to='/ds-bao-cao-scyk' />} />
+          <Route index element={<Navigate to='/danh-sach-truong-hop-benh' />} />
         </Route>
       </Routes>
     </BrowserRouter>

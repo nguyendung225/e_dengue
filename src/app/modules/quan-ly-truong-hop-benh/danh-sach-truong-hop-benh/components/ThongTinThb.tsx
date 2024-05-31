@@ -1,6 +1,6 @@
 import { Form, Formik } from "formik"
 import { TabMenu } from "../../../component/tabs/TabMenu"
-import { tabTruongHopBenh } from "../constants/constant"
+import { tabThongTinTruongHopBenh } from "../constants/constant"
 import { TruongHopBenh } from "../model/Model"
 
 type IProps = {
@@ -19,7 +19,7 @@ const ThongTinThb = ({ dataRow }: IProps) => {
                 {formikProps => (
                     <Form>
                         <TabMenu
-                            danhsachTabs={tabTruongHopBenh}
+                            danhsachTabs={tabThongTinTruongHopBenh}
                             contentTabClassName="pe-none"
                         />
                     </Form>

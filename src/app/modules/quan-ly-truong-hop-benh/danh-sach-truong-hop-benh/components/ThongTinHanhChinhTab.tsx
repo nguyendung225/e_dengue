@@ -67,14 +67,14 @@ const ThongTinHanhChinhTab = (props: Props) => {
                     urlData='data.data'
                     getOptionLabel={(option) => option.tenNghe}
                     options={[]}
-                    value={values.doiTuongMacBenh?.ngheNghiepId}
+                    value={values.doiTuongMacBenh?.ngheNghiep}
                     onChange={(option) => {
-                        setFieldValue("doiTuongMacBenh.ngheNghiepId", option?.id)
+                        setFieldValue("doiTuongMacBenh.ngheNghiep", option)
                     }}
                     searchObject={{}}
                     isRequired
-                    errors={errors.doiTuongMacBenh?.ngheNghiepId}
-                    touched={touched.doiTuongMacBenh?.ngheNghiepId}
+                    errors={errors.doiTuongMacBenh?.ngheNghiep}
+                    touched={touched.doiTuongMacBenh?.ngheNghiep}
                 />
             </Col>
             <Col xl={3}>
@@ -84,12 +84,12 @@ const ThongTinHanhChinhTab = (props: Props) => {
                     urlData='data.data'
                     getOptionLabel={(option) => option.tenDanToc}
                     options={[]}
-                    value={values.doiTuongMacBenh?.danTocId}
-                    onChange={(option) => setFieldValue("doiTuongMacBenh.danTocId", option?.id)}
+                    value={values.doiTuongMacBenh?.danToc}
+                    onChange={(option) => setFieldValue("doiTuongMacBenh.danToc", option)}
                     searchObject={{}}
                     isRequired
-                    errors={errors.doiTuongMacBenh?.danTocId}
-                    touched={touched.doiTuongMacBenh?.danTocId}
+                    errors={errors.doiTuongMacBenh?.danToc}
+                    touched={touched.doiTuongMacBenh?.danToc}
                 />
             </Col>
             <Col xl={3}>
@@ -183,70 +183,70 @@ const ThongTinHanhChinhTab = (props: Props) => {
                     urlData='data.data'
                     getOptionLabel={(option) => option.tenTinh}
                     options={[]}
-                    name='doiTuongMacBenh.tinhIdHienNay'
+                    name='doiTuongMacBenh.tinhHienNay'
                     searchObject={{}}
                     onChange={(option) => {
                         setValues({
                             ...values,
                             doiTuongMacBenh: {
                                 ...values.doiTuongMacBenh,
-                                tinhIdHienNay: option?.id,
-                                huyenIdHienNay: null,
-                                xaIdHienNay: null
+                                tinhHienNay: option,
+                                huyenHienNay: null,
+                                xaHienNay: null
                             },
                         })
                     }}
                     isRequired
-                    value={values.doiTuongMacBenh?.tinhIdHienNay}
-                    errors={errors.doiTuongMacBenh?.tinhIdHienNay}
-                    touched={touched.doiTuongMacBenh?.tinhIdHienNay}
+                    value={values.doiTuongMacBenh?.tinhHienNay}
+                    errors={errors.doiTuongMacBenh?.tinhHienNay}
+                    touched={touched.doiTuongMacBenh?.tinhHienNay}
                 />
             </Col>
             <Col xl={3}>
                 <OCTAutocomplete
                     menuPlacement="top"
                     lable="Quận/Huyện hiện nay"
-                    searchFunction={() => getListHuyenByTinhId(values.doiTuongMacBenh?.tinhIdHienNay)}
+                    searchFunction={() => getListHuyenByTinhId(values.doiTuongMacBenh?.tinhHienNay?.id)}
                     urlData='data.data'
                     getOptionLabel={(option) => option.tenHuyen}
                     options={[]}
                     searchObject={{}}
-                    value={values.doiTuongMacBenh?.huyenIdHienNay}
-                    isDisabled={!values.doiTuongMacBenh?.tinhIdHienNay}
+                    value={values.doiTuongMacBenh?.huyenHienNay}
+                    isDisabled={!values.doiTuongMacBenh?.tinhHienNay}
                     onChange={(option) => {
                         setValues({
                             ...values,
                             doiTuongMacBenh: {
                                 ...values.doiTuongMacBenh,
-                                huyenIdHienNay: option?.id,
-                                xaIdHienNay: null
+                                huyenHienNay: option,
+                                xaHienNay: null
                             },
                         })
                     }}
-                    dependencies={[values.doiTuongMacBenh?.tinhIdHienNay]}
+                    dependencies={[values.doiTuongMacBenh?.tinhHienNay]}
                     isRequired
-                    errors={errors.doiTuongMacBenh?.huyenIdHienNay}
-                    touched={touched.doiTuongMacBenh?.huyenIdHienNay}
+                    errors={errors.doiTuongMacBenh?.huyenHienNay}
+                    touched={touched.doiTuongMacBenh?.huyenHienNay}
                 />
             </Col>
             <Col xl={3}>
                 <OCTAutocomplete
                     menuPlacement="top"
                     lable="Phường/Xã hiện nay"
-                    searchFunction={() => getListXaByHuyenId(values.doiTuongMacBenh?.huyenIdHienNay)}
+                    searchFunction={() => getListXaByHuyenId(values.doiTuongMacBenh?.huyenHienNay?.id)}
                     urlData='data.data'
                     getOptionLabel={(option) => option.tenXa}
                     options={[]}
                     searchObject={{}}
-                    value={values.doiTuongMacBenh?.xaIdHienNay}
-                    isDisabled={!values.doiTuongMacBenh?.huyenIdHienNay}
+                    value={values.doiTuongMacBenh?.xaHienNay}
+                    isDisabled={!values.doiTuongMacBenh?.huyenHienNay}
                     onChange={(option) => {
-                        setFieldValue("doiTuongMacBenh.xaIdHienNay", option?.xaId)
+                        setFieldValue("doiTuongMacBenh.xaHienNay", option)
                     }}
-                    dependencies={[values?.doiTuongMacBenh?.huyenIdHienNay]}
+                    dependencies={[values?.doiTuongMacBenh?.huyenHienNay]}
                     isRequired
-                    errors={errors.doiTuongMacBenh?.xaIdHienNay}
-                    touched={touched.doiTuongMacBenh?.xaIdHienNay}
+                    errors={errors.doiTuongMacBenh?.xaHienNay}
+                    touched={touched.doiTuongMacBenh?.xaHienNay}
                 />
 
             </Col>
@@ -271,20 +271,20 @@ const ThongTinHanhChinhTab = (props: Props) => {
                     urlData='data.data'
                     getOptionLabel={(option) => option.tenTinh}
                     options={[]}
-                    name='doiTuongMacBenh.tinhIdThuongTru'
+                    name='doiTuongMacBenh.tinhThuongTru'
                     searchObject={{}}
                     onChange={(option) => {
                         setValues({
                             ...values,
                             doiTuongMacBenh: {
                                 ...values.doiTuongMacBenh,
-                                tinhIdThuongTru: option?.id,
-                                huyenIdThuongTru: null,
-                                xaIdThuongTru: null
+                                tinhThuongTru: option,
+                                huyenThuongTru: null,
+                                xaThuongTru: null
                             },
                         })
                     }}
-                    value={values.doiTuongMacBenh?.tinhIdThuongTru}
+                    value={values.doiTuongMacBenh?.tinhThuongTru}
 
                 />
             </Col>
@@ -292,41 +292,41 @@ const ThongTinHanhChinhTab = (props: Props) => {
                 <OCTAutocomplete
                     menuPlacement="top"
                     lable="Quận/Huyện thường chú"
-                    searchFunction={() => getListHuyenByTinhId(values.doiTuongMacBenh?.tinhIdThuongTru)}
+                    searchFunction={() => getListHuyenByTinhId(values.doiTuongMacBenh?.tinhThuongTru?.id)}
                     urlData='data.data'
                     getOptionLabel={(option) => option.tenHuyen}
                     options={[]}
                     searchObject={{}}
-                    value={values.doiTuongMacBenh?.huyenIdThuongTru}
-                    isDisabled={!values.doiTuongMacBenh?.tinhIdThuongTru}
+                    value={values.doiTuongMacBenh?.huyenThuongTru}
+                    isDisabled={!values.doiTuongMacBenh?.tinhThuongTru}
                     onChange={(option) => {
                         setValues({
                             ...values,
                             doiTuongMacBenh: {
                                 ...values.doiTuongMacBenh,
-                                huyenIdThuongTru: option?.id,
-                                xaIdThuongTru: null
+                                huyenThuongTru: option,
+                                xaThuongTru: null
                             },
                         })
                     }}
-                    dependencies={[values.doiTuongMacBenh?.tinhIdThuongTru]}
+                    dependencies={[values.doiTuongMacBenh?.tinhThuongTru]}
                 />
             </Col>
             <Col xl={3}>
                 <OCTAutocomplete
                     menuPlacement="top"
                     lable="Phường/Xã thường trú"
-                    searchFunction={() => getListXaByHuyenId(values.doiTuongMacBenh?.huyenIdThuongTru)}
+                    searchFunction={() => getListXaByHuyenId(values.doiTuongMacBenh?.huyenThuongTru?.id)}
                     urlData='data.data'
                     getOptionLabel={(option) => option.tenXa}
                     options={[]}
                     searchObject={{}}
-                    value={values.doiTuongMacBenh?.xaIdThuongTru}
-                    isDisabled={!values.doiTuongMacBenh?.huyenIdThuongTru}
+                    value={values.doiTuongMacBenh?.xaThuongTru}
+                    isDisabled={!values.doiTuongMacBenh?.huyenThuongTru}
                     onChange={(option) => {
-                        setFieldValue("doiTuongMacBenh.xaIdThuongTru", option?.xaId)
+                        setFieldValue("doiTuongMacBenh.xaThuongTru", option)
                     }}
-                    dependencies={[values.doiTuongMacBenh?.huyenIdThuongTru]}
+                    dependencies={[values.doiTuongMacBenh?.huyenThuongTru]}
                 />
             </Col>
         </Row>

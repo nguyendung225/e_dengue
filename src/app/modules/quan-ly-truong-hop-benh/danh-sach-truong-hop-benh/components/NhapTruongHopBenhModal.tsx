@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import TabMenu from "../../../component/tabs/TabMenu";
 import { hanhChinhSchema, KeyTab, tabConfig, tabTruongHopBenh } from "../constants/constant";
 import { TruongHopBenh } from "../model/Model";
-import { AddTruongHopBenh } from "../servives/Services";
+import { AddTruongHopBenh, updateTruongHopBenh } from "../servives/Services";
 
 type TProps = {
     handleClose: () => void;
@@ -25,13 +25,41 @@ const NhapTruongHopBenhModal = (props: TProps) => {
         setPrevTab(prevTab || null);
     }, [activeTab]);
 
+    const formatData = (data: TruongHopBenh): TruongHopBenh => {
+        return {
+            truongHopBenh: {
+                ...data?.truongHopBenh,
+                capDoBenhId: data?.truongHopBenh?.capDoBenh?.id,
+                benhVienChuyenToiId: data?.truongHopBenh?.benhVienChuyenToi?.id,
+                donViXetNghiem: data?.truongHopBenh?.donViXetNghiemObject?.id,
+                coSoDieuTriId: data?.truongHopBenh?.coSoDieuTri?.id,
+                coSoQuanLyId: data?.truongHopBenh?.coSoQuanLy?.id,
+                donViCongTacNbcId: data?.truongHopBenh?.donViCongTacNbc?.id
+
+            },
+            doiTuongMacBenh: {
+                ...data?.doiTuongMacBenh,
+                ngheNghiepId: data?.doiTuongMacBenh?.ngheNghiep?.id,
+                danTocId: data?.doiTuongMacBenh?.danToc?.id,
+                huyenIdHienNay: data?.doiTuongMacBenh?.huyenHienNay?.id,
+                xaIdHienNay: data?.doiTuongMacBenh?.xaHienNay?.xaId,
+                tinhIdHienNay: data?.doiTuongMacBenh?.tinhHienNay?.id,
+                tinhIdThuongTru: data?.doiTuongMacBenh?.tinhThuongTru?.id,
+                huyenIdThuongTru: data?.doiTuongMacBenh?.huyenThuongTru?.id,
+                xaIdThuongTru: data?.doiTuongMacBenh?.xaThuongTru?.xaId,
+            }
+        }
+
+    }
 
     const handleSubmit = async (values: TruongHopBenh,  formikHelpers: FormikHelpers<TruongHopBenh>) => {
         const { nextTab } = tabConfig[activeTab] || {};
+        const id = values?.truongHopBenh?.truongHopBenhId
+        const formData = formatData(values) 
         if (nextTab) {
             setActiveTab(nextTab);
         } else {
-            await AddTruongHopBenh(values)
+            id ? await updateTruongHopBenh(id, formData) : await AddTruongHopBenh(formData)
             toast.success("Thêm mới thành công trường hợp bệnh thành công");
             updatePageData();
             handleClose();

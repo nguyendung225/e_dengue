@@ -22,7 +22,7 @@ export const allMenu: TMenu[] = [
   {
     title: "Quản lý trường hợp bệnh",
     to: "/danh-sach-truong-hop-benh",
-    name: "ds-bao-cao-scyk",
+    name: "danh-sach-truong-hop-benh",
     permission: PERMISSIONS.SU_CO,
     ability: PERMISSION_ABILITY.VIEW,
     subMenu: [
