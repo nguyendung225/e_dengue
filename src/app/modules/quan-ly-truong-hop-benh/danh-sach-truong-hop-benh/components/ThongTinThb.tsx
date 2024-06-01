@@ -20,7 +20,6 @@ const ThongTinThb = ({ dataRow }: IProps) => {
                     <Form>
                         <TabMenu
                             danhsachTabs={tabThongTinTruongHopBenh}
-                            contentTabClassName="pe-none"
                         />
                     </Form>
                 )}

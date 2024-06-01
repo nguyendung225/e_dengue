@@ -198,7 +198,7 @@ const DanhSachTruongHopBenh = () => {
                     <div className="ds-search-box">
                         <div className="box-search">
                             <InputSearch
-                                placeholder="Tìm kiếm theo họ tên/ mã số bệnh nhân/ CMND/ Số điện thoại"
+                                placeholder="Tìm kiếm theo họ tên/ mã số bệnh nhân/ CMND/ SĐT"
                                 handleChange={(e) => setsSearchKeyword(e.target.value)}
                                 className="spaces h-32"
                                 value={searchKeyword}

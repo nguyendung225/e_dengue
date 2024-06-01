@@ -252,17 +252,17 @@ export const tabThongTinTruongHopBenh = [
     {
         eventKey: "0",
         title: "Thông tin hành chính",
-        component: <ThongTinHanhChinhTab />
+        component: <ThongTinHanhChinhTab onlyView />
     },
     {
         eventKey: "1",
         title: "Thông tin chẩn đoán",
-        component: <ThongTinChanDoanTab />
+        component: <ThongTinChanDoanTab onlyView />
     },
     {
         eventKey: "2",
         title: "Thông tin ghi nhận",
-        component: <ThongTinGhiNhanTab />
+        component: <ThongTinGhiNhanTab onlyView />
     },
     {
         eventKey: "3",

@@ -7,8 +7,9 @@ import { useFormikContext } from "formik";
 import { SearchObjectModel } from "../../models/TimKiemTruongHopBenhModels";
 import { GENDER_OPTION, KQ_XET_NGHIEM, PHAN_LOAI_QUAN_LY, SEARCH_OBJECT_INIT, TINH_TRANG_HIEN_NAY } from "../constants/constants";
 import LabelRequired from "../../../component/LabelRequired";
-import { getListCoSo, getListDmDonViThucHienXetNghiem, getListHuyenByTinhId, getListNgheNghiep, getListTinh, getListXaByHuyenId } from "../../../services";
+import { getListCoSo, getListCoSoDieuTri, getListDmDonViThucHienXetNghiem, getListHuyenByTinhId, getListNgheNghiep, getListTinh, getListXaByHuyenId } from "../../../services";
 import { heightSelectMutil } from "../../../component/input-field/StyleComponent";
+import AsyncAutoComplete from "../../../component/input-field/AsyncAutoComplete";
 
 const SearchAdvanceForm = () => {
     const [openSearchAdvance, setOpenSearchAdvance] = useState<boolean>(false);
@@ -481,23 +482,15 @@ const SearchAdvanceForm = () => {
                                     />
                                 </Col>
                                 <Col xs={12} sm={6} md={4}>
-                                    <LabelRequired
-                                        label="Cơ sở điều trị"
-                                        className="spaces fw-500"
-                                    />
-                                    <OCTAutocomplete
+                                    <AsyncAutoComplete
                                         menuPlacement="top"
-                                        onChange={(selectedOption) =>
-                                            setFieldValue("CoSoDieuTriId", selectedOption)
-                                        }
-                                        className="spaces h-30"
-                                        name="coSoDieuTriId"
-                                        options={[]}
+                                        params={{}}
+                                        required
+                                        label="Cơ sở điều trị"
+                                        displayField='tenCoSo'
+                                        service={getListCoSoDieuTri}
+                                        handleChange={(value) => setFieldValue("coSoDieuTriId", value)}
                                         value={values?.coSoDieuTriId}
-                                        getOptionLabel={(option) => option.tenCoSo}
-                                        searchObject={{}}
-                                        searchFunction={getListCoSo}
-                                        urlData='data.data'
                                     />
                                 </Col>
                             </Row>
