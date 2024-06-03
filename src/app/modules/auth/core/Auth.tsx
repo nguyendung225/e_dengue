@@ -78,7 +78,22 @@ const setAuthoritiesToLocalStorage = (tokenDecode: any) => {
 const setUserInfomation = async () => {
     try {
         const { data } = await getThongTinUser()
-        localStorage.setItem(KEY_LOCALSTORAGE.USER_INFOMATION, JSON.stringify(data?.data));
+        const dataTemp = {
+          ...data.data,
+          tinhInfo: {
+            id: data?.data.tinhId,
+            tenTinh: data?.data.tenTinh,
+          },
+          huyenInfo: {
+            id: data?.data.huyenId,
+            tenHuyen: data?.data.tenHuyen,
+          },
+          xaInfo: {
+            id: data?.data.xaId,
+            tenXa: data?.data.tenXa,
+          },
+        };
+        localStorage.setItem(KEY_LOCALSTORAGE.USER_INFOMATION, JSON.stringify(dataTemp));
     } catch (error) {
         console.error(error)
     }

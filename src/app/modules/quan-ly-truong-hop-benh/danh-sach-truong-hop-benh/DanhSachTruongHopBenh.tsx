@@ -36,16 +36,23 @@ const DanhSachTruongHopBenh = () => {
     const getTruongHopBenhList = async () => {
         try {
             setPageLoading(true);
+            let tinhTrangHienNay: { [key: string]: number } = {};
+            
+            searchObject.listTinhTrangHienNay?.forEach((value: any, index: number) => {
+                tinhTrangHienNay[`listTinhTrangHienNay[${index}]`] = value.code;
+            });
+            delete searchObject.listTinhTrangHienNay;
+
             const searchObjTemp: SearchObjectModel = {
                 ...searchObject,
+                ...tinhTrangHienNay,
                 gioiTinh: searchObject.gioiTinh?.code,
                 ngheNghiepId: searchObject.ngheNghiepId?.id,
-                phanLoai: searchObject.phanLoai?.code,
-                listTinhTrangHienNay: searchObject.listTinhTrangHienNay?.map((item: any) => item.code),
+                phanLoaiQuanLy: searchObject.phanLoaiQuanLy?.code,
                 tinhId: searchObject.tinhId?.id,
                 huyenId: searchObject.huyenId?.id,
                 xaId: searchObject.xaId?.id,
-                coSoCreateId: searchObject.coSoCreateId?.id,
+                coSoGhiNhanId: searchObject.coSoGhiNhanId?.id,
                 kqXetNghiem: searchObject.kqXetNghiem?.id,
                 donViThucHienXn: searchObject.donViThucHienXn?.id,
                 coSoDieuTriId: searchObject.coSoDieuTriId?.id
@@ -55,7 +62,7 @@ const DanhSachTruongHopBenh = () => {
                 return index === 0 ? {...item, isChecked: true} : item;
             })
             setTruongHopBenhList(dataTemp);
-            getThongTinChiTietTHB(dataTemp?.[0]?.truongHopBenhId);
+            dataTemp[0] && getThongTinChiTietTHB(dataTemp?.[0]?.truongHopBenhId);
             setConfigTable({
                 totalPages: data?.data?.totalPages,
                 totalElements: data?.data?.total,

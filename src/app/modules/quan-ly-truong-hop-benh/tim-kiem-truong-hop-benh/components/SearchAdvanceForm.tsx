@@ -7,15 +7,18 @@ import { useFormikContext } from "formik";
 import { SearchObjectModel } from "../../models/TimKiemTruongHopBenhModels";
 import { GENDER_OPTION, KQ_XET_NGHIEM, PHAN_LOAI_QUAN_LY, SEARCH_OBJECT_INIT, TINH_TRANG_HIEN_NAY } from "../constants/constants";
 import LabelRequired from "../../../component/LabelRequired";
-import { getListCoSo, getListCoSoDieuTri, getListDmDonViThucHienXetNghiem, getListHuyenByTinhId, getListNgheNghiep, getListTinh, getListXaByHuyenId } from "../../../services";
-import { heightSelectMutil } from "../../../component/input-field/StyleComponent";
+import { getListCoSoBaoCao, getListCoSoDieuTri, getListDmDonViThucHienXetNghiem, getListHuyenByTinhId, getListNgheNghiep, getListTinh, getListXaByHuyenId } from "../../../services";
+import { localStorageItem } from "../../../utils/LocalStorage";
+import { KEY_LOCALSTORAGE } from "../../../auth/core/_consts";
+import { authRoles } from "../../../auth/authRoles";
 import AsyncAutoComplete from "../../../component/input-field/AsyncAutoComplete";
 
 const SearchAdvanceForm = () => {
     const [openSearchAdvance, setOpenSearchAdvance] = useState<boolean>(false);
     const location = useLocation();
     const { values, handleChange, errors, touched, setFieldValue, setValues } = useFormikContext<SearchObjectModel>();
-
+    const roleUser = localStorageItem.get(KEY_LOCALSTORAGE.USER_INFOMATION)?.username;
+    
     return (
         <>
             {location.pathname === "/tim-kiem-truong-hop-benh" && (
@@ -129,7 +132,7 @@ const SearchAdvanceForm = () => {
                             urlData="data.data"
                         />
                     </Col>
-                    <Col xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <Col xs={12} sm={6} md={4} lg={3}>
                         <LabelRequired
                             label="Phân loại quản lý"
                             className="spaces fw-500"
@@ -137,15 +140,15 @@ const SearchAdvanceForm = () => {
                         <OCTAutocomplete
                             menuPlacement="bottom"
                             onChange={(selectedOption) =>
-                                setFieldValue("phanLoai", selectedOption)
+                                setFieldValue("phanLoaiQuanLy", selectedOption)
                             }
                             className="spaces h-30"
-                            name="phanLoai"
+                            name="phanLoaiQuanLy"
                             options={PHAN_LOAI_QUAN_LY}
-                            value={values?.phanLoai}
+                            value={values?.phanLoaiQuanLy}
                         />
                     </Col>
-                    <Col xs={12} sm={6} md={4} lg={3} xl={4}>
+                    <Col xs={12} sm={6} md={4} lg={3}>
                         <LabelRequired
                             label="Tình trạng hiện nay"
                             className="spaces fw-500"
@@ -155,7 +158,6 @@ const SearchAdvanceForm = () => {
                             getOptionLabel={(option) => option.name}
                             getOptionValue={option => option.code}
                             menuPlacement="bottom"
-                            styles={heightSelectMutil("auto", "25px")}
                             onChange={(selectedOption) =>
                                 setFieldValue("listTinhTrangHienNay", selectedOption)
                             }
@@ -190,7 +192,8 @@ const SearchAdvanceForm = () => {
                                 className="spaces h-30"
                                 name="tinhId"
                                 options={[]}
-                                value={values?.tinhId}
+                                value={values.tinhId}
+                                isDisabled={roleUser === authRoles.TINH || roleUser === authRoles.HUYEN || roleUser === authRoles.XA}
                                 getOptionLabel={(option) => option.tenTinh}
                                 searchObject={{}}
                                 searchFunction={getListTinh}
@@ -216,9 +219,10 @@ const SearchAdvanceForm = () => {
                                 name="huyenId"
                                 options={[]}
                                 value={values?.huyenId}
+                                isDisabled={roleUser === authRoles.HUYEN || roleUser === authRoles.XA}
                                 getOptionLabel={(option) => option.tenHuyen}
                                 searchObject={{}}
-                                searchFunction={() => getListHuyenByTinhId(values?.tinhId?.id || null)}
+                                searchFunction={() =>  values?.tinhId?.id && getListHuyenByTinhId(values?.tinhId?.id)}
                                 dependencies={[values?.tinhId]}
                                 urlData='data.data'
                             />
@@ -232,15 +236,16 @@ const SearchAdvanceForm = () => {
                                 menuPlacement="bottom"
                                 maxMenuHeight={200}
                                 onChange={(selectedOption) =>
-                                    setFieldValue("xaId", selectedOption)
+                                    setFieldValue('xaId',selectedOption)
                                 }
                                 className="spaces h-30"
                                 name="xaId"
                                 options={[]}
                                 value={values?.xaId}
+                                isDisabled={roleUser === authRoles.XA}
                                 getOptionLabel={(option) => option.tenXa}
                                 searchObject={{}}
-                                searchFunction={() => getListXaByHuyenId(values?.huyenId?.id || null)}
+                                searchFunction={() =>  values?.huyenId?.id  && getListXaByHuyenId(values?.huyenId?.id)}
                                 dependencies={[values?.huyenId]}
                                 urlData='data.data'
                             />
@@ -274,22 +279,14 @@ const SearchAdvanceForm = () => {
                             />
                         </Col>
                         <Col xs={12} sm={6} md={4} lg={3} xl={2}>
-                            <LabelRequired
+                            <AsyncAutoComplete
+                                menuPlacement="top"
+                                params={{}}
                                 label="Cơ sở báo cáo"
-                                className="spaces fw-500"
-                            />
-                            <OCTAutocomplete
-                                onChange={(selectedOption) =>
-                                    setFieldValue("coSoCreateId", selectedOption?.CoSoId)
-                                }
-                                className="spaces h-30"
-                                name="coSoCreateId"
-                                getOptionLabel={(option) => option.tenCoSo}
-                                options={[]}
-                                value={values?.coSoCreateId}
-                                searchObject={{}}
-                                searchFunction={getListCoSo}
-                                urlData='data.data'
+                                displayField='tenCoSo'
+                                service={getListCoSoBaoCao}
+                                handleChange={(value) => setFieldValue("coSoGhiNhanId", value)}
+                                value={values?.coSoGhiNhanId}
                             />
                         </Col>
                     </Row>
@@ -485,7 +482,6 @@ const SearchAdvanceForm = () => {
                                     <AsyncAutoComplete
                                         menuPlacement="top"
                                         params={{}}
-                                        required
                                         label="Cơ sở điều trị"
                                         displayField='tenCoSo'
                                         service={getListCoSoDieuTri}

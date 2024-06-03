@@ -36,17 +36,24 @@ const TimKiemTruongHopBenh = (props: Props) => {
   };
 
   useEffect(() => {
+    let tinhTrangHienNay: { [key: string]: number } = {};
+    
+    searchObj.listTinhTrangHienNay?.forEach((value: any, index: number) => {
+      tinhTrangHienNay[`listTinhTrangHienNay[${index}]`] = value.code;
+    });
+    delete searchObj.listTinhTrangHienNay;
+
     const searchObjTemp: SearchObjectModel = {
       ...searchObj,
+      ...tinhTrangHienNay,
       gioiTinh: searchObj.gioiTinh?.code,
       ngheNghiepId: searchObj.ngheNghiepId?.id,
-      phanLoai: searchObj.phanLoai?.code,
-      listTinhTrangHienNay: searchObj.listTinhTrangHienNay?.map((item: any) => item?.code),
+      phanLoaiQuanLy: searchObj?.phanLoaiQuanLy?.code,
       tinhId: searchObj.tinhId?.id,
       huyenId: searchObj.huyenId?.id,
       xaId: searchObj.xaId?.id,
-      coSoCreateId: searchObj.coSoCreateId?.id,
-      kqXetNghiem: searchObj.kqXetNghiem?.id,
+      coSoGhiNhanId: searchObj.coSoGhiNhanId?.id,
+      kqXetNghiem: searchObj.kqXetNghiem?.code,
       donViThucHienXn: searchObj.donViThucHienXn?.id,
       coSoDieuTriId: searchObj.coSoDieuTriId?.id
     }
@@ -55,7 +62,7 @@ const TimKiemTruongHopBenh = (props: Props) => {
 
   return (
     <div className="search-container">
-      <div className="section-container">
+      <div className="section-container z-index-3 position-relative">
         <FilterSearchContainer
           searchObject={searchObj}
           setSearchObject={setSearchObj}

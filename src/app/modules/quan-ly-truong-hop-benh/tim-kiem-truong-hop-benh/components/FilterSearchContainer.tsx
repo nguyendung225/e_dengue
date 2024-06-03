@@ -29,47 +29,47 @@ const FilterSearchContainer = ({
         DenNgayNhapBaoCao: Yup.date()
             .nullable()
             .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
-            .min(Yup.ref('TuNgayNhapBaoCao'), 'Ngày họp không được trước ngày nhập báo cáo từ'),
+            .min(Yup.ref('TuNgayNhapBaoCao'), 'Ngày không được trước ngày nhập báo cáo từ'),
         tuNgayKhoiPhat: Yup.date()
             .nullable()
             .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
-            .max(Yup.ref('denNgayKhoiPhat'), 'Ngày không được sau đến ngày khởi phát'),
+            .max(Yup.ref('denNgayKhoiPhat'), 'Ngày không được sau ngày khởi phát đến'),
         denNgayKhoiPhat: Yup.date()
             .nullable()
             .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
-            .min(Yup.ref('tuNgayKhoiPhat'), 'Ngày họp không được trước từ ngày khởi phát'),
+            .min(Yup.ref('tuNgayKhoiPhat'), 'Ngày không được trước ngày khởi phát từ'),
         tuNgayNhapVien: Yup.date()
             .nullable()
             .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
-            .max(Yup.ref('denNgayNhapVien'), 'Ngày không được sau đến ngày nhập viện'),
+            .max(Yup.ref('denNgayNhapVien'), 'Ngày không được sau ngày nhập viện đến'),
         denNgayNhapVien: Yup.date()
             .nullable()
             .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
-            .min(Yup.ref('tuNgayNhapVien'), 'Ngày họp không được trước từ ngày nhập viện'),
+            .min(Yup.ref('tuNgayNhapVien'), 'Ngày không được trước ngày nhập viện từ'),
         tuNgayRaVien: Yup.date()
             .nullable()
             .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
-            .max(Yup.ref('denNgayRaVien'), 'Ngày không được sau đến ngày đến ngày ra viện'),
+            .max(Yup.ref('denNgayRaVien'), 'Ngày không được sau ngày ngày ra viện/tử vong đến'),
         denNgayRaVien: Yup.date()
             .nullable()
             .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
-            .min(Yup.ref('tuNgayRaVien'), 'Ngày họp không được trước từ ngày ra viện'),
+            .min(Yup.ref('tuNgayRaVien'), 'Ngày không được trước ngày ra viện/tử vong từ'),
         tuNgayLayMau: Yup.date()
             .nullable()
             .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
-            .max(Yup.ref('denNgayLayMau'), 'Ngày không được sau đến ngày đến ngày lấy mẫu xét nghiệm'),
+            .max(Yup.ref('denNgayLayMau'), 'Ngày không được sau ngày lấy mẫu xét nghiệm đến'),
         denNgayLayMau: Yup.date()
             .nullable()
             .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
-            .min(Yup.ref('tuNgayLayMau'), 'Ngày họp không được trước từ ngày lấy mẫu xét nghiệm'),
+            .min(Yup.ref('tuNgayLayMau'), 'Ngày không được trước ngày lấy mẫu xét nghiệm từ'),
         tuNgayTraKetQuaXn: Yup.date()
             .nullable()
             .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
-            .max(Yup.ref('denNgayTraKetQuaXn'), 'Ngày không được sau đến ngày đến ngày trả xét nghiệm'),
+            .max(Yup.ref('denNgayTraKetQuaXn'), 'Ngày không được sau ngày trả kết quả đến'),
         denNgayTraKetQuaXn: Yup.date()
             .nullable()
             .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
-            .min(Yup.ref('tuNgayTraKetQuaXn'), 'Ngày họp không được trước từ ngày trả mẫu xét nghiệm'),
+            .min(Yup.ref('tuNgayTraKetQuaXn'), 'Ngày không được trước ngày trả kết quả từ'),
     });
 
     return (

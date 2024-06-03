@@ -108,6 +108,11 @@ export const getListCoSoXetNghiem = (params: any) => {
 }
 
 export const getListCoSoDieuTri = (params: any) => {
-    let url = API_URL + `co-so/dieu-tri/${params?.keyword}`;
+    let url = API_URL + `co-so/co-so-dieu-tri/${params?.keyword}`;
+    return axios.get(url);
+}
+
+export const getListCoSoBaoCao = (params: any) => {
+    let url = API_URL + `co-so/co-so-bao-cao/${params?.keyword}`;
     return axios.get(url);
 }

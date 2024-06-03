@@ -27,9 +27,9 @@ export interface SearchObjectModel {
     isNopTroLen?: boolean | null;
     pageNumber: number;
     pageSize: number;
-    phanLoai?: number | any | null;
+    phanLoaiQuanLy?: number | any | null;
     tuNgayNhapBaoCao?: string | null;
     denNgayNhapBaoCao?: string | null;
-    listTinhTrangHienNay?: number[] | any | null;
-    coSoCreateId?: number | any | null;
+    listTinhTrangHienNay?: number[] | null;
+    coSoGhiNhanId?: number | any | null;
 }
