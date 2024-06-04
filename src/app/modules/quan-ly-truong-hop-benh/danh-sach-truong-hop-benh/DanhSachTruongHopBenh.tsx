@@ -1,7 +1,7 @@
 import { OCTKTSVG, OCTTable } from "@oceantech/oceantech-ui";
 import "./styles/danhSachThb.scss";
 import { TYPE } from "../../utils/Constant";
-import { danhSachThbColumns } from "./constants/constant";
+import { danhSachThbColumns, getExportedFileList } from "./constants/constant";
 import { Button } from "react-bootstrap";
 import InputSearch from "../../component/input-field/InputSearch";
 import ThongTinThb from "./components/ThongTinThb";
@@ -13,10 +13,11 @@ import AppContext from "../../../AppContext";
 import ModalXacNhanTHB from "./components/ModalXacNhanTHB";
 import { SearchObjectModel } from "../models/TimKiemTruongHopBenhModels";
 import { searchThbByPage } from "../tim-kiem-truong-hop-benh/services/TimKiemThbServices";
-import { initTruongHopBenh, TruongHopBenh } from "./model/Model";
+import { IDropdownButton, initTruongHopBenh, TruongHopBenh } from "./model/Model";
 import { deleteTruongHopBenh, getThongTinTruongHopBenh } from "./servives/Services";
 import { SEARCH_OBJECT_INIT } from "../tim-kiem-truong-hop-benh/constants/constants";
 import ConfirmDialog from "../../component/confirm-dialog/ConfirmDialog";
+import DropdownButton from "../../component/button/DropdownButton";
 
 const DanhSachTruongHopBenh = () => {
     const { setPageLoading } = useContext(AppContext);
@@ -30,6 +31,7 @@ const DanhSachTruongHopBenh = () => {
     const [dataForm, setDataForm] = useState<TruongHopBenh>(dataRow);
     const [configTable, setConfigTable] = useState<any>({});
     const [searchKeyword, setsSearchKeyword] = useState<string>("");
+    const [exportedFileList, setExportedFileList] = useState<IDropdownButton[]>([]);
 
     const getTruongHopBenhList = async () => {
         try {
@@ -172,7 +174,10 @@ const DanhSachTruongHopBenh = () => {
         getTruongHopBenhList();
     }, [searchObject])
 
-
+    useEffect(()=>{
+        setExportedFileList(getExportedFileList(dataRow, setPageLoading));
+    }, [dataRow])
+    
     return (
         <div className="page-container">
             <div className="left-content-container">
@@ -295,6 +300,10 @@ const DanhSachTruongHopBenh = () => {
                             <OCTKTSVG path='/media/svg/icons/plus.svg' svgClassName='spaces h-14 w-14 color-white' />
                             Thêm
                         </Button>
+                        <DropdownButton 
+                            title="Xuất báo cáo"
+                            dropdownItems={exportedFileList}
+                        />
                     </div>
                 </div>
                 <div className="tt-tabs">
