@@ -45,6 +45,7 @@ export interface truongHopBenh {
 
 export interface doiTuongMacBenh {
     doiTuongMacBenhId: number | null;
+    maSo?: string | null;
     hoTen: string | null;
     ngaySinh: string | null;
     ngheNghiepId: number | null;

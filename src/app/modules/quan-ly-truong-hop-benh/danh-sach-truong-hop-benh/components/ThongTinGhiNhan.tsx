@@ -5,10 +5,12 @@ import AsyncAutoComplete from '../../../component/input-field/AsyncAutoComplete'
 import { getListCoSoDieuTri, getListDonViCongTac } from '../../../services';
 import { DIA_DIEM_DIEU_TRI } from '../constants/constant';
 import { TruongHopBenh } from '../model/Model';
+
 type Props = {
+    onlyView?: boolean
 }
 
-const ThongTinGhiNhanTab = (props: Props) => {
+const ThongTinGhiNhanTab = ({ onlyView }: Props) => {
     const { values, handleChange, errors, touched, setFieldValue, setValues } = useFormikContext<TruongHopBenh>()
 
     return (
@@ -27,6 +29,7 @@ const ThongTinGhiNhanTab = (props: Props) => {
                         onChange={handleChange}
                         errors={errors?.truongHopBenh?.tenNguoiBaoCao}
                         touched={touched?.truongHopBenh?.tenNguoiBaoCao}
+                        disabled={onlyView}
                     />
                 </Col>
                 <Col xs={6}>
@@ -39,6 +42,7 @@ const ThongTinGhiNhanTab = (props: Props) => {
                         onChange={handleChange}
                         errors={errors?.truongHopBenh?.dienThoaiNguoiBaoCao}
                         touched={touched?.truongHopBenh?.dienThoaiNguoiBaoCao}
+                        disabled={onlyView}
                     />
                 </Col>
                 <Col xs={6}>
@@ -51,6 +55,7 @@ const ThongTinGhiNhanTab = (props: Props) => {
                         onChange={handleChange}
                         errors={errors?.truongHopBenh?.emailNguoiBaoCao}
                         touched={touched?.truongHopBenh?.emailNguoiBaoCao}
+                        disabled={onlyView}
                     />
                 </Col>
                 <Col xs={6}>
@@ -63,6 +68,7 @@ const ThongTinGhiNhanTab = (props: Props) => {
                         handleChange={(value) => setFieldValue("truongHopBenh.donViCongTacNbc", value)}
                         nameErrorMessage={errors?.truongHopBenh?.donViCongTacNbc as string}
                         value={values.truongHopBenh?.donViCongTacNbc}
+                        isDisabled={onlyView}
                     />
                 </Col>
                 <Col xl={6}>
@@ -82,6 +88,7 @@ const ThongTinGhiNhanTab = (props: Props) => {
                         onChange={(option) => setFieldValue("truongHopBenh.noiPhatHien", option?.code)}
                         errors={errors?.truongHopBenh?.noiPhatHien}
                         touched={touched?.truongHopBenh?.noiPhatHien}
+                        isDisabled={onlyView}
                     />
                 </Col>
                 <Col xl={4}>
@@ -94,6 +101,7 @@ const ThongTinGhiNhanTab = (props: Props) => {
                         handleChange={(value) =>setFieldValue("truongHopBenh.coSoDieuTri", value)}
                         nameErrorMessage={errors?.truongHopBenh?.coSoDieuTri as string}
                         value={values.truongHopBenh?.coSoDieuTri}
+                        isDisabled={onlyView}
                     />
                 </Col>
                 <Col xl={4}>
@@ -106,6 +114,7 @@ const ThongTinGhiNhanTab = (props: Props) => {
                         handleChange={(value) => setFieldValue("truongHopBenh.coSoQuanLy", value)}
                         nameErrorMessage={errors?.truongHopBenh?.coSoQuanLy as string}
                         value={values.truongHopBenh?.coSoQuanLy}
+                        isDisabled={onlyView}
                     />
                 </Col>
             </Row>

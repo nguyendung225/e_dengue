@@ -171,7 +171,7 @@ export const SEARCH_OBJECT_INIT: SearchObjectModel = {
   phanLoai: null,
   listTinhTrangHienNay: [],
   tuNgayNhapBaoCao: moment().subtract(1, 'months').startOf('month').format('YYYY-MM-DD'),
-  denNgayNhapBaoCao: moment().endOf('month').format('YYYY-MM-DD'),
+  denNgayNhapBaoCao: moment().format('YYYY-MM-DD'),
   coSoCreateId: null,
 };
 

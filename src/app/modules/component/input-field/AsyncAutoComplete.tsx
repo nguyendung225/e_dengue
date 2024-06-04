@@ -68,7 +68,7 @@ const AsyncAutoComplete: FC<ComboboxProps> = (props) => {
         fieldSearch = 'keyword',
         valueField = 'id',
         displayField = 'label',
-        noDataMessage = 'Không có dữ liệu',
+        noDataMessage = 'Nhập tên đơn vị để tìm kiếm...',
         optionsResponse = 'data',
         placeholder = 'Nhập tên đơn vị để tìm kiếm...',
         handleChange,
@@ -123,7 +123,7 @@ const AsyncAutoComplete: FC<ComboboxProps> = (props) => {
                 getOptionValue={getOptionValue}
                 getOptionLabel={getOptionLabel}
                 noOptionsMessage={noOptionsMessage}
-                className='basic-multi-select mb-3'
+                className='autocomplete-custom'
                 classNamePrefix='select'
                 onChange={handleChange}
             />

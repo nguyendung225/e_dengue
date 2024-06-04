@@ -7,10 +7,12 @@ import { getListCoSoDieuTri, getListDmCapDoBenh } from '../../../services';
 import { CONFIG_BY_CURRENT_STATUS, CONFIG_BY_TYPE_TEST } from '../config/config';
 import { CO_SU_DUNG_VAXIN, KHONG_LAY_MAU_XN, KQ_XET_NGHIEM, LAY_MAU_XN, LOAI_XET_NGHIEM, PCLD_XAC_DINH_PHONG_XET_NGHIEM, PHAN_LOAI_CHAN_DOAN, SU_DUNG_VAXIN, TINH_TRANG_HIEN_NAY, YES_NO_OPT } from '../constants/constant';
 import { TruongHopBenh } from '../model/Model';
+
 type Props = {
+    onlyView?: boolean
 }
 
-const ThongTinChanDoanTab = (props: Props) => {
+const ThongTinChanDoanTab = ({ onlyView }: Props) => {
     const { values, handleChange, errors, touched, setFieldValue, setValues } = useFormikContext<TruongHopBenh>()
 
     const handleChangePhanLoaiChanDoan = (option: any) => {
@@ -85,6 +87,7 @@ const ThongTinChanDoanTab = (props: Props) => {
                         value={values.truongHopBenh?.capDoBenhId}
                         onChange={(option) => setFieldValue("truongHopBenh.capDoBenh", option)}
                         searchObject={{}}
+                        isDisabled={onlyView}
                     />
                 </Col>
             </Row>
@@ -99,6 +102,7 @@ const ThongTinChanDoanTab = (props: Props) => {
                         isRequired
                         errors={errors.truongHopBenh?.tinhTrangHienNay}
                         touched={touched.truongHopBenh?.tinhTrangHienNay}
+                        isDisabled={onlyView}
                     />
                 </Col>
                 <Col xl={2}>
@@ -111,6 +115,7 @@ const ThongTinChanDoanTab = (props: Props) => {
                         isRequired={configByStatus?.ngayKhoiPhat?.require}
                         errors={errors?.truongHopBenh?.ngayKhoiPhat}
                         touched={touched?.truongHopBenh?.ngayKhoiPhat}
+                        disabled={onlyView}
                     />
                 </Col>
                 <Col xl={2}>
@@ -123,6 +128,7 @@ const ThongTinChanDoanTab = (props: Props) => {
                         onChange={handleChange}
                         errors={errors?.truongHopBenh?.ngayNhapVien}
                         touched={touched?.truongHopBenh?.ngayNhapVien}
+                        disabled={onlyView}
                     />
                 </Col>
                 <Col xl={3}>
@@ -132,10 +138,10 @@ const ThongTinChanDoanTab = (props: Props) => {
                         name="truongHopBenh.ngayRaVien"
                         onChange={handleChange}
                         value={values.truongHopBenh?.ngayRaVien}
-                        disabled={configByStatus?.ngayRaVienChuyenVienTuVong?.disabled}
+                        disabled={configByStatus?.ngayRaVienChuyenVienTuVong?.disabled || onlyView}
                         isRequired={configByStatus?.ngayRaVienChuyenVienTuVong?.require}
                         errors={errors?.truongHopBenh?.ngayRaVien}
-                        touched={touched?.truongHopBenh?.ngayRaVien}
+                        touched={touched?.truongHopBenh?.ngayRaVien}                      
                     />
                 </Col>
                 <Col xl={3}>
@@ -149,6 +155,7 @@ const ThongTinChanDoanTab = (props: Props) => {
                             onChange={handleChange}
                             errors={errors?.truongHopBenh?.chanDoanRaVien}
                             touched={touched?.truongHopBenh?.chanDoanRaVien}
+                            disabled={onlyView}
                         />
                     )}
                     {configByStatus?.chuyenToi && (
@@ -161,6 +168,7 @@ const ThongTinChanDoanTab = (props: Props) => {
                             handleChange={(value) => setFieldValue('truongHopBenh.benhVienChuyenToi', value)}
                             nameErrorMessage={errors?.truongHopBenh?.benhVienChuyenToi as string}
                             value={values.truongHopBenh?.benhVienChuyenToi}
+                            isDisabled={onlyView}
                         />
                     )}
                     {configByStatus?.tinhTrangKhac && (
@@ -173,6 +181,7 @@ const ThongTinChanDoanTab = (props: Props) => {
                             onChange={handleChange}
                             errors={errors?.truongHopBenh?.tinhTrangKhac}
                             touched={touched?.truongHopBenh?.tinhTrangKhac}
+                            disabled={onlyView}
                         />
                     )}
                 </Col>
@@ -186,6 +195,7 @@ const ThongTinChanDoanTab = (props: Props) => {
                         isRequired
                         errors={errors?.truongHopBenh?.phanLoaiChanDoan}
                         touched={touched?.truongHopBenh?.phanLoaiChanDoan}
+                        isDisabled={onlyView}
                     />
                 </Col>
                 <Col xl={3}>
@@ -195,7 +205,7 @@ const ThongTinChanDoanTab = (props: Props) => {
                         value={values?.truongHopBenh?.layMauXetNghiem}
                         radioItemList={YES_NO_OPT}
                         handleChange={handleChangeLayMauXN}
-                        disabledFields={disabledFieldLayMauXN}
+                        disabledFields={onlyView ? YES_NO_OPT.map(item => item.code) : disabledFieldLayMauXN}
                     />
                 </Col>
                 <Col xl={3}>
@@ -205,6 +215,7 @@ const ThongTinChanDoanTab = (props: Props) => {
                         valueSearch={"code"}
                         value={values?.truongHopBenh?.suDungVacXin}
                         onChange={(option) => setFieldValue("truongHopBenh.suDungVacXin", option?.code)}
+                        isDisabled={onlyView}
                     />
                 </Col>
                 <Col xl={3} >
@@ -219,6 +230,7 @@ const ThongTinChanDoanTab = (props: Props) => {
                                 isRequired
                                 errors={errors?.truongHopBenh?.soLanSuDung}
                                 touched={touched?.truongHopBenh?.soLanSuDung}
+                                disabled={onlyView}
                             />
                         )
                     }
@@ -231,6 +243,7 @@ const ThongTinChanDoanTab = (props: Props) => {
                             options={LOAI_XET_NGHIEM}
                             value={values?.truongHopBenh?.loaiXetNghiem}
                             onChange={handleChangeLoaiXetNghiem}
+                            isDisabled={onlyView}
                         />
                     </Col>
                     <Col xl={3}>
@@ -241,6 +254,7 @@ const ThongTinChanDoanTab = (props: Props) => {
                                 name="truongHopBenh.dinhLoaiXetNghiemKhac"
                                 value={values?.truongHopBenh?.dinhLoaiXetNghiemKhac}
                                 onChange={handleChange}
+                                disabled={onlyView}
                             />
                         )}
                     </Col>
@@ -255,6 +269,7 @@ const ThongTinChanDoanTab = (props: Props) => {
                                 onChange={handleChange}
                                 errors={errors?.truongHopBenh?.loaiXetNghiemKhac}
                                 touched={touched?.truongHopBenh?.loaiXetNghiemKhac}
+                                disabled={onlyView}
                             />
                         )}
                     </Col>
@@ -266,6 +281,7 @@ const ThongTinChanDoanTab = (props: Props) => {
                             valueSearch={"code"}
                             value={values?.truongHopBenh?.ketQuaXetNghiem}
                             onChange={(option) => setFieldValue("truongHopBenh.ketQuaXetNghiem", option?.code)}
+                            isDisabled={onlyView}
                         />
                     </Col>
                     <Col xl={3}>
@@ -278,6 +294,7 @@ const ThongTinChanDoanTab = (props: Props) => {
                             onChange={handleChange}
                             errors={errors?.truongHopBenh?.ngayThucHienXn}
                             touched={touched?.truongHopBenh?.ngayThucHienXn}
+                            disabled={onlyView}
 
                         />
                     </Col>
@@ -288,6 +305,7 @@ const ThongTinChanDoanTab = (props: Props) => {
                             name="truongHopBenh.ngayTraKetQuaXn"
                             value={values?.truongHopBenh?.ngayTraKetQuaXn}
                             onChange={handleChange}
+                            disabled={onlyView}
                         />
                     </Col>
                     <Col xl={3}>
@@ -300,6 +318,7 @@ const ThongTinChanDoanTab = (props: Props) => {
                         handleChange={(value) => setFieldValue("truongHopBenh.donViXetNghiemObject", value)}
                         nameErrorMessage={errors?.truongHopBenh?.donViXetNghiemObject as string}
                         value={values.truongHopBenh?.donViXetNghiemObject}
+                        isDisabled={onlyView}
                     />
                     </Col>
                 </>)}
@@ -310,8 +329,7 @@ const ThongTinChanDoanTab = (props: Props) => {
                         value={values?.truongHopBenh?.benhChanDoanPhu}
                         name={"truongHopBenh.benhChanDoanPhu"}
                         onChange={handleChange}
-
-
+                        disabled={onlyView}
                     />
                 </Col>
                 <Col xl={6}>
@@ -321,6 +339,7 @@ const ThongTinChanDoanTab = (props: Props) => {
                         value={values?.truongHopBenh?.chanDoanBienChung}
                         name={"truongHopBenh.chanDoanBienChung"}
                         onChange={handleChange}
+                        disabled={onlyView}
                     />
                 </Col>
                 <Col xl={6}>
@@ -332,6 +351,8 @@ const ThongTinChanDoanTab = (props: Props) => {
                         value={values?.truongHopBenh?.tienSuDichTe}
                         name={"truongHopBenh.tienSuDichTe"}
                         onChange={handleChange}
+                        disabled={onlyView}
+
                     />
                 </Col>
                 <Col xl={6}>
@@ -343,6 +364,7 @@ const ThongTinChanDoanTab = (props: Props) => {
                         value={values?.truongHopBenh?.ghiChu}
                         name={"truongHopBenh.ghiChu"}
                         onChange={handleChange}
+                        disabled={onlyView}
                     />
                 </Col>
             </Row>

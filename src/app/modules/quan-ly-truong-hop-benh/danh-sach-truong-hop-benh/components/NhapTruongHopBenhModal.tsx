@@ -52,10 +52,10 @@ const NhapTruongHopBenhModal = (props: TProps) => {
 
     }
 
-    const handleSubmit = async (values: TruongHopBenh,  formikHelpers: FormikHelpers<TruongHopBenh>) => {
+    const handleSubmit = async (values: TruongHopBenh, formikHelpers: FormikHelpers<TruongHopBenh>) => {
         const { nextTab } = tabConfig[activeTab] || {};
         const id = values?.truongHopBenh?.truongHopBenhId
-        const formData = formatData(values) 
+        const formData = formatData(values)
         if (nextTab) {
             setActiveTab(nextTab);
         } else {
@@ -81,20 +81,23 @@ const NhapTruongHopBenhModal = (props: TProps) => {
                     </span>
                 </Modal.Title>
             </Modal.Header>
-            <Modal.Body>
-                <Formik
-                    initialValues={dataRow}
-                    validationSchema={validationSchema}
-                    onSubmit={handleSubmit}
-                >
-                    {formikProps => (
-                        <Form>
+            <Formik
+                initialValues={dataRow}
+                validationSchema={validationSchema}
+                onSubmit={handleSubmit}
+            >
+                {formikProps => (
+                    <Form>
+                        <Modal.Body>
                             <TabMenu
                                 danhsachTabs={tabTruongHopBenh}
                                 setCurrentTab={setActiveTab}
-                                defaultActiveKey={activeTab} 
-                                />
-                            <div className='d-flex justify-content-between'>
+                                defaultActiveKey={activeTab}
+                            />
+
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <div className='d-flex justify-content-between w-100'>
                                 <div className='d-flex justify-content-between align-items-center'>
                                     <div className='fw-bold'>Lưu ý các dấu <span className='text-danger'>* </span> là trường bắt buộc nhập</div>
                                 </div>
@@ -114,10 +117,10 @@ const NhapTruongHopBenhModal = (props: TProps) => {
                                     </Button>
                                 </div>
                             </div>
-                        </Form>
-                    )}
-                </Formik>
-            </Modal.Body>
+                        </Modal.Footer>
+                    </Form>
+                )}
+            </Formik>
         </Modal>
     );
 }

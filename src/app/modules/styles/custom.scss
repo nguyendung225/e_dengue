@@ -23,6 +23,7 @@
 
   &:disabled {
     border-color: $royal-blue !important;
+    cursor: not-allowed;
   }
 }
 
@@ -169,7 +170,18 @@ textarea.customs-input {
     &.radius>div {
         border-radius: 4px;
     }
-}
+
+    [aria-disabled="true"] {
+        background-color: #eff2f5;
+        pointer-events: all;
+        cursor: not-allowed;
+
+        .css-olqui2-singleValue {
+            color: black;
+        }
+    }
+
+    }
 
 .max-content-width {
     width: max-content;

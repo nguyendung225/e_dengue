@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { useEffect, useState } from 'react';
 import type { GetProp } from 'antd';
 import { Checkbox, Row } from 'antd';
