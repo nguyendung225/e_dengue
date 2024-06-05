@@ -3,7 +3,7 @@ export interface truongHopBenh {
     truongHopBenhId: number | null;
     doiTuongMacBenhId: number | null;
     capDoBenhId: number | null;
-    tinhTrangHienNay: string | null;
+    tinhTrangHienNay: number | null;
     ngayKhoiPhat: string | null;
     ngayNhapVien: string | null;
     ngayRaVien: string | null;
@@ -41,6 +41,12 @@ export interface truongHopBenh {
     coSoQuanLy: any | null;
     donViXetNghiemObject: any | null;
     capDoBenh: any | null;
+    capDoBenhTen?: string | null;
+    benhVienChuyenToiTen?: string | null;
+    donViXetNghiemTen?: string | null;
+    donViCongTacNbcTen?: string | null;
+    coSoDieuTriTen?: string | null;
+    coSoQuanLyTen?: string | null;
 }
 
 export interface doiTuongMacBenh {
@@ -73,6 +79,14 @@ export interface doiTuongMacBenh {
     tinhThuongTru: any | null;
     huyenThuongTru: any | null;
     xaThuongTru: any | null;
+    ngheNghiepTen?: string | null;
+    danTocTen?: string | null;
+    tinhTenHienNay?: string | null;
+    huyenTenHienNay?: string | null;
+    xaTenHienNay?: string | null;
+    tinhTenThuongTru?: string | null;
+    huyenTenThuongTru?: string | null;
+    xaTenThuongTru?: string | null;
 }
 
 ////////////////////////////////////////////////////////
@@ -81,104 +95,6 @@ export interface TruongHopBenh {
     truongHopBenh: truongHopBenh
     doiTuongMacBenh: doiTuongMacBenh
 }
-
-const initialtruongHopBenh: truongHopBenh = {
-    benhTruyenNhiemId: 37,
-    truongHopBenhId: null,
-    doiTuongMacBenhId: null,
-    capDoBenhId: null,
-    tinhTrangHienNay: null,
-    ngayKhoiPhat: null,
-    ngayNhapVien: null,
-    ngayRaVien: null,
-    chanDoanRaVien: null,
-    benhVienChuyenToiId: null,
-    tinhTrangKhac: null,
-    phanLoaiChanDoan: null,
-    layMauXetNghiem: 1,
-    suDungVacXin: null,
-    soLanSuDung: null,
-    loaiXetNghiem: null,
-    loaiXetNghiemKhac: "",
-    dinhLoaiXetNghiemKhac: null,
-    ketQuaXetNghiem: null,
-    ngayThucHienXn: null,
-    ngayTraKetQuaXn: null,
-    donViXetNghiem: null,
-    benhChanDoanPhu: null,
-    chanDoanBienChung: null,
-    tienSuDichTe: null,
-    ghiChu: null,
-    tenNguoiBaoCao: null,
-    emailNguoiBaoCao: null,
-    donViCongTacNbcId: null,
-    dienThoaiNguoiBaoCao: null,
-    noiPhatHien: null,
-    coSoDieuTriId: null,
-    coSoQuanLyId: null,
-    trangThaiPhanHoi: null,
-    trangThaiTheoDoi: null,
-    ///object
-    coSoDieuTri:null,
-    coSoQuanLy:null,
-    donViCongTacNbc:null,
-    benhVienChuyenToi:null,
-    donViXetNghiemObject:null,
-    capDoBenh:null
-
-};
-
-const initialdoiTuongMacBenh: doiTuongMacBenh = {
-    doiTuongMacBenhId: null,
-    hoTen: null,
-    ngaySinh: null,
-    ngheNghiepId: null,
-    danTocId: null,
-    gioiTinh: 1,
-    haveCmnd: true,
-    cmnd: null,
-    haveDienThoai: true,
-    dienThoai: null,
-    noiLamViecHocTap: null,
-    tinhIdHienNay: null,
-    huyenIdHienNay: null,
-    xaIdHienNay: null,
-    diaChiHienNay: null,
-    tinhIdThuongTru: null,
-    huyenIdThuongTru: null,
-    xaIdThuongTru: null,
-    diaChiThuongTru: null,
-    //object
-    ngheNghiep: null,
-    danToc: null,
-    tinhHienNay: null,
-    huyenHienNay: null,
-    xaHienNay: null,
-    tinhThuongTru: null,
-    huyenThuongTru: null,
-    xaThuongTru: null
-};
-
-export const initTruongHopBenh: TruongHopBenh = {
-    truongHopBenh: initialtruongHopBenh,
-    doiTuongMacBenh: initialdoiTuongMacBenh
-};
-
-export interface BenhReport {
-    truongHopBenhId: number | null;
-    hoTenNguoiBaoCao: string | null;
-    trangThaiXacNhanThb: number | null;
-    dienThoaiNguoiBaoCao: string | null;
-    moTa: string | null;
-}
-
-export const initialBenhReport: BenhReport = {
-    truongHopBenhId: null,
-    hoTenNguoiBaoCao: null,
-    trangThaiXacNhanThb: null,
-    dienThoaiNguoiBaoCao: null,
-    moTa: null
-};
 
 export interface IDropdownButton {
     title: string;

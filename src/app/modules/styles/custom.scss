@@ -469,3 +469,21 @@ textarea.customs-input {
 .bg-backdrop-dark  {
     background-color: rgba(30, 26, 26, 0.285) !important;
 }
+
+#bien-phap-phong-chong {
+    .table-responsive {
+        overflow: unset !important;
+    }
+}
+
+.css-1nmdiq5-menu {
+    z-index: 2 !important;
+}
+
+.ant-radio-wrapper-checked {
+    color: black !important;
+
+    .ant-radio-inner {
+        border-color: #1677ff !important;
+    }
+}

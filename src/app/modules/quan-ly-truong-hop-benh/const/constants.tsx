@@ -1,5 +1,5 @@
 export const GENDER_OPTION = [
-	{ name: "Nam", code: 1 },
-	{ name: "Nữ ", code: 2 },
-	{ name: "Khác", code: 3 },
+	{ name: "Nam", code: 0 },
+	{ name: "Nữ ", code: 1 },
+	{ name: "Khác", code: 2 },
 ];

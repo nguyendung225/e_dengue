@@ -1,5 +1,6 @@
 import axios from "axios";
 import { TruongHopBenh } from "../model/Model";
+import { IThongTinODich } from "../../../quan-ly-o-dich/models/quanLyODichModels";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -54,3 +55,9 @@ export const exportPdfFile = (id: number) => {
         responseType: "blob",
     });
 }
+
+export const addNewOdich = (data: IThongTinODich) => {
+    let url = API_URL + "o-dich";
+    return axios.post(url, data);
+}
+

@@ -1,7 +1,7 @@
 import { OCTKTSVG, OCTTable } from "@oceantech/oceantech-ui";
 import "./styles/danhSachThb.scss";
 import { TYPE } from "../../utils/Constant";
-import { danhSachThbColumns, getExportedFileList } from "./constants/constant";
+import { danhSachThbColumns, getExportedFileList, INIT_TRUONG_HOP_BENH } from "./constants/constant";
 import { Button } from "react-bootstrap";
 import InputSearch from "../../component/input-field/InputSearch";
 import ThongTinThb from "./components/ThongTinThb";
@@ -13,7 +13,7 @@ import AppContext from "../../../AppContext";
 import ModalXacNhanTHB from "./components/ModalXacNhanTHB";
 import { SearchObjectModel } from "../models/TimKiemTruongHopBenhModels";
 import { searchThbByPage } from "../tim-kiem-truong-hop-benh/services/TimKiemThbServices";
-import { IDropdownButton, initTruongHopBenh, TruongHopBenh } from "./model/Model";
+import { IDropdownButton, TruongHopBenh } from "./model/Model";
 import { deleteTruongHopBenh, getThongTinTruongHopBenh } from "./servives/Services";
 import { SEARCH_OBJECT_INIT } from "../tim-kiem-truong-hop-benh/constants/constants";
 import ConfirmDialog from "../../component/confirm-dialog/ConfirmDialog";
@@ -27,7 +27,7 @@ const DanhSachTruongHopBenh = () => {
     const [shouldOpenXacNhanThbDialog, setShouldOpenXacNhanThbDialog] = useState<boolean>(false);
     const [truongHopBenhList, setTruongHopBenhList] = useState<any>([]);
     const [searchObject, setSearchObject] = useState<SearchObjectModel>(SEARCH_OBJECT_INIT);
-    const [dataRow, setDataRow] = useState<TruongHopBenh>(initTruongHopBenh);
+    const [dataRow, setDataRow] = useState<TruongHopBenh>(INIT_TRUONG_HOP_BENH);
     const [dataForm, setDataForm] = useState<TruongHopBenh>(dataRow);
     const [configTable, setConfigTable] = useState<any>({});
     const [searchKeyword, setsSearchKeyword] = useState<string>("");
@@ -199,7 +199,7 @@ const DanhSachTruongHopBenh = () => {
                         <Button
                             className="button-primary"
                             onClick={() => {
-                                setDataForm(initTruongHopBenh)
+                                setDataForm(INIT_TRUONG_HOP_BENH)
                                 setOpenTruongHopBenhForm(true)
                             }}
                         >

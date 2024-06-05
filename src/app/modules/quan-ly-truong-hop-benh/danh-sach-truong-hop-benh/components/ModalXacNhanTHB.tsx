@@ -3,7 +3,7 @@ import { Form, Formik } from "formik";
 import { Button, Modal } from "react-bootstrap";
 import { Col, Row } from "../../../component/Grid";
 import { OCTAutocomplete, OCTTextValidator } from "@oceantech/oceantech-ui";
-import { initialBenhReport } from "../model/Model";
+import { INITIAL_BENH_REPORT } from "../constants/constant";
 
 type TProps = {
     handleClose: () => void;
@@ -41,7 +41,7 @@ const ModalXacNhanTHB = (props: TProps) => {
             </Modal.Header>
             <Modal.Body>
                 <Formik
-                    initialValues={initialBenhReport}
+                    initialValues={INITIAL_BENH_REPORT}
                     validationSchema={benhReportSchema}
                     onSubmit={handleSubmit}
                 >

@@ -275,8 +275,6 @@ const ThongTinHanhChinhTab = ({onlyView}: Props) => {
                     name="doiTuongMacBenh.diaChiThuongTru"
                     onChange={handleChange}
                     disabled={onlyView}
-
-
                 />
             </Col>
             <Col xl={3}>

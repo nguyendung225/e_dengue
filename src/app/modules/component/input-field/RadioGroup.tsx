@@ -21,6 +21,7 @@ type TRadioItem = {
     handleChange: (value: any) => void;
     otherField?: any;
     disabledFields?: Array<string | number>;
+    disabled?: boolean;
   };
 
 function RadioGroup(props: TProps) {
@@ -38,6 +39,7 @@ function RadioGroup(props: TProps) {
             )}
             <>
                 <Radio.Group
+                    disabled={props?.disabled}
                     onChange={onChange}
                     value={props?.value}
                     size="large"

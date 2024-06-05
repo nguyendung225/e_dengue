@@ -1,33 +1,23 @@
-import { OCTKTSVG, OCTTable } from "@oceantech/oceantech-ui"
-import { dsBienPhapPhongChongColumns } from "../constants/constants"
+import { OCTKTSVG } from "@oceantech/oceantech-ui"
+import { useFormikContext } from "formik"
 import { Button } from "react-bootstrap"
-import { useState } from "react"
+import TableCustom from "../../component/table/table-custom/TableCustom"
+import { dsBienPhapPhongChongColumns, INITIAL_BIEN_PHAP_TRIEN_KHAI } from "../constants/constants"
+import { IThongTinODich } from "../models/quanLyODichModels"
 
 const BienPhapPhongChongBox = () => {
-    const [bienPhapPhongChongList, setBienPhapPhongChongList] = useState<any>([]);
+    const { values, handleChange, setValues, setFieldValue } = useFormikContext<IThongTinODich>()
 
     const handleAddRow = () => {
-        setBienPhapPhongChongList([...bienPhapPhongChongList, {}]);
-    }
-
-    const handleDeleteRow = (deleteItem: any, indexItem: number) => {
-        setBienPhapPhongChongList((bienPhapPhongChongListPrev: any) => {
-            return bienPhapPhongChongListPrev.filter((bienPhap: any, index: number) => {
-                return indexItem !== index;
-            })
-        })
-    }
-
-    const handleChange = (name: string, value: number | string, rowIndex: number) => {
-        setBienPhapPhongChongList((bienPhapPhongChongListPrev: any) => {
-            return bienPhapPhongChongListPrev.map((bienPhap: any, index: number) => {
-                return index === rowIndex
-                    ? {
-                        ...bienPhap,
-                        [name]: value,
-                    } : bienPhap;
-            })
+        setValues(prev => {
+            return { ...prev, bienPhapTrienKhaiList: [...prev.bienPhapTrienKhaiList, INITIAL_BIEN_PHAP_TRIEN_KHAI] }
         });
+    };
+
+    const handleDeleteRow = (index: number) => {
+        setValues(prev => {
+            return { ...prev, bienPhapTrienKhaiList: prev.bienPhapTrienKhaiList.filter((item, indexItem) => indexItem !== index) }
+        })
     }
 
     return (
@@ -45,25 +35,19 @@ const BienPhapPhongChongBox = () => {
                 </Button>
             </div>
             <div className="border-top spaces pt-10">
-                <OCTTable
+                <TableCustom
+                    updatePageData={() => { }}
                     id="bien-phap-phong-chong"
-                    data={bienPhapPhongChongList}
+                    data={values?.bienPhapTrienKhaiList}
                     columns={dsBienPhapPhongChongColumns({
+                        handleDeleteRow,
                         handleChange,
-                        handleDeleteRow
+                        values,
+                        setFieldValue
                     })}
-                    // searchObject={searchObject}
-                    // setSearchObject={setSearchObject}
-                    // type={TYPE.SINGLE}
-                    // fixedColumnsCount={0}
                     notDelete={true}
                     notEdit={true}
                     noToolbar={true}
-                    // totalPages={totalPage}
-                    // totalElements={totalElements}
-                    // numberOfElements={numberOfElements}
-                    // dataChecked={dataChecked}
-                    // setDataChecked={setDataChecked}
                     unSelectedAll={true}
                     noPagination={true}
                 />
