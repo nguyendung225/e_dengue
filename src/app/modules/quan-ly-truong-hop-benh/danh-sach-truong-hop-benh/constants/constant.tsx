@@ -9,6 +9,10 @@ import TienSuBenh from "../components/TienSuBenhTab";
 import moment from "moment";
 import LichSuTheoDoi from "../components/LichSuTheoDoi";
 import LichSuXacNhan from "../components/LichSuXacNhan";
+import { TruongHopBenh } from "../model/Model";
+import { exportToFile } from "../../../utils/FunctionUtils";
+import { TYPE } from "../../../utils/Constant";
+import { exportPdfFile, exportWordFile } from "../servives/Services";
 
 const TRANG_THAI_PHAN_HOI = {
     QUA_7_NGAY_CHUA_XN: -1,
@@ -520,3 +524,29 @@ export const LichSuTheoDoiColumns = [
     },
 ]
 
+export const getExportedFileList = (thongTinTHB: TruongHopBenh, setPageLoading: React.Dispatch<React.SetStateAction<boolean>>) => {
+    const exportedFileList = [
+        {
+            title: "Báo cáo thb.docx",
+            handleClick: () => exportToFile({
+                exportAPI: () => thongTinTHB?.truongHopBenh?.truongHopBenhId && exportWordFile(thongTinTHB?.truongHopBenh?.truongHopBenhId), 
+                fileName: "Báo cáo thb",
+                type: TYPE.WORD,
+                setPageLoading
+            }),
+        },
+        {
+            title: "Báo cáo thb.pdf",
+            handleClick: () => exportToFile({
+                exportAPI: () => thongTinTHB?.truongHopBenh?.truongHopBenhId && exportPdfFile(thongTinTHB?.truongHopBenh?.truongHopBenhId), 
+                fileName: "Báo cáo thb",
+                type: TYPE.PDF,
+                setPageLoading
+            }),
+        },
+    
+    ]
+
+    return exportedFileList
+    
+}

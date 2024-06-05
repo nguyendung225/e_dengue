@@ -179,3 +179,8 @@ export const initialBenhReport: BenhReport = {
     dienThoaiNguoiBaoCao: null,
     moTa: null
 };
+
+export interface IDropdownButton {
+    title: string;
+    handleClick: () => void;
+}

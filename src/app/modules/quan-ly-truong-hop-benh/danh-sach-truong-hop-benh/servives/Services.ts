@@ -36,3 +36,21 @@ export const updateTruongHopBenh = (id: number, data: TruongHopBenh) => {
     let url = API_URL + `truong-hop-benh/${id}`;
     return axios.put(url, data)
 }
+
+export const exportWordFile = (id: number) => {
+    const url = API_URL + `truong-hop-benh/${id}/export-word`;
+    return axios({
+        url: url,
+        method: "GET",
+        responseType: "blob",
+    });
+}
+
+export const exportPdfFile = (id: number) => {
+    const url = API_URL +`truong-hop-benh/${id}/export-pdf`;
+    return axios({
+        url: url,
+        method: "GET",
+        responseType: "blob",
+    });
+}
