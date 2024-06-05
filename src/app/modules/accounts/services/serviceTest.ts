@@ -49,3 +49,8 @@ export function getUserByToken(token: string) {
     Authorization: 'Basic Y29yZV9jbGllbnQ6c2VjcmV0' 
   }})
 }
+
+export const getThongTinUser = () => {
+    let url = API_URL + "cache/user";
+    return axios.get(url);
+}
