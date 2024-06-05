@@ -18,6 +18,7 @@ const KEY_LOCALSTORAGE = {
   TOKEN_EXPIRATION: "token-expiration",
   DEPARTMENT: "department",
   ROOM: "room",
+  USER_INFOMATION: "user_informaion",
   AUTH_LOCAL_STORAGE_KEY :'kt-auth-react-v',
   LIST_SUB_MENU: 'listSubMenu',
   LIST_CHUC_VU: 'listChucVu',

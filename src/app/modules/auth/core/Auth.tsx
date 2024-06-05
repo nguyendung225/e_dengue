@@ -17,6 +17,7 @@ import { AUTHORIZE_REQUEST, KEY_LOCALSTORAGE } from './_consts'
 import { localStorageItem } from '../../utils/LocalStorage'
 import jwt_decode from "jwt-decode";
 import { headerConstant } from '../../../../_metronic/layout/components/header/header-menus/constant'
+import { getThongTinUser } from '../../accounts/services/serviceTest'
 
 type AuthContextProps = {
   auth: AuthModel | undefined
@@ -74,6 +75,15 @@ const setAuthoritiesToLocalStorage = (tokenDecode: any) => {
   localStorage.setItem(headerConstant.AUTHORITIES, JSON.stringify(permissionObj));
 }
 
+const setUserInfomation = async () => {
+    try {
+        const { data } = await getThongTinUser()
+        localStorage.setItem(KEY_LOCALSTORAGE.USER_INFOMATION, JSON.stringify(data?.data));
+    } catch (error) {
+        console.error(error)
+    }
+}
+
 const AuthInit: FC<WithChildren> = ({ children }) => {
   const { auth, saveAuth } = useAuth()
   const didRequest = useRef(false)
@@ -89,6 +99,7 @@ const AuthInit: FC<WithChildren> = ({ children }) => {
             localStorageItem.set(KEY_LOCALSTORAGE.ACCESS_TOKEN_DECODE, tokenDecode)
             authHelper.setSubMenu()
             setAuthoritiesToLocalStorage(tokenDecode);
+            setUserInfomation()
           }
         }
       } catch (error) {
