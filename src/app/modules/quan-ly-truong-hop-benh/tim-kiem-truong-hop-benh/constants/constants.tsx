@@ -2,6 +2,11 @@ import moment from "moment";
 import { SearchObjectModel } from "../../models/TimKiemTruongHopBenhModels";
 import { renderStatusThb } from "../../../utils/FormatUtils";
 import { PHAN_LOAI_CHAN_DOAN } from "../../danh-sach-truong-hop-benh/constants/constant";
+import { localStorageItem } from "../../../utils/LocalStorage";
+import { KEY_LOCALSTORAGE } from "../../../auth/core/_consts";
+import { authRoles } from "../../../auth/authRoles";
+
+const userInfo = localStorageItem.get(KEY_LOCALSTORAGE.USER_INFOMATION);
 
 export const truongHopBenhColumns = [
   {
@@ -21,13 +26,14 @@ export const truongHopBenhColumns = [
   },
   {
     name: "Chuẩn đoán",
-    field: "tenChanDoan",
+    field: "phanLoaiChanDoan",
     headerStyle: {
       minWidth: "120px",
     },
     cellStyle: {
       textAlign: "center",
     },
+    render: (rowData: any) => PHAN_LOAI_CHAN_DOAN.find((item) => item.code === rowData.phanLoaiChanDoan)?.name,
   },
   {
     name: "Tình trạng hiện tại",
@@ -38,6 +44,7 @@ export const truongHopBenhColumns = [
     cellStyle: {
       textAlign: "left",
     },
+    render: (rowData: any) => TINH_TRANG_HIEN_NAY.find((item) => item.code === rowData.tinhTrangHienNay)?.name,
   },
   {
     name: "Tỉnh",
@@ -146,9 +153,9 @@ export const SEARCH_OBJECT_INIT: SearchObjectModel = {
   thoiGianKetThuc: null,
   benhIds: null,
   listTrangThai: null,
-  tinhId: null,
-  huyenId: null,
-  xaId: null,
+  tinhId: (userInfo?.username === authRoles.TINH || userInfo?.username === authRoles.HUYEN || userInfo?.username === authRoles.XA) ? userInfo?.tinhInfo : null,
+  huyenId: (userInfo?.username === authRoles.HUYEN || userInfo?.username === authRoles.XA) ? userInfo?.huyenInfo : null,
+  xaId: userInfo?.username === authRoles.XA ? userInfo?.xaInfo : null,
   hoTen: "",
   gioiTinh: null,
   ngheNghiepId: null,
@@ -168,11 +175,14 @@ export const SEARCH_OBJECT_INIT: SearchObjectModel = {
   isNopTroLen: null,
   pageNumber: 1,
   pageSize: 10,
-  phanLoai: null,
+  phanLoaiQuanLy: {
+    code: 0,
+    name: "Tất cả"
+  },
   listTinhTrangHienNay: [],
   tuNgayNhapBaoCao: moment().subtract(1, 'months').startOf('month').format('YYYY-MM-DD'),
-  denNgayNhapBaoCao: moment().format('YYYY-MM-DD'),
-  coSoCreateId: null,
+  denNgayNhapBaoCao: moment().endOf('month').format('YYYY-MM-DD'),
+  coSoGhiNhanId: null,
 };
 
 export const TINH_TRANG_HIEN_NAY = [

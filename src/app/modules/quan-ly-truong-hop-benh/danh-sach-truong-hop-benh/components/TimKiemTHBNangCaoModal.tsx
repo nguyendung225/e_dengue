@@ -76,6 +76,7 @@ const TimKiemTHBNangCaoModal = ({
       size="xl"
       centered
       className="custom-modal"
+      backdrop="static"
     >
       <FilterSearchContainer
         searchObject={searchObject}
