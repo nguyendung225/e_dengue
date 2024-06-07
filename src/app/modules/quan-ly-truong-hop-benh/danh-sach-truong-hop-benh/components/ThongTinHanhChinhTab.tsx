@@ -1,18 +1,133 @@
 import { OCTAutocomplete, OCTTextValidator } from '@oceantech/oceantech-ui';
 import { useFormikContext } from 'formik';
+import { useContext, useEffect, useState } from 'react';
 import { Form } from 'react-bootstrap';
+import AppContext from '../../../../AppContext';
 import { Col, Row } from '../../../component/Grid';
 import RadioGroup from '../../../component/input-field/RadioGroup';
 import { getListDanToc, getListHuyenByTinhId, getListNgheNghiep, getListTinh, getListXaByHuyenId } from '../../../services';
 import { calculateAge } from '../../../utils/AppFunction';
+import { handleChangeHuyen, handleChangeTinh, handleChangeXa, handleSetConfigTable, haveInfomation } from '../../../utils/FunctionUtils';
+import { CheckTrungParams, INIT_VALUE_CHECK_TRUNG } from '../../models/TimKiemTruongHopBenhModels';
+import { checkTrungTruongHopBenh } from '../../tim-kiem-truong-hop-benh/services/TimKiemThbServices';
 import { GENDER_OPT } from '../constants/constant';
 import { TruongHopBenh } from '../model/Model';
+import { toast } from 'react-toastify';
+import DanhSachTHBModal from './DanhSachTHB';
+import { formatDataViewTHB } from './../../../utils/FunctionUtils';
 type Props = {
     onlyView?: boolean
 }
 
-const ThongTinHanhChinhTab = ({onlyView}: Props) => {
-    const { values, handleChange, errors, touched, setFieldValue, setValues } = useFormikContext<TruongHopBenh>()
+const ThongTinHanhChinhTab = ({ onlyView }: Props) => {
+    const {
+        values,
+        handleChange,
+        errors, touched,
+        setFieldValue,
+        setValues,
+    } = useFormikContext<TruongHopBenh>()
+
+    const [dataCheckTrung, setDataCheckTrung] = useState<CheckTrungParams>(INIT_VALUE_CHECK_TRUNG)
+    const { setPageLoading } = useContext(AppContext);
+    const [dSCheckTrung, setDSCheckTrung] = useState<any[]>([])
+    const [openModalDS, setOpenModalDS] = useState(false)
+    const [configTable, setConfigTable] = useState<any>({});
+
+    const handleCheckTrung = async (params: CheckTrungParams) => {
+        try {
+            setPageLoading(true)
+            const { data } = await checkTrungTruongHopBenh(params)
+            if (data?.data?.data?.length > 0) {
+                const dataTemp = data?.data?.data.map((item: any, index: number) => {
+                    return index === 0 ? { ...item, isChecked: true } : item;
+                })
+                setDSCheckTrung(dataTemp)
+                handleSetConfigTable(setConfigTable, data?.data)
+                setOpenModalDS(true)
+            }
+            toast.success('Kiểm tra thông tin trùng thành công')
+        } catch (error) {
+            console.error('error', error)
+        }
+        finally {
+            setPageLoading(false)
+        }
+    }
+
+    const handleSetDataCheckTrung = (event: any, name: string) => {
+        const newValue = event?.target?.value;
+        if (dataCheckTrung[name as keyof CheckTrungParams] !== newValue) {
+            setDataCheckTrung({
+                ...dataCheckTrung,
+                [name]: newValue
+            });
+        }
+    };
+
+    const handleChangeGioiTinh = (event: any) => {
+        setFieldValue('doiTuongMacBenh.gioiTinh', event?.target?.value)
+        handleSetDataCheckTrung(event, 'GioiTinh')
+    }
+
+    const handleChangeXaHienNay = (option: any) => {
+        setFieldValue('doiTuongMacBenh.xaHienNay', option)
+        setDataCheckTrung({
+            ...dataCheckTrung,
+            XaId: option?.xaId
+        })
+    }
+
+    const handleChangeHuyenHienNay = (option: any) => {
+        handleChangeHuyen(setValues, 'doiTuongMacBenh', 'huyenHienNay', 'xaHienNay', option)
+        setDataCheckTrung({
+            ...dataCheckTrung,
+            HuyenId: option?.id
+        })
+    }
+
+    const handleChangeTinhHienNay = (option: any) => {
+        handleChangeTinh(setValues, 'doiTuongMacBenh', 'tinhHienNay', 'huyenHienNay', "xaHienNay", option)
+        setDataCheckTrung({
+            ...dataCheckTrung,
+            TinhId: option?.id
+        })
+    }
+
+    const handleChangeHaveCmnd = (event: any) => {
+        haveInfomation(setValues, 'doiTuongMacBenh', 'haveCmnd', 'cmnd', event)
+        setDataCheckTrung({
+            ...dataCheckTrung,
+            HaveCmnd: !event?.target?.checked,
+            Cmnd: ""
+        })
+    }
+
+    const handleSelectTHBTrung = (data: TruongHopBenh) => {
+        setValues(formatDataViewTHB(data))
+    }
+
+    const checkTrungCondition = (values: TruongHopBenh, dataCheckTrung: CheckTrungParams) => {
+        if (values?.doiTuongMacBenh?.doiTuongMacBenhId) {
+            return;
+        }
+
+        if (dataCheckTrung.Cmnd && dataCheckTrung.HaveCmnd) {
+            handleCheckTrung(dataCheckTrung);
+            return;
+
+        }
+
+        if (dataCheckTrung.HoTen && dataCheckTrung.NgaySinh && dataCheckTrung.XaId) {
+            handleCheckTrung(dataCheckTrung);
+            return;
+        }
+    };
+
+    useEffect(() => {
+        checkTrungCondition(values, dataCheckTrung);
+    }, [dataCheckTrung]);
+
     return (
         <Row>
             <Col xl={12}>
@@ -28,6 +143,7 @@ const ThongTinHanhChinhTab = ({onlyView}: Props) => {
                     errors={errors?.doiTuongMacBenh?.hoTen}
                     touched={touched?.doiTuongMacBenh?.hoTen}
                     disabled={onlyView}
+                    onBlur={(event: any) => handleSetDataCheckTrung(event, 'HoTen')}
                 />
             </Col>
             <Col xl={2}>
@@ -41,6 +157,7 @@ const ThongTinHanhChinhTab = ({onlyView}: Props) => {
                     errors={errors?.doiTuongMacBenh?.ngaySinh}
                     touched={touched?.doiTuongMacBenh?.ngaySinh}
                     disabled={onlyView}
+                    onBlur={(event: any) => handleSetDataCheckTrung(event, 'NgaySinh')}
                 />
             </Col>
             <Col xl={1}>
@@ -59,7 +176,7 @@ const ThongTinHanhChinhTab = ({onlyView}: Props) => {
                     lable='Giới tính'
                     value={values.doiTuongMacBenh?.gioiTinh}
                     radioItemList={GENDER_OPT}
-                    handleChange={handleChange}
+                    handleChange={(event) => { handleChangeGioiTinh(event) }}
                     disabledFields={onlyView ? GENDER_OPT.map(item => item.code) : []}
                 />
             </Col>
@@ -108,6 +225,7 @@ const ThongTinHanhChinhTab = ({onlyView}: Props) => {
                     errors={errors?.doiTuongMacBenh?.cmnd}
                     touched={touched?.doiTuongMacBenh?.cmnd}
                     disabled={!values.doiTuongMacBenh?.haveCmnd || onlyView}
+                    onBlur={(event: any) => handleSetDataCheckTrung(event, 'Cmnd')}
                 />
                 <Form.Check
                     disabled={onlyView}
@@ -115,17 +233,7 @@ const ThongTinHanhChinhTab = ({onlyView}: Props) => {
                     name='doiTuongMacBenh.haveCmnd'
                     label='Không khai thác được CCCD'
                     checked={!values.doiTuongMacBenh?.haveCmnd}
-                    onChange={(event) => {
-                        setValues({
-                            ...values,
-                            doiTuongMacBenh: {
-                                ...values.doiTuongMacBenh,
-                                haveCmnd: !event.target.checked,
-                                cmnd: ""
-                            },
-                        });
-
-                    }}
+                    onChange={handleChangeHaveCmnd}
                 />
             </Col>
             <Col xl={3}>
@@ -148,14 +256,7 @@ const ThongTinHanhChinhTab = ({onlyView}: Props) => {
                     name='doiTuongMacBenh.haveDienThoai'
                     checked={!values.doiTuongMacBenh?.haveDienThoai}
                     onChange={(event) => {
-                        setValues({
-                            ...values,
-                            doiTuongMacBenh: {
-                                ...values.doiTuongMacBenh,
-                                haveDienThoai: !event.target.checked,
-                                dienThoai: ""
-                            },
-                        });
+                        haveInfomation(setValues, "doiTuongMacBenh", "haveDienThoai", "dienThoai", event)
                     }}
                 />
             </Col>
@@ -197,17 +298,7 @@ const ThongTinHanhChinhTab = ({onlyView}: Props) => {
                     options={[]}
                     name='doiTuongMacBenh.tinhHienNay'
                     searchObject={{}}
-                    onChange={(option) => {
-                        setValues({
-                            ...values,
-                            doiTuongMacBenh: {
-                                ...values.doiTuongMacBenh,
-                                tinhHienNay: option,
-                                huyenHienNay: null,
-                                xaHienNay: null
-                            },
-                        })
-                    }}
+                    onChange={(option) => handleChangeTinhHienNay(option)}
                     isRequired
                     value={values.doiTuongMacBenh?.tinhHienNay}
                     errors={errors.doiTuongMacBenh?.tinhHienNay}
@@ -227,16 +318,7 @@ const ThongTinHanhChinhTab = ({onlyView}: Props) => {
                     searchObject={{}}
                     value={values.doiTuongMacBenh?.huyenHienNay}
                     isDisabled={!values.doiTuongMacBenh?.tinhHienNay || onlyView}
-                    onChange={(option) => {
-                        setValues({
-                            ...values,
-                            doiTuongMacBenh: {
-                                ...values.doiTuongMacBenh,
-                                huyenHienNay: option,
-                                xaHienNay: null
-                            },
-                        })
-                    }}
+                    onChange={(option) => handleChangeHuyenHienNay(option)}
                     dependencies={[values.doiTuongMacBenh?.tinhHienNay]}
                     isRequired
                     errors={errors.doiTuongMacBenh?.huyenHienNay}
@@ -254,9 +336,7 @@ const ThongTinHanhChinhTab = ({onlyView}: Props) => {
                     searchObject={{}}
                     value={values.doiTuongMacBenh?.xaHienNay}
                     isDisabled={!values.doiTuongMacBenh?.huyenHienNay || onlyView}
-                    onChange={(option) => {
-                        setFieldValue("doiTuongMacBenh.xaHienNay", option)
-                    }}
+                    onChange={handleChangeXaHienNay}
                     dependencies={[values?.doiTuongMacBenh?.huyenHienNay]}
                     isRequired
                     errors={errors.doiTuongMacBenh?.xaHienNay}
@@ -288,15 +368,7 @@ const ThongTinHanhChinhTab = ({onlyView}: Props) => {
                     name='doiTuongMacBenh.tinhThuongTru'
                     searchObject={{}}
                     onChange={(option) => {
-                        setValues({
-                            ...values,
-                            doiTuongMacBenh: {
-                                ...values.doiTuongMacBenh,
-                                tinhThuongTru: option,
-                                huyenThuongTru: null,
-                                xaThuongTru: null
-                            },
-                        })
+                        handleChangeTinh(setValues, 'doiTuongMacBenh', 'tinhThuongTru', 'huyenThuongTru', "xaThuongTru", option)
                     }}
                     isDisabled={onlyView}
                     value={values.doiTuongMacBenh?.tinhThuongTru}
@@ -315,14 +387,7 @@ const ThongTinHanhChinhTab = ({onlyView}: Props) => {
                     value={values.doiTuongMacBenh?.huyenThuongTru}
                     isDisabled={!values.doiTuongMacBenh?.tinhThuongTru || onlyView}
                     onChange={(option) => {
-                        setValues({
-                            ...values,
-                            doiTuongMacBenh: {
-                                ...values.doiTuongMacBenh,
-                                huyenThuongTru: option,
-                                xaThuongTru: null
-                            },
-                        })
+                        handleChangeHuyen(setValues, 'doiTuongMacBenh', 'huyenThuongTru', 'xaThuongTru', option)
                     }}
                     dependencies={[values.doiTuongMacBenh?.tinhThuongTru]}
                 />
@@ -339,11 +404,21 @@ const ThongTinHanhChinhTab = ({onlyView}: Props) => {
                     value={values.doiTuongMacBenh?.xaThuongTru}
                     isDisabled={!values.doiTuongMacBenh?.huyenThuongTru || onlyView}
                     onChange={(option) => {
-                        setFieldValue("doiTuongMacBenh.xaThuongTru", option)
+                        handleChangeXa(setValues, 'doiTuongMacBenh', 'xaThuongTru', option)
                     }}
                     dependencies={[values.doiTuongMacBenh?.huyenThuongTru]}
                 />
             </Col>
+            {
+                openModalDS &&
+                <DanhSachTHBModal
+                    data={dSCheckTrung}
+                    handleClose={() => setOpenModalDS(false)}
+                    configTable={configTable}
+                    setSearchObject={setDataCheckTrung}
+                    setDataSelected={handleSelectTHBTrung}
+                />
+            }
         </Row>
     )
 }

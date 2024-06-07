@@ -10,6 +10,8 @@ import { RESPONSE_STATUS_CODE } from "./Constant";
 import generatePDF, { Options } from "react-to-pdf";
 import debounce from 'lodash/debounce';
 import * as echarts from "echarts";
+import { TruongHopBenh } from "../quan-ly-truong-hop-benh/danh-sach-truong-hop-benh/model/Model";
+import { configTable } from "./models";
 
 export const checkTypeOf = (value: any) => {
   return Object.prototype.toString.call(value).slice(8, -1);
@@ -344,8 +346,84 @@ export const haveInfomation = (setValues, nameParent, fieldCheck, fieldInfo, eve
             [nameParent]: {
                 ...prev[nameParent],
                 [fieldCheck]: !event.target.checked,
-                [fieldInfo]: null
+                [fieldInfo]: ""
             }
         }
+    })
+}
+
+export const formatDataViewTHB = (data: TruongHopBenh) => {
+    let newData = {
+        truongHopBenh: {
+            ...data?.truongHopBenh,
+            capDoBenh: {
+                id: data?.truongHopBenh.capDoBenhId,
+                tenCapDo: data?.truongHopBenh.capDoBenhTen
+            },
+            benhVienChuyenToi: {
+                id: data?.truongHopBenh.benhVienChuyenToiId,
+                tenCoSo: data?.truongHopBenh.benhVienChuyenToiTen
+            },
+            donViXetNghiemObject: {
+                id: data?.truongHopBenh.donViXetNghiem,
+                tenCoSo: data?.truongHopBenh.donViXetNghiemTen
+            },
+            donViCongTacNbc: {
+                id: data?.truongHopBenh.donViCongTacNbcId,
+                tenCoSo: data?.truongHopBenh.donViCongTacNbcTen
+            },
+            coSoDieuTri: {
+                id: data?.truongHopBenh.coSoDieuTriId,
+                tenCoSo: data?.truongHopBenh.coSoDieuTriTen
+            },
+            coSoQuanLy: {
+                id: data?.truongHopBenh.coSoQuanLyId,
+                tenCoSo: data?.truongHopBenh.coSoQuanLyTen
+            }
+        },
+        doiTuongMacBenh: {
+            ...data?.doiTuongMacBenh,
+            ngheNghiep: {
+                id: data?.doiTuongMacBenh.ngheNghiepId,
+                tenNghe: data?.doiTuongMacBenh.ngheNghiepTen
+            },
+            danToc: {
+                id: data?.doiTuongMacBenh.danTocId,
+                tenDanToc: data?.doiTuongMacBenh.danTocTen
+            },
+            tinhHienNay: {
+                id: data?.doiTuongMacBenh.tinhIdHienNay,
+                tenTinh: data?.doiTuongMacBenh.tinhTenHienNay
+            },
+            huyenHienNay: {
+                id: data?.doiTuongMacBenh.huyenIdHienNay,
+                tenHuyen: data?.doiTuongMacBenh.huyenTenHienNay
+            },
+            xaHienNay: {
+                xaId: data?.doiTuongMacBenh.xaIdHienNay,
+                tenXa: data?.doiTuongMacBenh.xaTenHienNay
+            },
+            tinhThuongTru: {
+                id: data?.doiTuongMacBenh.tinhIdThuongTru,
+                tenTinh: data?.doiTuongMacBenh.tinhTenThuongTru
+            },
+            huyenThuongTru: {
+                id: data?.doiTuongMacBenh.huyenIdThuongTru,
+                tenHuyen: data?.doiTuongMacBenh.huyenTenThuongTru
+            },
+            xaThuongTru: {
+                xaId: data?.doiTuongMacBenh.xaIdThuongTru,
+                tenXa: data?.doiTuongMacBenh.xaTenThuongTru
+            }
+        }
+    };
+    return newData
+}
+
+export const handleSetConfigTable = (setConfigTable, data: configTable) => {
+    setConfigTable({
+        totalPages: data?.totalPages,
+        totalElements: data?.total,
+        numberOfElements: data?.numberOfElements,
     })
 }

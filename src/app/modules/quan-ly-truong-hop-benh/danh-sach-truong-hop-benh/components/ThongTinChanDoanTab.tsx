@@ -84,7 +84,7 @@ const ThongTinChanDoanTab = ({ onlyView }: Props) => {
                         urlData='data.data'
                         getOptionLabel={(option) => option.tenCapDo}
                         options={[]}
-                        value={values.truongHopBenh?.capDoBenhId}
+                        value={values.truongHopBenh?.capDoBenh}
                         onChange={(option) => setFieldValue("truongHopBenh.capDoBenh", option)}
                         searchObject={{}}
                         isDisabled={onlyView}

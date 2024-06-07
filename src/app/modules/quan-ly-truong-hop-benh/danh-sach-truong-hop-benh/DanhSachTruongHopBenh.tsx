@@ -18,6 +18,7 @@ import { deleteTruongHopBenh, getThongTinTruongHopBenh } from "./servives/Servic
 import { SEARCH_OBJECT_INIT } from "../tim-kiem-truong-hop-benh/constants/constants";
 import ConfirmDialog from "../../component/confirm-dialog/ConfirmDialog";
 import DropdownButton from "../../component/button/DropdownButton";
+import { formatDataViewTHB } from "../../utils/FunctionUtils";
 
 const DanhSachTruongHopBenh = () => {
     const { setPageLoading } = useContext(AppContext);
@@ -91,80 +92,12 @@ const DanhSachTruongHopBenh = () => {
         }
     }
 
-    const formatData = (data: any) => {
-        let newData = {
-            truongHopBenh: {
-                ...data?.truongHopBenh,
-                capDoBenh: {
-                    id: data?.truongHopBenh.capDoBenhId,
-                    tenCapDo: data?.truongHopBenh.capDoBenhTen
-                },
-                benhVienChuyenToi: {
-                    id: data?.truongHopBenh.benhVienChuyenToiId,
-                    tenCoSo: data?.truongHopBenh.benhVienChuyenToiTen
-                },
-                donViXetNghiemObject: {
-                    id: data?.truongHopBenh.donViXetNghiem,
-                    tenCoSo: data?.truongHopBenh.donViXetNghiemTen
-                },
-                donViCongTacNbc: {
-                    id: data?.truongHopBenh.donViCongTacNbcId,
-                    tenCoSo: data?.truongHopBenh.donViCongTacNbcTen
-                },
-                coSoDieuTri: {
-                    id: data?.truongHopBenh.coSoDieuTriId,
-                    tenCoSo: data?.truongHopBenh.coSoDieuTriTen
-                },
-                coSoQuanLy: {
-                    id: data?.truongHopBenh.coSoQuanLyId,
-                    tenCoSo: data?.truongHopBenh.coSoQuanLyTen
-                }
-            },
-            doiTuongMacBenh: {
-                ...data?.doiTuongMacBenh,
-                ngheNghiep: {
-                    id: data?.doiTuongMacBenh.ngheNghiepId,
-                    tenNghe: data?.doiTuongMacBenh.ngheNghiepTen
-                },
-                danToc: {
-                    id: data?.doiTuongMacBenh.danTocId,
-                    tenDanToc: data?.doiTuongMacBenh.danTocTen
-                },
-                tinhHienNay: {
-                    id: data?.doiTuongMacBenh.tinhIdHienNay,
-                    tenTinh: data?.doiTuongMacBenh.tinhTenHienNay
-                },
-                huyenHienNay: {
-                    id: data?.doiTuongMacBenh.huyenIdHienNay,
-                    tenHuyen: data?.doiTuongMacBenh.huyenTenHienNay
-                },
-                xaHienNay: {
-                    xaId: data?.doiTuongMacBenh.xaIdHienNay,
-                    tenXa: data?.doiTuongMacBenh.xaTenHienNay
-                },
-                tinhThuongTru: {
-                    id: data?.doiTuongMacBenh.tinhIdThuongTru,
-                    tenTinh: data?.doiTuongMacBenh.tinhTenThuongTru
-                },
-                huyenThuongTru: {
-                    id: data?.doiTuongMacBenh.huyenIdThuongTru,
-                    tenHuyen: data?.doiTuongMacBenh.huyenTenThuongTru
-                },
-                xaThuongTru: {
-                    xaId: data?.doiTuongMacBenh.xaIdThuongTru,
-                    tenXa: data?.doiTuongMacBenh.xaTenThuongTru
-                }
-            }
-
-        };
-        return newData
-    }
 
     const getThongTinChiTietTHB = async (id: string) => {
         try {
             setPageLoading(true);
             const rest = await getThongTinTruongHopBenh(id);
-            setDataRow(formatData(rest.data.data));
+            setDataRow(formatDataViewTHB(rest.data.data));
         } catch (error) {
 
         }

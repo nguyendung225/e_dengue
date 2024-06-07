@@ -33,3 +33,29 @@ export interface SearchObjectModel {
     listTinhTrangHienNay?: number[] | null;
     coSoGhiNhanId?: number | any | null;
 }
+
+export interface CheckTrungParams {
+    HaveCmnd?: boolean;
+    Cmnd?: string;
+    HoTen?: string;
+    NgaySinh?: string;
+    GioiTinh?: number;
+    TinhId?: number;
+    HuyenId?: number;
+    XaId?: number;
+    PageNumber?: number;
+    PageSize?: number;
+}
+
+export const INIT_VALUE_CHECK_TRUNG: CheckTrungParams = {
+    HaveCmnd: true,
+    Cmnd: '',
+    HoTen: '',
+    NgaySinh: '',
+    GioiTinh: 0,
+    TinhId: 0,
+    HuyenId: 0,
+    XaId: 0,
+    PageNumber: 1,
+    PageSize: 10
+};
