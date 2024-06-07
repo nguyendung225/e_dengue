@@ -167,6 +167,7 @@ const ThongTinChanDoanTab = ({ onlyView }: Props) => {
                             service={getListCoSoDieuTri}
                             handleChange={(value) => setFieldValue('truongHopBenh.benhVienChuyenToi', value)}
                             nameErrorMessage={errors?.truongHopBenh?.benhVienChuyenToi as string}
+                            touched={touched?.truongHopBenh?.benhVienChuyenToi}
                             value={values.truongHopBenh?.benhVienChuyenToi}
                             isDisabled={onlyView}
                         />
@@ -317,6 +318,7 @@ const ThongTinChanDoanTab = ({ onlyView }: Props) => {
                         service={getListCoSoDieuTri}
                         handleChange={(value) => setFieldValue("truongHopBenh.donViXetNghiemObject", value)}
                         nameErrorMessage={errors?.truongHopBenh?.donViXetNghiemObject as string}
+                        touched={touched?.truongHopBenh?.donViXetNghiemObject}
                         value={values.truongHopBenh?.donViXetNghiemObject}
                         isDisabled={onlyView}
                     />

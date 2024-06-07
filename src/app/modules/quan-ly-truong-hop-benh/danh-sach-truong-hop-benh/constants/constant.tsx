@@ -9,7 +9,7 @@ import TienSuBenh from "../components/TienSuBenhTab";
 import moment from "moment";
 import LichSuTheoDoi from "../components/LichSuTheoDoi";
 import LichSuXacNhan from "../components/LichSuXacNhan";
-import { TruongHopBenh } from "../model/Model";
+import { doiTuongMacBenh, truongHopBenh, TruongHopBenh } from "../model/Model";
 import { exportToFile } from "../../../utils/FunctionUtils";
 import { TYPE } from "../../../utils/Constant";
 import { exportPdfFile, exportWordFile } from "../servives/Services";
@@ -170,7 +170,6 @@ export const chanDoanSchema = hanhChinhSchema.shape({
         tinhTrangHienNay: Yup.string().required("Bắt buộc nhập").nullable(),
         ngayNhapVien: Yup.string().required("Bắt buộc nhập").nullable(),
         phanLoaiChanDoan: Yup.string().required("Bắt buộc nhập").nullable(),
-        ngayKhoiPhat: Yup.string().required("Bắt buộc nhập").nullable(),
         ngayThucHienXn: Yup.string().when("layMauXetNghiem", {
             is: LAY_MAU_XN,
             then: Yup.string().nullable().required("Bắt buộc nhập"),
@@ -550,3 +549,100 @@ export const getExportedFileList = (thongTinTHB: TruongHopBenh, setPageLoading: 
     return exportedFileList
     
 }
+
+export const INITIAL_TRUONG_HOP_BENH: truongHopBenh = {
+    benhTruyenNhiemId: 37,
+    truongHopBenhId: null,
+    doiTuongMacBenhId: null,
+    capDoBenhId: null,
+    tinhTrangHienNay: 0,
+    ngayKhoiPhat: null,
+    ngayNhapVien: null,
+    ngayRaVien: null,
+    chanDoanRaVien: null,
+    benhVienChuyenToiId: null,
+    tinhTrangKhac: null,
+    phanLoaiChanDoan: 0,
+    layMauXetNghiem: 1,
+    suDungVacXin: 1,
+    soLanSuDung: null,
+    loaiXetNghiem: null,
+    loaiXetNghiemKhac: "",
+    dinhLoaiXetNghiemKhac: null,
+    ketQuaXetNghiem: null,
+    ngayThucHienXn: null,
+    ngayTraKetQuaXn: null,
+    donViXetNghiem: null,
+    benhChanDoanPhu: null,
+    chanDoanBienChung: null,
+    tienSuDichTe: null,
+    ghiChu: null,
+    tenNguoiBaoCao: null,
+    emailNguoiBaoCao: null,
+    donViCongTacNbcId: null,
+    dienThoaiNguoiBaoCao: null,
+    noiPhatHien: null,
+    coSoDieuTriId: null,
+    coSoQuanLyId: null,
+    trangThaiPhanHoi: null,
+    trangThaiTheoDoi: null,
+    ///object
+    coSoDieuTri: null,
+    coSoQuanLy: null,
+    donViCongTacNbc: null,
+    benhVienChuyenToi: null,
+    donViXetNghiemObject: null,
+    capDoBenh: null
+};
+
+export const INITIAL_DOI_TUONG_MAC_BENH: doiTuongMacBenh = {
+    doiTuongMacBenhId: null,
+    hoTen: null,
+    ngaySinh: null,
+    ngheNghiepId: null,
+    danTocId: null,
+    gioiTinh: 1,
+    haveCmnd: true,
+    cmnd: null,
+    haveDienThoai: true,
+    dienThoai: null,
+    noiLamViecHocTap: null,
+    tinhIdHienNay: null,
+    huyenIdHienNay: null,
+    xaIdHienNay: null,
+    diaChiHienNay: null,
+    tinhIdThuongTru: null,
+    huyenIdThuongTru: null,
+    xaIdThuongTru: null,
+    diaChiThuongTru: null,
+    //object
+    ngheNghiep: null,
+    danToc: null,
+    tinhHienNay: null,
+    huyenHienNay: null,
+    xaHienNay: null,
+    tinhThuongTru: null,
+    huyenThuongTru: null,
+    xaThuongTru: null
+};
+
+export const INIT_TRUONG_HOP_BENH: TruongHopBenh = {
+    truongHopBenh: INITIAL_TRUONG_HOP_BENH,
+    doiTuongMacBenh: INITIAL_DOI_TUONG_MAC_BENH
+};
+
+export interface BenhReport {
+    truongHopBenhId: number | null;
+    hoTenNguoiBaoCao: string | null;
+    trangThaiXacNhanThb: number | null;
+    dienThoaiNguoiBaoCao: string | null;
+    moTa: string | null;
+}
+
+export const INITIAL_BENH_REPORT: BenhReport = {
+    truongHopBenhId: null,
+    hoTenNguoiBaoCao: null,
+    trangThaiXacNhanThb: null,
+    dienThoaiNguoiBaoCao: null,
+    moTa: null
+};

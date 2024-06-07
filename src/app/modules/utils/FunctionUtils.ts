@@ -296,3 +296,56 @@ export const convertToChartData = (data: any, color: string[]) => {
   });
   return chartData
 }
+
+export const handleChangeTinh = (setValues, nameParent, tinhField, huyenField, xaField, option) => {
+    setValues((prev) => {
+        return {
+            ...prev,
+            [nameParent]: {
+                ...prev[nameParent],
+                [tinhField]: option,
+                [huyenField]: null,
+                [xaField]: null
+            }
+        }
+    })
+
+}
+
+export const handleChangeHuyen = (setValues, nameParent, huyenField, xaField, option) => {
+    setValues((prev) => {
+        return {
+            ...prev,
+            [nameParent]: {
+                ...prev[nameParent],
+                [huyenField]: option,
+                [xaField]: null
+            }
+        }
+    })
+}
+
+export const handleChangeXa = (setValues, nameParent, xaField, option) => {
+    setValues((prev) => {
+        return {
+            ...prev,
+            [nameParent]: {
+                ...prev[nameParent],
+                [xaField]: option
+            }
+        }
+    })
+}
+
+export const haveInfomation = (setValues, nameParent, fieldCheck, fieldInfo, event) => {
+    setValues((prev) => {
+        return {
+            ...prev,
+            [nameParent]: {
+                ...prev[nameParent],
+                [fieldCheck]: !event.target.checked,
+                [fieldInfo]: null
+            }
+        }
+    })
+}

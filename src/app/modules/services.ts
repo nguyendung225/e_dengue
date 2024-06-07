@@ -97,6 +97,11 @@ export const getListXa = () => {
     return axios.get(url);
 }
 
+export const getListHoatDongChongDich = () => {
+    let url = API_URL + "dm-hoat-dong-phong-chong-dich/all";
+    return axios.get(url);
+}
+
 export const getListDonViCongTac = (params: any) => {
     let url = API_URL + `co-so/don-vi-cong-tac/${params?.keyword}`;
     return axios.get(url);

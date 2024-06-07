@@ -1,15 +1,12 @@
 import { OCTTextValidator } from "@oceantech/oceantech-ui";
-import LabelRequired from "../../component/LabelRequired";
+import { useFormikContext } from "formik";
 import RadioGroup from "../../component/input-field/RadioGroup";
-
-const TIEM_OPTION = [
-    { name: "Có tiêm, uống", code: 1 },
-    { name: "Không", code: 2 },
-    { name: "Không rõ", code: 3 },
-]
+import { CO_SU_DUNG_VAXIN, SU_DUNG_VAXIN } from "../../quan-ly-truong-hop-benh/danh-sach-truong-hop-benh/constants/constant";
+import { IThongTinODich } from "../models/quanLyODichModels";
 
 const ThongTinVeTiemUongVacXin = () => {
-
+    const { values, handleChange, errors, touched, } = useFormikContext<IThongTinODich>()
+    const existTHB = Boolean(values?.doiTuongMacBenh?.doiTuongMacBenhId)
 
     return (
         <div className="section-container">
@@ -18,26 +15,29 @@ const ThongTinVeTiemUongVacXin = () => {
             </div>
             <div className="border-top spaces mb-10 pt-15">
                 <RadioGroup
-                    name={""}
-                    value={1}
+                    name={"truongHopBenh.suDungVacXin"}
+                    value={values?.truongHopBenh?.suDungVacXin}
                     groupContainerClassName="d-flex flex-column"
-                    radioItemList={TIEM_OPTION}
-                    handleChange={() => { }}
+                    radioItemList={SU_DUNG_VAXIN}
+                    handleChange={handleChange}
+                    disabled={existTHB}
                 />
             </div>
-            <div className="d-flex">
-                <LabelRequired
-                    isRequired
-                    label="Số lần tiêm, uống"
-                    className="spaces fw-500 mb-5 min-w-140"
-                />
-                <OCTTextValidator
-                    className="w-100"
-                    name="soLanTiemUong"
-                    type="text"
-
-                />
-            </div>
+            <div >
+                {values?.truongHopBenh?.suDungVacXin === CO_SU_DUNG_VAXIN && (
+                    <OCTTextValidator
+                        lable="Số lần tiêm, uống"
+                        type="text"
+                        name="truongHopBenh.soLanSuDung"
+                        value={values?.truongHopBenh?.soLanSuDung}
+                        onChange={handleChange}
+                        isRequired
+                        errors={errors?.truongHopBenh?.soLanSuDung}
+                        touched={touched?.truongHopBenh?.soLanSuDung}
+                        disabled={existTHB}
+                    />
+                )}
+            </div >
         </div>
     )
 }

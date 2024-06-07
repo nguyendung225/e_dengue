@@ -6,6 +6,7 @@ interface ComboboxProps extends Props {
     label?: string,
     name?: string,
     nameErrorMessage?: string,
+    touched?: any,
     noDataMessage?: string,
     required?: boolean,
     isCallApi?: boolean,
@@ -62,7 +63,8 @@ const AsyncAutoComplete: FC<ComboboxProps> = (props) => {
     const {
         label,
         name,
-        nameErrorMessage = false,
+        nameErrorMessage = "",
+        touched = false,
         required = false,
         params,
         fieldSearch = 'keyword',
@@ -127,7 +129,7 @@ const AsyncAutoComplete: FC<ComboboxProps> = (props) => {
                 classNamePrefix='select'
                 onChange={handleChange}
             />
-            {nameErrorMessage &&
+            {touched && nameErrorMessage &&
                 <div className="error-message text-danger">{nameErrorMessage}</div>
             }
         </div>

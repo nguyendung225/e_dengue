@@ -60,7 +60,7 @@ const NhapTruongHopBenhModal = (props: TProps) => {
             setActiveTab(nextTab);
         } else {
             id ? await updateTruongHopBenh(id, formData) : await AddTruongHopBenh(formData)
-            toast.success("Thêm mới thành công trường hợp bệnh thành công");
+            toast.success(`${id ? "Cập nhật" : "Thêm"} trường hợp bệnh thành công`);
             updatePageData();
             handleClose();
         }

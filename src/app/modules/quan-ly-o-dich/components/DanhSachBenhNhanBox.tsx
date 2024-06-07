@@ -7,7 +7,7 @@ const DanhSachBenhNhanBox = () => {
         <div className="section-container">
             <div className="d-flex align-items-center justify-content-between">
                 <div className="spaces mb-10 fs-18 fw-bold text-uppercase color-dark-red">
-                    Biện pháp phòng chống dịch đã triển khai
+                    Danh sách bệnh nhân
                 </div>
                 <Button
                     className="button-primary"
