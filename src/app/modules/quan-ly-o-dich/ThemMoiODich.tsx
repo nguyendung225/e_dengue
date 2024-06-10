@@ -19,8 +19,12 @@ import XaPhuongQuanLyBox from "./components/XaPhuongQuanLyBox";
 import { IThongTinODich } from "./models/quanLyODichModels";
 import { INITIAL_THONG_TIN_O_DICH } from "./constants/constants";
 import "./styles/quanLyODich.scss";
+import { useParams } from "react-router-dom";
+import { getThongTinODich } from "./services/services";
+import { useEffect } from "react";
 
 export const ThemMoiODich = () => {
+    const { id } = useParams();
 
     const formatData = (data: IThongTinODich) => {
         return {
@@ -37,6 +41,7 @@ export const ThemMoiODich = () => {
             },
             truongHopBenhId: data?.truongHopBenh?.truongHopBenhId,
             truongHopBenh: {
+                benhTruyenNhiemId: data?.oDich?.benhTruyenNhiemId,
                 doiTuongMacBenhId: data?.truongHopBenh?.doiTuongMacBenhId,
                 capDoBenhId: data?.truongHopBenh?.capDoBenh?.id,
                 tinhTrangHienNay: data?.truongHopBenh?.tinhTrangHienNay,
@@ -119,6 +124,15 @@ export const ThemMoiODich = () => {
     const handleSubmit = async (values: IThongTinODich) => {
         const res = addNewOdich(formatData(values) as IThongTinODich)
     }  
+
+    const getThongTinOdich = async () => {
+        // const res = (id && await getThongTinODich(id)) || {}
+        //xu lý lay hien thi thong tin o dich
+    }
+
+    useEffect(() => {
+        getThongTinOdich()
+    }, [])
 
     return (
         <Formik

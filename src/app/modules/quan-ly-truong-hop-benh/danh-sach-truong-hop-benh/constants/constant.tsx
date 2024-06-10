@@ -646,3 +646,31 @@ export const INITIAL_BENH_REPORT: BenhReport = {
     dienThoaiNguoiBaoCao: null,
     moTa: null
 };
+
+export const DanhSachTHBColumns = [
+    {
+        name: "#",
+        field: "",
+        render: (row: any, index: number, stt: number) => <span>{stt}</span>
+    },
+    {
+        name: "Họ tên",
+        field: "hoTen",
+        headerStyle: {
+            minWidth: "120px"
+        },
+        cellStyle: {
+            textAlign: "center",
+        },
+    },
+    {
+        name: "Ngày sinh",
+        field: "ngaySinh",
+        headerStyle: {
+            minWidth: "120px"
+        },
+        cellStyle: {
+            textAlign: "center",
+        },
+    },
+]

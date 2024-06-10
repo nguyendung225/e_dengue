@@ -47,6 +47,7 @@ const PrivateRoutes = () => {
         <Route path="/tim-kiem-truong-hop-benh" element={<PrivateRoute auth={PERMISSIONS.SU_CO} ability={PERMISSION_ABILITY.VIEW} component={TimKiemTruongHopBenh} redirect="/tim-kiem-truong-hop-benh" />} />
         <Route path="/danh-sach-o-dich" element={<PrivateRoute auth={PERMISSIONS.SU_CO} ability={PERMISSION_ABILITY.VIEW} component={DanhSachODich} redirect="/danh-sach-o-dich" />} />
         <Route path="/them-moi-o-dich" element={<PrivateRoute auth={PERMISSIONS.SU_CO} ability={PERMISSION_ABILITY.VIEW} component={ThemMoiODich} redirect="/danh-sach-o-dich" />} />
+        <Route path="/chinh-sua-o-dich/:id" element={<PrivateRoute auth={PERMISSIONS.SU_CO} ability={PERMISSION_ABILITY.VIEW} component={ThemMoiODich} redirect="/danh-sach-o-dich" />} />
         {/* Pages */}
         <Route path="menu-test" element={<MenuTestPage />} />
         <Route path="*" element={<Navigate to="/error/404" />} />
