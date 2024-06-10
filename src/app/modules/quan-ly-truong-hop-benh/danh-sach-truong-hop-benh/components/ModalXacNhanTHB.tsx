@@ -4,24 +4,56 @@ import { Button, Modal } from "react-bootstrap";
 import { Col, Row } from "../../../component/Grid";
 import { OCTAutocomplete, OCTTextValidator } from "@oceantech/oceantech-ui";
 import { INITIAL_BENH_REPORT } from "../constants/constant";
+import { TruongHopBenh } from "../model/Model";
+import { XAC_NHAN_THB } from "../constants/constant";
+import { regex } from "../../../constant";
+import { updateXacNhanTrangThaiTHB } from "../servives/Services";
+import { toast } from "react-toastify";
+import { RESPONSE_STATUS_CODE } from "../../../utils/Constant";
+import { useContext } from "react";
+import AppContext from "../../../../AppContext";
 
 type TProps = {
     handleClose: () => void;
-    dataRow?: any;
+    dataRow?: TruongHopBenh;
+    updatePageData: () => void;
 };
 
 const ModalXacNhanTHB = (props: TProps) => {
-    const { dataRow, handleClose } = props;
-
+    const { dataRow, handleClose, updatePageData } = props;
+    const { setPageLoading } = useContext(AppContext);
     const benhReportSchema = Yup.object().shape({
-        hoTenNguoiBaoCao: Yup.string().required('Bắt buộc nhập').nullable(),
-        trangThaiXacNhanThb: Yup.number().required('Bắt buộc nhập').nullable(),
-        dienThoaiNguoiBaoCao: Yup.string().required('Bắt buộc nhập').nullable(),
-        moTa: Yup.string()
+        hoTenNguoiBaoCao: Yup.string().required("Bắt buộc nhập").nullable(),
+        trangThaiXacNhanThb: Yup.number().required("Bắt buộc nhập").nullable(),
+        dienThoaiNguoiBaoCao: Yup.string()
+          .required("Bắt buộc nhập")
+          .nullable()
+          .matches(regex.phone, "Số điện thoại không hợp lệ"),
     });
 
     const handleSubmit = async (values: any) => {
+        const formData = {
+          ...values,
+          truongHopBenhId:  dataRow?.truongHopBenh?.truongHopBenhId,
+        };
 
+        try {
+          setPageLoading(true);
+          const { data } = await updateXacNhanTrangThaiTHB(formData.truongHopBenhId as number, formData);
+
+          if (data?.code === RESPONSE_STATUS_CODE.SUCCESS) {
+            toast.success("Cập nhật trường hợp bệnh thành công");
+            updatePageData();
+            handleClose();
+            return;
+          }
+
+           toast.warning(data?.message);
+        } catch (error) {
+          toast.error(error as string);
+        } finally {
+          setPageLoading(false);
+        }
     };
 
     return (
@@ -45,16 +77,18 @@ const ModalXacNhanTHB = (props: TProps) => {
                     validationSchema={benhReportSchema}
                     onSubmit={handleSubmit}
                 >
-                    {({ values, errors, touched, handleChange }) => (
+                    {({ values, errors, touched, handleChange, setFieldValue}) => (
                         <Form>
                             <Row>
                                 <Col xs={4}>
                                     <OCTAutocomplete
                                         lable="Loại xác nhận"
-                                        options={[]}
+                                        options={XAC_NHAN_THB}
                                         name="trangThaiXacNhanThb"
                                         value={values.trangThaiXacNhanThb}
-                                        onChange={handleChange}
+                                        onChange={(selectedOption) => {
+                                            setFieldValue("trangThaiXacNhanThb", selectedOption.code)
+                                        }}
                                         isRequired
                                         errors={errors.trangThaiXacNhanThb}
                                         touched={touched.trangThaiXacNhanThb}

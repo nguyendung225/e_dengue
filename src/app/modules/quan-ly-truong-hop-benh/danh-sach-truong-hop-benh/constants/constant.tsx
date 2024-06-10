@@ -14,7 +14,7 @@ import { exportToFile } from "../../../utils/FunctionUtils";
 import { TYPE } from "../../../utils/Constant";
 import { exportPdfFile, exportWordFile } from "../servives/Services";
 
-const TRANG_THAI_PHAN_HOI = {
+export const TRANG_THAI_PHAN_HOI = {
     QUA_7_NGAY_CHUA_XN: -1,
     CHUA_XAC_NHAN: 0,
     DA_XN_DUNG: 1,
@@ -22,18 +22,49 @@ const TRANG_THAI_PHAN_HOI = {
     XN_SAI_THONG_TIN_CHAN_DOAN: 3,
 }
 
-const randerTrangThaiPhanHoi = (trangThaiPhanHoi: number) => {
+export const XAC_NHAN_THB = [
+    {
+        code : TRANG_THAI_PHAN_HOI.DA_XN_DUNG,
+        name : 'Xác minh đúng thông tin'
+    },
+    {
+        code : TRANG_THAI_PHAN_HOI.XN_SAI_THONG_TIN_HANH_CHINH,
+        name : 'Thông tin THB sai thông tin hành chính'
+    },
+    {
+        code : TRANG_THAI_PHAN_HOI.XN_SAI_THONG_TIN_CHAN_DOAN,
+        name : 'Thông tin THB sai thông tin chuẩn đoán'
+    }
+]
+
+const isDifferenceGreaterThan7Days = (ngayTao: string): boolean => {
+    const createdDate = new Date(ngayTao);
+    const currentDate = new Date();
+
+    createdDate.setHours(0, 0, 0, 0);
+    currentDate.setHours(0, 0, 0, 0);
+    const differenceInMilliseconds = currentDate.getTime() - createdDate.getTime();
+    const millisecondsInDay = 1000 * 60 * 60 * 24;
+    const differenceInDays = Math.floor(differenceInMilliseconds / millisecondsInDay);
+    
+    return differenceInDays > 7;
+};
+
+const randerTrangThaiPhanHoi = (trangThaiPhanHoi: number, ngayTao: any) => {
     switch(trangThaiPhanHoi) {
         case TRANG_THAI_PHAN_HOI.DA_XN_DUNG:
             return <OCTKTSVG path="/media/svg/icons/check-circle-fill.svg" svgClassName="spaces w-16 h-16 mr-10 color-bright-cyan"/>
-        case TRANG_THAI_PHAN_HOI.QUA_7_NGAY_CHUA_XN: 
-            return <OCTKTSVG path="/media/svg/icons/exclamation-triangle-fill.svg" svgClassName="spaces w-16 h-16 mr-10 color-dark-red"/>
         case TRANG_THAI_PHAN_HOI.CHUA_XAC_NHAN:
-            return <OCTKTSVG path="/media/svg/icons/exclamation-triangle-fill.svg" svgClassName="spaces w-16 h-16 mr-10 color-dark-orange"/>
+            isDifferenceGreaterThan7Days(ngayTao) 
+            ? <OCTKTSVG path="/media/svg/icons/exclamation-circle-fill.svg" svgClassName="spaces w-16 h-16 mr-10 color-red"/> 
+            : <OCTKTSVG path="/media/svg/icons/exclamation-triangle-fill.svg" svgClassName="spaces w-16 h-16 mr-10 color-dark-orange"/>
+            break;
         case TRANG_THAI_PHAN_HOI.XN_SAI_THONG_TIN_HANH_CHINH:
             return <OCTKTSVG path="/media/svg/icons/question-circle-fill.svg" svgClassName="spaces w-16 h-16 mr-10 color-steel-blue"/>
         case TRANG_THAI_PHAN_HOI.XN_SAI_THONG_TIN_CHAN_DOAN: 
             return <OCTKTSVG path="/media/svg/icons/question-circle-fill.svg" svgClassName="spaces w-16 h-16 mr-10 color-green"/>
+        default:
+           break;
     }
 }
 
@@ -52,6 +83,7 @@ export const danhSachThbColumns = [
     cellStyle: {
       textAlign: "left",
     },
+    render: (row: any) => row?.isQuaHanNopBaoCao ? <span className="color-red">{row?.hoTen}</span> : <span>{row?.hoTen}</span>
   },
   {
     name: "GT",
@@ -79,9 +111,7 @@ export const danhSachThbColumns = [
     headerStyle: {
       minWidth: "100px"
     },
-    render: (row: any) => (
-        <>{randerTrangThaiPhanHoi(row?.trangThaiPhanHoi)}</>
-    )
+    render: (row: any) => <>{randerTrangThaiPhanHoi(row?.trangThaiPhanHoi,row?.ngayTao)}</>
   }
 ]
 

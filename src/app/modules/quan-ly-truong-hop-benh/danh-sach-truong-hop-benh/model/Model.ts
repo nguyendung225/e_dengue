@@ -32,7 +32,7 @@ export interface truongHopBenh {
     dienThoaiNguoiBaoCao: string | null;
     coSoDieuTriId: number | null;
     coSoQuanLyId: number | null;
-    trangThaiPhanHoi: string | null; // không rõ
+    trangThaiPhanHoi: number | null;
     trangThaiTheoDoi: number | null;
     //object
     noiPhatHien: string | null;

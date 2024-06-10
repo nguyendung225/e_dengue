@@ -1,7 +1,7 @@
 import { OCTKTSVG, OCTTable } from "@oceantech/oceantech-ui";
 import "./styles/danhSachThb.scss";
 import { TYPE } from "../../utils/Constant";
-import { danhSachThbColumns, getExportedFileList, INIT_TRUONG_HOP_BENH } from "./constants/constant";
+import { danhSachThbColumns, getExportedFileList,TRANG_THAI_PHAN_HOI, INIT_TRUONG_HOP_BENH } from "./constants/constant";
 import { Button } from "react-bootstrap";
 import InputSearch from "../../component/input-field/InputSearch";
 import ThongTinThb from "./components/ThongTinThb";
@@ -19,6 +19,9 @@ import { SEARCH_OBJECT_INIT } from "../tim-kiem-truong-hop-benh/constants/consta
 import ConfirmDialog from "../../component/confirm-dialog/ConfirmDialog";
 import DropdownButton from "../../component/button/DropdownButton";
 import { formatDataViewTHB } from "../../utils/FunctionUtils";
+import { localStorageItem } from "../../utils/LocalStorage";
+import { KEY_LOCALSTORAGE } from "../../auth/core/_consts";
+import { authRoles } from "../../auth/authRoles";
 
 const DanhSachTruongHopBenh = () => {
     const { setPageLoading } = useContext(AppContext);
@@ -33,6 +36,7 @@ const DanhSachTruongHopBenh = () => {
     const [configTable, setConfigTable] = useState<any>({});
     const [searchKeyword, setsSearchKeyword] = useState<string>("");
     const [exportedFileList, setExportedFileList] = useState<IDropdownButton[]>([]);
+    const roleUser = localStorageItem.get(KEY_LOCALSTORAGE.USER_INFOMATION)?.username;
 
     const getTruongHopBenhList = async () => {
         try {
@@ -210,12 +214,16 @@ const DanhSachTruongHopBenh = () => {
                         <span className="title">Thông tin trường hợp bệnh</span>
                     </div>
                     <div className="d-flex spaces gap-10">
-                        <Button
-                            className="button-primary"
-                            onClick={() => setShouldOpenXacNhanThbDialog(true)}
-                        >
-                            Xác nhận
-                        </Button>
+                        {(roleUser === authRoles.HUYEN || roleUser === authRoles.TINH)
+                            && dataRow?.truongHopBenh?.trangThaiPhanHoi === TRANG_THAI_PHAN_HOI.CHUA_XAC_NHAN
+                            && 
+                                <Button
+                                    className={`button-primary ${roleUser === authRoles.TINH ?  'disabled' : ''}`}
+                                    onClick={() => setShouldOpenXacNhanThbDialog(true)}
+                                >
+                                    Xác nhận
+                                </Button>
+                        }                    
                         <Button
                             className="button-primary"
                             onClick={() => {
@@ -269,7 +277,11 @@ const DanhSachTruongHopBenh = () => {
             )}
 
             {shouldOpenXacNhanThbDialog && (
-                <ModalXacNhanTHB handleClose={() => setShouldOpenXacNhanThbDialog(false)} />
+                 <ModalXacNhanTHB
+                    handleClose={() => setShouldOpenXacNhanThbDialog(false)}
+                    dataRow={dataRow}
+                    updatePageData={getTruongHopBenhList}
+                 />
             )}
             {
                 openDeleteTruongHopBenh && (
