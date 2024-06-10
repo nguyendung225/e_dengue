@@ -72,7 +72,7 @@ const ThongTinDoiTuongBox = () => {
                             lable="Nghề nghiệp"
                             searchFunction={getListNgheNghiep}
                             urlData='data.data'
-                            getOptionLabel={(option) => option.tenNghe}
+                            getOptionLabel={(option) => option?.tenNghe}
                             options={[]}
                             value={values.doiTuongMacBenh?.ngheNghiep}
                             onChange={(option) => {
@@ -100,7 +100,7 @@ const ThongTinDoiTuongBox = () => {
                             lable="Dân tộc"
                             searchFunction={getListDanToc}
                             urlData='data.data'
-                            getOptionLabel={(option) => option.tenDanToc}
+                            getOptionLabel={(option) => option?.tenDanToc}
                             options={[]}
                             value={values.doiTuongMacBenh?.danToc}
                             onChange={(option) => setFieldValue("doiTuongMacBenh.danToc", option)}
@@ -190,7 +190,7 @@ const ThongTinDoiTuongBox = () => {
                             menuPlacement="top"
                             searchFunction={getListTinh}
                             urlData='data.data'
-                            getOptionLabel={(option) => option.tenTinh}
+                            getOptionLabel={(option) => option?.tenTinh}
                             options={[]}
                             name='doiTuongMacBenh.tinhThuongTru'
                             searchObject={{}}
@@ -207,7 +207,7 @@ const ThongTinDoiTuongBox = () => {
                             lable="Quận/Huyện thường chú"
                             searchFunction={() => getListHuyenByTinhId(values.doiTuongMacBenh?.tinhThuongTru?.id)}
                             urlData='data.data'
-                            getOptionLabel={(option) => option.tenHuyen}
+                            getOptionLabel={(option) => option?.tenHuyen}
                             options={[]}
                             searchObject={{}}
                             value={values.doiTuongMacBenh?.huyenThuongTru}
@@ -224,7 +224,7 @@ const ThongTinDoiTuongBox = () => {
                             lable="Phường/Xã thường trú"
                             searchFunction={() => getListXaByHuyenId(values.doiTuongMacBenh?.huyenThuongTru?.id)}
                             urlData='data.data'
-                            getOptionLabel={(option) => option.tenXa}
+                            getOptionLabel={(option) => option?.tenXa}
                             options={[]}
                             searchObject={{}}
                             value={values.doiTuongMacBenh?.xaThuongTru}
@@ -258,7 +258,7 @@ const ThongTinDoiTuongBox = () => {
                             menuPlacement="top"
                             searchFunction={getListTinh}
                             urlData='data.data'
-                            getOptionLabel={(option) => option.tenTinh}
+                            getOptionLabel={(option) => option?.tenTinh}
                             options={[]}
                             name='doiTuongMacBenh.tinhHienNay'
                             searchObject={{}}
@@ -278,7 +278,7 @@ const ThongTinDoiTuongBox = () => {
                             lable="Quận/Huyện hiện nay"
                             searchFunction={() => getListHuyenByTinhId(values.doiTuongMacBenh?.tinhHienNay?.id)}
                             urlData='data.data'
-                            getOptionLabel={(option) => option.tenHuyen}
+                            getOptionLabel={(option) => option?.tenHuyen}
                             options={[]}
                             searchObject={{}}
                             value={values.doiTuongMacBenh?.huyenHienNay}
@@ -298,7 +298,7 @@ const ThongTinDoiTuongBox = () => {
                             lable="Phường/Xã hiện nay"
                             searchFunction={() => getListXaByHuyenId(values.doiTuongMacBenh?.huyenHienNay?.id)}
                             urlData='data.data'
-                            getOptionLabel={(option) => option.tenXa}
+                            getOptionLabel={(option) => option?.tenXa}
                             options={[]}
                             searchObject={{}}
                             value={values.doiTuongMacBenh?.xaHienNay}

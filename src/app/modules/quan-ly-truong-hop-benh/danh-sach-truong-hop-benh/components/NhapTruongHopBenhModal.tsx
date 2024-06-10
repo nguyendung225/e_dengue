@@ -34,7 +34,8 @@ const NhapTruongHopBenhModal = (props: TProps) => {
                 donViXetNghiem: data?.truongHopBenh?.donViXetNghiemObject?.id,
                 coSoDieuTriId: data?.truongHopBenh?.coSoDieuTri?.id,
                 coSoQuanLyId: data?.truongHopBenh?.coSoQuanLy?.id,
-                donViCongTacNbcId: data?.truongHopBenh?.donViCongTacNbc?.id
+                donViCongTacNbcId: data?.truongHopBenh?.donViCongTacNbc?.id,
+                capDoBenhRaVienId: data?.truongHopBenh?.capDoBenhRaVien?.id
 
             },
             doiTuongMacBenh: {

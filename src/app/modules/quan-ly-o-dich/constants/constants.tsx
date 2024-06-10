@@ -1,9 +1,7 @@
-import { OCTTextValidator } from "@oceantech/oceantech-ui";
+import { OCTAutocomplete, OCTTextValidator } from "@oceantech/oceantech-ui";
 import moment from "moment";
-import * as Yup from "yup";
-import Autocomplete from "../../component/input-field/autocomplete/Autocomplete";
-import { CURENT_STATUS, TYPE_TEST_CODE } from "../../quan-ly-truong-hop-benh/danh-sach-truong-hop-benh/config/config";
-import { CO_SU_DUNG_VAXIN, GENDER_OPT, INITIAL_DOI_TUONG_MAC_BENH, INITIAL_TRUONG_HOP_BENH, LAY_MAU_XN } from "../../quan-ly-truong-hop-benh/danh-sach-truong-hop-benh/constants/constant";
+import { Link } from "react-router-dom";
+import { GENDER_OPT, INITIAL_DOI_TUONG_MAC_BENH, INITIAL_TRUONG_HOP_BENH } from "../../quan-ly-truong-hop-benh/danh-sach-truong-hop-benh/constants/constant";
 import { getListHoatDongChongDich } from "../../services";
 import { BienPhapTrienKhai, ISearchObjModel, IThongTinODich, ODich, SoCaMac, TienSuDichTe, XetNghiem, iConfigTable } from "../models/quanLyODichModels";
 
@@ -18,91 +16,103 @@ const TRANG_THAI_O_DICH = [
     }
 ]
 
-export const dsOBenhColumns = [
-    {
-        name: "#",
-        field: "",
-        render: (row: any, index: number, stt: number) => <span>{stt}</span>
-    },
-    {
-        name: "Địa điểm xảy ra ổ dịch",
-        field: "diaDiem",
-        headerStyle: {
-            minWidth: "250px"
+export const dsOBenhColumns = () => {
+    return [
+        {
+            name: "#",
+            field: "",
+            render: (row: any, index: number, stt: number) => <span>{stt}</span>
         },
-        cellStyle: {
-            textAlign: "left",
+        {
+            name: "Địa điểm xảy ra ổ dịch",
+            field: "diaDiem",
+            headerStyle: {
+                minWidth: "250px"
+            },
+            cellStyle: {
+                textAlign: "left",
+            },
+            render: (rowData: any) => {
+                return (
+                    <Link to={`/chinh-sua-o-dich/${rowData?.oDichId}`} className="cursor-pointer text-primary">
+                        {rowData?.tenODich + " - " + rowData?.xaTen + " - " + rowData?.huyenTen + " - " + rowData?.tinhTen}
+                    </Link>
+                )
+            }
         },
-        render: (rowData: any) => rowData?.xaTen + "," + rowData?.huyenTen + "," + rowData?.tinhTen
-    },
-    {
-        name: "Trạng thái",
-        field: "trangThai",
-        headerStyle: {
-            minWidth: "120px"
+        {
+            name: "Trạng thái",
+            field: "trangThai",
+            headerStyle: {
+                minWidth: "120px"
+            },
+            render: (rowData: any) => {
+                return <div className={`${rowData?.trangThai === TRANG_THAI_O_DICH[0].code ? "text-danger" : ""}`}>
+                    {TRANG_THAI_O_DICH.find((item: any) => item.code === rowData?.trangThai)?.value}
+                </div>
+            }
         },
-        render: (rowData: any) => TRANG_THAI_O_DICH.find(item => item.code === rowData?.trangThai)?.value
-    },
-    {
-        name: "Ngày khởi phát",
-        field: "ngayKhoiPhat",
-        cellStyle: {
-            minWidth: "100px",
-            textAlign: "center",
+        {
+            name: "Ngày khởi phát",
+            field: "ngayKhoiPhat",
+            cellStyle: {
+                minWidth: "100px",
+                textAlign: "center",
+            },
+            render: (rowData: any) => rowData?.ngayKhoiPhat ? moment(rowData?.ngayKhoiPhat).format("DD/MM/YYYY") : null
         },
-        render: (rowData: any) => rowData?.ngayKhoiPhat ? moment(rowData?.ngayKhoiPhat).format("DD/MM/YYYY") : null
-    },
-    {
-        name: "Ngày kết thúc",
-        field: "ngayKetThuc",
-        cellStyle: {
-            minWidth: "100px",
-            textAlign: "center",
+        {
+            name: "Ngày kết thúc",
+            field: "ngayKetThuc",
+            cellStyle: {
+                minWidth: "100px",
+                textAlign: "center",
+            },
+            render: (rowData: any) => rowData?.ngayKetThuc ? moment(rowData?.ngayKetThuc).format("DD/MM/YYYY") : null
         },
-        render: (rowData: any) => rowData?.ngayKetThuc ? moment(rowData?.ngayKetThuc).format("DD/MM/YYYY") : null
-    },
-    {
-        name: "Số ca mắc",
-        field: "soCaMac",
-        cellStyle: {
-            minWidth: "100px",
-            textAlign: "center",
+        {
+            name: "Số ca mắc",
+            field: "soCaMac",
+            cellStyle: {
+                minWidth: "100px",
+                textAlign: "center",
+            },
         },
-    },
-    {
-        name: "Số ca tử vong",
-        field: "soCaTuVong",
-        cellStyle: {
-            minWidth: "100px",
-            textAlign: "center",
+        {
+            name: "Số ca tử vong",
+            field: "soCaTuVong",
+            cellStyle: {
+                minWidth: "100px",
+                textAlign: "center",
+            },
         },
-    },
-    {
-        name: "Ngày báo cáo",
-        field: "ngayBaoCao",
-        cellStyle: {
-            minWidth: "100px",
-            textAlign: "center",
+        {
+            name: "Ngày báo cáo",
+            field: "ngayBaoCao",
+            cellStyle: {
+                minWidth: "100px",
+                textAlign: "center",
+            },
+            render: (rowData: any) => rowData?.ngayBaoCao ? moment(rowData?.ngayBaoCao).format("DD/MM/YYYY") : null
         },
-        render: (rowData: any) => rowData?.ngayBaoCao ? moment(rowData?.ngayBaoCao).format("DD/MM/YYYY") : null
-    },
-    {
-        name: "Đơn vị báo cáo",
-        field: "coSoBaoCaoTen",
-        cellStyle: {
-            minWidth: "200px",
-            textAlign: "left",
+        {
+            name: "Đơn vị báo cáo",
+            field: "coSoBaoCaoTen",
+            cellStyle: {
+                minWidth: "200px",
+                textAlign: "left",
+            },
         },
-    },
-    {
-        name: "Tỉnh báo cáo",
-        field: "tinhBaoCaoTen",
-        cellStyle: {
-            minWidth: "100px",
-            textAlign: "center",
-        },
-    }
-]
+        {
+            name: "Tỉnh báo cáo",
+            field: "tinhBaoCaoTen",
+            cellStyle: {
+                minWidth: "100px",
+                textAlign: "center",
+            },
+        }
+    ]
+}
 
 export const dsTienXuBenhNhanColumns = [
     {
@@ -135,7 +145,7 @@ export const dsTienXuBenhNhanColumns = [
     },
 ]
 
-export const dsSoMauXetNghiemColumns = ({ handleDeleteRow, handleChange, values }: any) => {
+export const dsSoMauXetNghiemColumns = ({ handleDeleteRow, handleChange, values, errors, touched }: any) => {
     return [
         {
             name: "#",
@@ -153,11 +163,14 @@ export const dsSoMauXetNghiemColumns = ({ handleDeleteRow, handleChange, values 
             },
             render: (row: any, index: number, stt: number) => (
                 <OCTTextValidator
+                    className="spaces min-h-54"
                     type="text"
                     isRequired
                     name={`xetNghiemList[${index}].tenDiaPhuong`}
-                    value={values?.xetNghiemList[index]?.tenDiaPhuong}
-                    onChange={handleChange}
+                    defaultValue={values?.xetNghiemList[index]?.tenDiaPhuong}
+                    onBlur={handleChange}
+                    errors={errors?.xetNghiemList?.[index]?.tenDiaPhuong}
+                    touched={touched?.xetNghiemList?.[index]?.tenDiaPhuong}
                 />
             )
         },
@@ -171,7 +184,12 @@ export const dsSoMauXetNghiemColumns = ({ handleDeleteRow, handleChange, values 
                 <OCTTextValidator
                     type="date"
                     isRequired
-                    name="truongHopBenh.loaiXetNghiemKhac"
+                    className="spaces min-h-54"
+                    name={`xetNghiemList[${index}].ngayCapNhat`}
+                    defaultValue={values?.xetNghiemList[index]?.ngayCapNhat && moment(values?.xetNghiemList[index]?.ngayCapNhat).format("YYYY-MM-DD")}
+                    onBlur={handleChange}
+                    errors={errors?.xetNghiemList?.[index]?.ngayCapNhat}
+                    touched={touched?.xetNghiemList?.[index]?.ngayCapNhat}
                 />
             )
         },
@@ -185,9 +203,12 @@ export const dsSoMauXetNghiemColumns = ({ handleDeleteRow, handleChange, values 
                 <OCTTextValidator
                     type="text"
                     isRequired
+                    className="spaces min-h-54"
                     name={`xetNghiemList[${index}].soXn`}
-                    value={values?.xetNghiemList[index]?.soXn}
-                    onChange={handleChange}
+                    defaultValue={values?.xetNghiemList[index]?.soXn}
+                    onBlur={handleChange}
+                    errors={errors?.xetNghiemList?.[index]?.soXn}
+                    touched={touched?.xetNghiemList?.[index]?.soXn}
                 />
             )
         },
@@ -200,10 +221,13 @@ export const dsSoMauXetNghiemColumns = ({ handleDeleteRow, handleChange, values 
             render: (row: any, index: number, stt: number) => (
                 <OCTTextValidator
                     type="text"
+                    className="spaces min-h-54"
                     isRequired
                     name={`xetNghiemList[${index}].soDuongTinh`}
-                    value={values?.xetNghiemList[index]?.soDuongTinh}
-                    onChange={handleChange}
+                    defaultValue={values?.xetNghiemList[index]?.soDuongTinh}
+                    onBlur={handleChange}
+                    rrors={errors?.xetNghiemList?.[index]?.soDuongTinh}
+                    touched={touched?.xetNghiemList?.[index]?.soDuongTinh}
                 />
             )
         },
@@ -224,7 +248,7 @@ export const dsSoMauXetNghiemColumns = ({ handleDeleteRow, handleChange, values 
     ]
 }
 
-export const dsSoMacTuVongColumns = ({ handleDeleteRow, handleChange, values, errors, touched }: any) => {
+export const dsSoMacTuVongColumns = ({ handleDeleteRow, handleChangeField, values, errors, touched }: any) => {
 
     return [
         {
@@ -237,17 +261,22 @@ export const dsSoMacTuVongColumns = ({ handleDeleteRow, handleChange, values, er
         },
         {
             name: "Địa phương",
-            field: "tenBenhNhan",
+            field: "tenDiaPhuong",
             headerStyle: {
                 minWidth: "60px"
+            },
+            cellStyle: {
+                padding: "8px",
             },
             render: (row: any, index: number, stt: number) => (
                 <OCTTextValidator
                     type="text"
                     isRequired
+                    className="spaces min-h-54"
+                    key={index}
                     name={`soCaMacList[${index}].tenDiaPhuong`}
-                    value={values?.soCaMacList[index]?.tenDiaPhuong}
-                    onChange={handleChange}
+                    defaultValue={values?.soCaMacList[index]?.tenDiaPhuong}
+                    onBlur={handleChangeField}
                     errorTooltip
                     errors={errors?.soCaMacList?.[index]?.tenDiaPhuong}
                     touched={touched?.soCaMacList?.[index]?.tenDiaPhuong}
@@ -260,11 +289,19 @@ export const dsSoMacTuVongColumns = ({ handleDeleteRow, handleChange, values, er
             headerStyle: {
                 minWidth: "60px"
             },
+            cellStyle: {
+                padding: "8px",
+            },
             render: (row: any, index: number, stt: number) => (
                 <OCTTextValidator
                     type="date"
+                    className="spaces min-h-54"
                     isRequired
-                    name="truongHopBenh.loaiXetNghiemKhac"
+                    name={`soCaMacList[${index}].ngayCapNhat`}
+                    defaultValue={values?.soCaMacList[index]?.ngayCapNhat && moment(values?.soCaMacList[index]?.ngayCapNhat).format("YYYY-MM-DD")}
+                    onBlur={handleChangeField}
+                    errors={errors?.soCaMacList?.[index]?.ngayCapNhat}
+                    touched={touched?.soCaMacList?.[index]?.ngayCapNhat}
                 />
             )
         },
@@ -274,13 +311,19 @@ export const dsSoMacTuVongColumns = ({ handleDeleteRow, handleChange, values, er
             headerStyle: {
                 width: "100px"
             },
+            cellStyle: {
+                padding: "8px",
+            },
             render: (row: any, index: number, stt: number) => (
                 <OCTTextValidator
                     type="text"
+                    className="spaces min-h-54"
                     isRequired
                     name={`soCaMacList[${index}].soMac`}
-                    value={values?.soCaMacList[index]?.soMac}
-                    onChange={handleChange}
+                    defaultValue={values?.soCaMacList[index]?.soMac}
+                    onBlur={handleChangeField}
+                    errors={errors?.soCaMacList?.[index]?.soMac}
+                    touched={touched?.soCaMacList?.[index]?.soMac}
                 />
             )
         },
@@ -290,13 +333,19 @@ export const dsSoMacTuVongColumns = ({ handleDeleteRow, handleChange, values, er
             headerStyle: {
                 width: "100px"
             },
+            cellStyle: {
+                padding: "8px",
+            },
             render: (row: any, index: number, stt: number) => (
                 <OCTTextValidator
                     type="text"
                     isRequired
+                    className="spaces min-h-54"
                     name={`soCaMacList[${index}].soChet`}
-                    value={values?.soCaMacList[index]?.soChet}
-                    onChange={handleChange}
+                    defaultValue={values?.soCaMacList[index]?.soChet}
+                    onBlur={handleChangeField}
+                    errors={errors?.soCaMacList?.[index]?.soChet}
+                    touched={touched?.soCaMacList?.[index]?.soChet}
                 />
             )
         },
@@ -305,6 +354,9 @@ export const dsSoMacTuVongColumns = ({ handleDeleteRow, handleChange, values, er
             field: "thaoTac",
             headerStyle: {
                 minWidth: "60px"
+            },
+            cellStyle: {
+                padding: "8px",
             },
             render: (row: any, index: number) => {
                 return (
@@ -317,7 +369,7 @@ export const dsSoMacTuVongColumns = ({ handleDeleteRow, handleChange, values, er
     ]
 }
 
-export const dsBienPhapPhongChongColumns = ({ handleDeleteRow, handleChange, values, setFieldValue }: any) => {
+export const dsBienPhapPhongChongColumns = ({ handleDeleteRow, handleChange, values, setFieldValue, errors, touched }: any) => {
 
     return [
         {
@@ -336,33 +388,40 @@ export const dsBienPhapPhongChongColumns = ({ handleDeleteRow, handleChange, val
             },
             render: (row: any, index: number) => {
                 return (
-                    <Autocomplete
-                        searchFunction={getListHoatDongChongDich}
-                        urlData='data.data'
-                        getOptionLabel={(option) => option.tenHoatDong}
-                        options={[]}
-                        value={values.bienPhapTrienKhaiList[index]?.hdPhongChongDich}
-                        onChange={(option) => {
-                            setFieldValue(`bienPhapTrienKhaiList[${index}].hdPhongChongDich`, option)
-                        }}
-                        searchObject={{}}
-                    />
+                    <div className="spaces min-h-54">
+                        <OCTAutocomplete
+                            searchFunction={getListHoatDongChongDich}
+                            urlData='data.data'
+                            getOptionLabel={(option) => option?.tenHoatDong}
+                            options={[]}
+                            value={values.bienPhapTrienKhaiList[index]?.hdPhongChongDich}
+                            onChange={(option) => {
+                                setFieldValue(`bienPhapTrienKhaiList[${index}].hdPhongChongDich`, option)
+                            }}
+                            searchObject={{}}
+                            errors={errors?.bienPhapTrienKhaiList?.[index]?.hdPhongChongDich}
+                            touched={touched?.bienPhapTrienKhaiList?.[index]?.hdPhongChongDich}
+                        />
+                    </div>
                 );
             }
         },
         {
-            name: "Ngày",
             field: "ngay",
+            name: "Ngày",
             headerStyle: {
                 minWidth: "120px"
             },
             render: (row: any, index: number) => {
                 return (
                     <OCTTextValidator
-                        className="flex-row min-w-80"
-                        name="ngay"
+                        className="flex-row min-w-80 spaces min-h-54"
                         type="date"
-                        value={row?.ngay}
+                        name={`bienPhapTrienKhaiList[${index}].ngayCapNhat`}
+                        defaultValue={values?.bienPhapTrienKhaiList[index]?.ngayCapNhat && moment(values?.bienPhapTrienKhaiList[index]?.ngayCapNhat).format("YYYY-MM-DD")}
+                        onBlur={handleChange}
+                        errors={errors?.bienPhapTrienKhaiList?.[index]?.ngayCapNhat}
+                        touched={touched?.bienPhapTrienKhaiList?.[index]?.ngayCapNhat}
                     />
                 );
             }
@@ -378,9 +437,12 @@ export const dsBienPhapPhongChongColumns = ({ handleDeleteRow, handleChange, val
                     <OCTTextValidator
                         type="text"
                         isRequired
+                        className="spaces min-h-54"
                         name={`bienPhapTrienKhaiList[${index}].yKienDeNghi`}
-                        value={values?.bienPhapTrienKhaiList[index]?.yKienDeNghi}
-                        onChange={handleChange}
+                        defaultValue={values?.bienPhapTrienKhaiList[index]?.yKienDeNghi}
+                        onBlur={handleChange}
+                        errors={errors?.bienPhapTrienKhaiList?.[index]?.yKienDeNghi}
+                        touched={touched?.bienPhapTrienKhaiList?.[index]?.yKienDeNghi}
                     />
                 );
             }
@@ -535,93 +597,10 @@ export const TRANG_THAI = [
     }
 ]
 
-export const OdichSchema = Yup.object().shape({
-    oDich: Yup.object().shape({
-        tinh: Yup.object().shape({
-            id: Yup.string().nullable().required("Bắt buộc nhập")
-        }),
-        huyen: Yup.object().shape({
-            id: Yup.string().nullable().required("Bắt buộc nhập")
-        }),
-        xa: Yup.object().shape({
-            xaId: Yup.string().nullable().required("Bắt buộc nhập")
-        }),
-        trangThaiObject: Yup.object().nullable().required("Bắt buộc nhap"),
-        tenODich: Yup.string().required("Bắt buộc nhap").nullable(),
-        ngayKhoiPhatThbDauTien: Yup.string().required("Bắt buộc nhap").nullable()
-    }),
-    doiTuongMacBenh: Yup.object().shape({
-        hoTen: Yup.string().required("Bắt buộc nhập").nullable(),
-        ngaySinh: Yup.string().nullable().required("Bắt buộc nhập"),
-        danToc: Yup.object().nullable().required("Bắt buộc nhập"),
-        ngheNghiep: Yup.object().nullable().required("Bắt buộc nhập"),
-        tinhHienNay: Yup.object().nullable().required("Bắt buộc nhập"),
-        huyenHienNay: Yup.object().nullable().required("Bắt buộc nhập"),
-        xaHienNay: Yup.object().nullable().required("Bắt buộc nhập"),
-        cmnd: Yup.string().when("haveCmnd", {
-            is: true,
-            then: Yup.string().nullable().required("Bắt buộc nhập"),
-            otherwise: Yup.string().nullable().notRequired()
-        }),
-        dienThoai: Yup.string().when("haveDienThoai", {
-            is: true,
-            then: Yup.string().nullable().required("Bắt buộc nhập"),
-            otherwise: Yup.string().nullable().notRequired()
-        }),
-        diaChiHienNay: Yup.string().nullable().required("Bắt buộc nhập"),
-    }),
-    truongHopBenh: Yup.object().shape({
-        tinhTrangHienNay: Yup.string().required("Bắt buộc nhập").nullable(),
-        ngayNhapVien: Yup.string().required("Bắt buộc nhập").nullable(),
-        phanLoaiChanDoan: Yup.string().required("Bắt buộc nhập").nullable(),
-        ngayThucHienXn: Yup.string().when("layMauXetNghiem", {
-            is: LAY_MAU_XN,
-            then: Yup.string().nullable().required("Bắt buộc nhập"),
-            otherwise: Yup.string().nullable().notRequired()
-        }),
-        donViXetNghiemObject: Yup.object().when("layMauXetNghiem", {
-            is: LAY_MAU_XN,
-            then: Yup.object().nullable().required("Bắt buộc nhập"),
-            otherwise: Yup.object().nullable().notRequired()
-        }),
-        loaiXetNghiemKhac: Yup.string().when("loaiXetNghiem", {
-            is: TYPE_TEST_CODE.LOAI_KHAC,
-            then: Yup.string().nullable().required("Bắt buộc nhập"),
-            otherwise: Yup.string().nullable().notRequired()
 
-        }),
-        tinhTrangKhac: Yup.string().when("tinhTrangHienNay", {
-            is: `${CURENT_STATUS.TINH_TRANG_KHAC}`,
-            then: Yup.string().nullable().required("Bắt buộc nhập"),
-            otherwise: Yup.string().nullable().notRequired()
-
-        }),
-        benhVienChuyenToi: Yup.object().when("tinhTrangHienNay", {
-            is: `${CURENT_STATUS.CHUYEN_VIEN}`,
-            then: Yup.object().nullable().required("Bắt buộc nhập"),
-            otherwise: Yup.object().nullable().notRequired()
-
-        }),
-        chanDoanRaVien: Yup.string().when("tinhTrangHienNay", {
-            is: `${CURENT_STATUS.RA_VIEN}`,
-            then: Yup.string().nullable().required("Bắt buộc nhập"),
-            otherwise: Yup.string().nullable().notRequired()
-
-        }),
-        soLanSuDung: Yup.string().when("suDungVacXin", {
-            is: CO_SU_DUNG_VAXIN,
-            then: Yup.string().nullable().required("Bắt buộc nhập"),
-            otherwise: Yup.string().nullable().notRequired()
-
-        }),
-        coSoDieuTri: Yup.object().required("Bắt buộc nhập").nullable(),
-        coSoQuanLy: Yup.object().required("Bắt buộc nhập").nullable(),
-        noiPhatHien: Yup.string().required("Bắt buộc nhập").nullable(),
-    }),
-
-});
 
 const INITIAL_O_DICH: ODich = {
+    ngayKetThucODich: "",
     oDichId: null,
     tinhId: null,
     tinh: null,
@@ -631,7 +610,6 @@ const INITIAL_O_DICH: ODich = {
     xa: null,
     benhTruyenNhiemId: 37, // benh sxh (37)
     trangThai: null,
-    trangThaiObject: null,
     tenODich: "",
     truongHopBenhId: null,
     xacDinhThbDauTien: null,
@@ -663,8 +641,9 @@ export const INITIAL_SO_CA_MAC: SoCaMac = {
     huyenId: null,
     xaId: null,
     tenDiaPhuong: null,
-    soMac: null,
-    soChet: null
+    soMac: 0,
+    soChet: 0,
+    ngayCapNhat: null
 };
 
 export const INITIAL_XET_NGHIEM: XetNghiem = {
@@ -673,15 +652,17 @@ export const INITIAL_XET_NGHIEM: XetNghiem = {
     huyenId: null,
     xaId: null,
     tenDiaPhuong: null,
-    soXn: null,
-    soDuongTinh: null
+    soXn: 0,
+    soDuongTinh: 0,
+    ngayCapNhat: null
 };
 
 export const INITIAL_BIEN_PHAP_TRIEN_KHAI: BienPhapTrienKhai = {
     oDichBienPhapTrienKhaiId: null,
     hdPhongChongDichId: null,
     hdPhongChongDich: null,
-    yKienDeNghi: null
+    yKienDeNghi: null,
+    ngayCapNhat: null
 };
 
 export const INITIAL_TIEN_SU_DICH_TE: TienSuDichTe = {

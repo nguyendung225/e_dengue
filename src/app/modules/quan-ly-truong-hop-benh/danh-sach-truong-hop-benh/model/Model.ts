@@ -9,7 +9,7 @@ export interface truongHopBenh {
     ngayRaVien: string | null;
     chanDoanRaVien: string | null;
     benhVienChuyenToiId: number | null;
-    benhVienChuyenToi: any | null;
+    benhVienChuyenToi?: any 
     tinhTrangKhac: string | null;
     phanLoaiChanDoan: number | null;
     layMauXetNghiem: number | null;
@@ -34,13 +34,16 @@ export interface truongHopBenh {
     coSoQuanLyId: number | null;
     trangThaiPhanHoi: number | null;
     trangThaiTheoDoi: number | null;
+    capDoBenhRaVienId: string | null;
+    capDoBenhRaVienTen: string | null;
     //object
+    capDoBenhRaVien?: any
     noiPhatHien: string | null;
-    donViCongTacNbc: any | null;
-    coSoDieuTri: any | null;
-    coSoQuanLy: any | null;
-    donViXetNghiemObject: any | null;
-    capDoBenh: any | null;
+    donViCongTacNbc?: any 
+    coSoDieuTri?: any 
+    coSoQuanLy?: any 
+    donViXetNghiemObject?: any 
+    capDoBenh?: any 
     capDoBenhTen?: string | null;
     benhVienChuyenToiTen?: string | null;
     donViXetNghiemTen?: string | null;
@@ -71,14 +74,14 @@ export interface doiTuongMacBenh {
     xaIdThuongTru: number | null;
     diaChiThuongTru: string | null;
     ////object
-    ngheNghiep: any | null;
-    danToc: any | null;
-    tinhHienNay: any | null;
-    huyenHienNay: any | null;
-    xaHienNay: any | null;
-    tinhThuongTru: any | null;
-    huyenThuongTru: any | null;
-    xaThuongTru: any | null;
+    ngheNghiep?: any 
+    danToc?: any 
+    tinhHienNay?: any 
+    huyenHienNay?: any 
+    xaHienNay?: any 
+    tinhThuongTru?: any 
+    huyenThuongTru?: any 
+    xaThuongTru?: any 
     ngheNghiepTen?: string | null;
     danTocTen?: string | null;
     tinhTenHienNay?: string | null;

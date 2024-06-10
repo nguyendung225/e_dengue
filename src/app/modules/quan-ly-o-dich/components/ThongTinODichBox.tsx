@@ -14,8 +14,10 @@ import { columnTHB, TRANG_THAI } from "../constants/constants"
 import { IThongTinODich } from "../models/quanLyODichModels"
 import { TruongHopBenh } from "../../quan-ly-truong-hop-benh/danh-sach-truong-hop-benh/model/Model"
 import { handleChangeHuyen, handleChangeTinh, handleChangeXa } from "../../utils/FunctionUtils"
+import { useParams } from "react-router-dom"
 
 export const ThongTinODichBox = () => {
+    const { id } = useParams();
     const { values, errors, touched, setFieldValue, setValues, handleChange } = useFormikContext<IThongTinODich>()
     const { setPageLoading } = useContext(AppContext);
     const dataUser = localStorageItem.get(KEY_LOCALSTORAGE.USER_INFOMATION)
@@ -28,7 +30,6 @@ export const ThongTinODichBox = () => {
         XaId: dataUser?.xaId,
     })
     const existTHB = Boolean(values?.doiTuongMacBenh?.doiTuongMacBenhId)
-
     const formatData = (data: TruongHopBenh) => {
         let newData = {
             truongHopBenh: {
@@ -108,10 +109,9 @@ export const ThongTinODichBox = () => {
                     xaId: data?.doiTuongMacBenh?.xaIdHienNay,
                     tenXa: data?.doiTuongMacBenh?.xaTenHienNay
                 },
-                ngayKhoiPhatThbDauTien: data?.truongHopBenh.ngayKhoiPhat
+                ngayKhoiPhatThbDauTien: data?.truongHopBenh.ngayKhoiPhat,
+                xacDinhThbDauTien: data?.truongHopBenh?.doiTuongMacBenhId,
             },
-
-
         };
         return newData
     }
@@ -180,7 +180,7 @@ export const ThongTinODichBox = () => {
     useEffect(() => {
         setTTODich()
     }, [])
-    
+
     return (
         <>
             <div className="section-container">
@@ -194,7 +194,7 @@ export const ThongTinODichBox = () => {
                                 lable="Tỉnh/TP"
                                 searchFunction={getListTinh}
                                 urlData='data.data'
-                                getOptionLabel={(option) => option.tenTinh}
+                                getOptionLabel={(option) => option?.tenTinh}
                                 options={[]}
                                 name='oDich.tinh'
                                 searchObject={{}}
@@ -211,7 +211,7 @@ export const ThongTinODichBox = () => {
                                 lable="Quận/Huyện "
                                 searchFunction={() => getListHuyenByTinhId(values.oDich?.tinh?.id)}
                                 urlData='data.data'
-                                getOptionLabel={(option) => option.tenHuyen}
+                                getOptionLabel={(option) => option?.tenHuyen}
                                 options={[]}
                                 searchObject={{}}
                                 value={values.oDich?.huyen}
@@ -228,11 +228,11 @@ export const ThongTinODichBox = () => {
                                 lable="Phường/Xã "
                                 searchFunction={() => getListXaByHuyenId(values.oDich?.huyen?.id)}
                                 urlData='data.data'
-                                getOptionLabel={(option) => option.tenXa}
+                                getOptionLabel={(option) => option?.tenXa}
                                 options={[]}
                                 searchObject={{}}
                                 value={values.oDich?.xa}
-                                isDisabled={!values.oDich?.huyen?.id || Boolean(dataUser?.xaId)}
+                                isDisabled={!values.oDich?.huyen?.id || Boolean(dataUser?.xaId) || Boolean(id)}
                                 onChange={handlechangeXaODich}
                                 dependencies={[values?.oDich?.huyen]}
                                 isRequired
@@ -247,11 +247,12 @@ export const ThongTinODichBox = () => {
                                 lable="Trạng thái"
                                 options={TRANG_THAI}
                                 valueSearch={"code"}
-                                value={values.oDich?.trangThaiObject}
-                                onChange={(option) => setFieldValue("oDich.trangThaiObject", option)}
+                                value={values.oDich?.trangThai}
+                                onChange={(option) => setFieldValue("oDich.trangThai", option?.code)}
                                 isRequired
-                                errors={errors.oDich?.trangThaiObject}
-                                touched={touched.oDich?.trangThaiObject}
+                                errors={errors.oDich?.trangThai}
+                                touched={touched.oDich?.trangThai}
+                                isDisabled={Boolean(id)}
                             />
                         </Col>
                         <Col xs={12} sm={6} md={3} lg={3} className="spaces mt-5">
@@ -283,23 +284,26 @@ export const ThongTinODichBox = () => {
                                 lable="Phân độ lâm sàng/ Phân loại thể bệnh"
                                 searchFunction={getListDmCapDoBenh}
                                 urlData='data.data'
-                                getOptionLabel={(option) => option.tenCapDo}
+                                getOptionLabel={(option) => option?.tenCapDo}
                                 options={[]}
                                 searchObject={{}}
+                                isDisabled={Boolean(id)}
                             />
                         </Col>
                     </Row>
                     <Row className="spaces mt-10">
-                        <Col xs={12} sm={6} md={9} lg={12} className="spaces mt-5">
-                            <SelectSearchBox
-                                lable="Tìm kiếm trường hợp bệnh"
-                                columns={columnTHB}
-                                service={searchThbOdichByPage}
-                                handleSelect={handleSelectTHB}
-                                searchObject={searchObject}
-                                disabled={existTHB}
-                            />
-                        </Col>
+                        {
+                            !Boolean(id) && <Col xs={12} sm={6} md={9} lg={12} className="spaces mt-5">
+                                <SelectSearchBox
+                                    lable="Tìm kiếm trường hợp bệnh"
+                                    columns={columnTHB}
+                                    service={searchThbOdichByPage}
+                                    handleSelect={handleSelectTHB}
+                                    searchObject={searchObject}
+                                    disabled={existTHB}
+                                />
+                            </Col>
+                        }
                     </Row>
                 </div>
             </div>

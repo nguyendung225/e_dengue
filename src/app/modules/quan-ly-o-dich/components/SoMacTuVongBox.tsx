@@ -1,15 +1,19 @@
-import { OCTKTSVG } from "@oceantech/oceantech-ui";
+import { OCTKTSVG, OCTTable } from "@oceantech/oceantech-ui";
 import { useFormikContext } from "formik";
+import { ChangeEvent } from "react";
 import { Button } from "react-bootstrap";
-import TableCustom from "../../component/table/table-custom/TableCustom";
 import { dsSoMacTuVongColumns, INITIAL_SO_CA_MAC } from "../constants/constants";
 import { IThongTinODich } from "../models/quanLyODichModels";
 
 const SoMacTuVongBox = () => {
-    const { values, handleChange, setValues, errors, touched } = useFormikContext<IThongTinODich>()
+    const { values, setValues, setFieldValue, errors, touched, } = useFormikContext<IThongTinODich>()
     const handleAddRow = () => {
-        setValues(prev => {
-            return { ...prev, soCaMacList: [...prev.soCaMacList, INITIAL_SO_CA_MAC] }
+        setValues({
+            ...values,
+            soCaMacList: [
+                ...values.soCaMacList,
+                { ...INITIAL_SO_CA_MAC }
+            ]
         });
     };
 
@@ -26,6 +30,10 @@ const SoMacTuVongBox = () => {
         };
     }, { soMac: 0, soChet: 0 });
 
+    const handleChangeField = (event: ChangeEvent<HTMLInputElement>) => {
+        setFieldValue(event.target.name, event.target.value)
+    }
+
     return (
         <div className="section-container">
             <div className="d-flex align-items-center justify-content-between">
@@ -41,11 +49,16 @@ const SoMacTuVongBox = () => {
                 </Button>
             </div>
             <div className="border-top spaces pt-10">
-                <TableCustom
-                    updatePageData={() => { }}
-                    id="bien-phap-phong-chong"
+                <OCTTable
+                    id="so-mac"
                     data={values.soCaMacList}
-                    columns={dsSoMacTuVongColumns({ handleDeleteRow, handleChange, values, errors, touched })}
+                    columns={dsSoMacTuVongColumns({
+                        handleDeleteRow,
+                        handleChangeField,
+                        values,
+                        errors,
+                        touched
+                    })}
                     notDelete={true}
                     noToolbar={true}
                     unSelectedAll={true}

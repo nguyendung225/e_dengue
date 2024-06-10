@@ -1,17 +1,22 @@
-import { OCTKTSVG } from "@oceantech/oceantech-ui";
+import { OCTKTSVG, OCTTable } from "@oceantech/oceantech-ui";
 import { useFormikContext } from "formik";
 import { Button } from "react-bootstrap";
-import TableCustom from "../../component/table/table-custom/TableCustom";
 import { dsSoMauXetNghiemColumns, INITIAL_XET_NGHIEM } from "../constants/constants";
 import { IThongTinODich } from "../models/quanLyODichModels";
 
 const SoMauXetNghiemBox = () => {
 
-    const { values, handleChange, setValues } = useFormikContext<IThongTinODich>()
+    const { values, handleChange, setValues, errors, touched, } = useFormikContext<IThongTinODich>()
 
     const handleAddRow = () => {
         setValues(prev => {
-            return { ...prev, xetNghiemList: [...prev.xetNghiemList, INITIAL_XET_NGHIEM] }
+            return {
+                ...prev,
+                xetNghiemList: [
+                    ...prev.xetNghiemList,
+                    { ...INITIAL_XET_NGHIEM }
+                ]
+            }
         });
     };
 
@@ -43,11 +48,17 @@ const SoMauXetNghiemBox = () => {
                 </Button>
             </div>
             <div className="border-top spaces pt-10">
-                <TableCustom
-                    updatePageData={() => { }}
+                <OCTTable
                     id="bien-phap-phong-chong"
                     data={values?.xetNghiemList}
-                    columns={dsSoMauXetNghiemColumns({ handleDeleteRow, handleChange, values })}
+                    columns={
+                        dsSoMauXetNghiemColumns({
+                            handleDeleteRow,
+                            handleChange,
+                            values,
+                            errors,
+                            touched
+                        })}
                     notDelete={true}
                     notEdit={true}
                     noToolbar={true}

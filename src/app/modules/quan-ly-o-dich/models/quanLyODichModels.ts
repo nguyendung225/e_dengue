@@ -31,14 +31,16 @@ export const initalSearchObject = {
 export interface ODich {
     oDichId?: number | null;
     tinhId: number | null;
+    tinhTen?: string | null;
     tinh?: any;
     huyenId: number | null;
+    huyenTen?: string | null;
     huyen?: any;
     xaId: number | null;
+    xaTen?: string | null;
     xa?: any;
     benhTruyenNhiemId: number | null;
     trangThai: number | null;
-    trangThaiObject: any;
     tenODich: string | null;
     truongHopBenhId: number | null;
     xacDinhThbDauTien: number | null;
@@ -47,6 +49,7 @@ export interface ODich {
     ngayNhanBaoCao: string | null;
     ngayKhoiPhatThbDauTien: string | null;
     ngayKhoiPhatThbCuoiCung: string | null;
+    ngayKetThucODich: string | null;
     chumCaBenh: string | null;
     danhSachTruongHopBenh: string | null;
     soMacTong: number | null;
@@ -71,6 +74,8 @@ export interface SoCaMac {
     tenDiaPhuong: string | null;
     soMac: number | null;
     soChet: number | null;
+    ngayCapNhat: string | null;
+    unique?: string | null;
 }
 
 export interface XetNghiem {
@@ -81,13 +86,18 @@ export interface XetNghiem {
     tenDiaPhuong: string | null;
     soXn: number | null;
     soDuongTinh: number | null;
+    ngayCapNhat: string | null;
+    unique?: string | null;
 }
 
 export interface BienPhapTrienKhai {
     oDichBienPhapTrienKhaiId: number | null;
     hdPhongChongDichId: number | null;
-    hdPhongChongDich: any;
+    hdPhongChongDich?: any;
     yKienDeNghi: string | null;
+    ngayCapNhat: string | null;
+    hdPhongChongDichTen?: string | null;
+    unique?: string | null;
 }
 
 export interface TienSuDichTe {

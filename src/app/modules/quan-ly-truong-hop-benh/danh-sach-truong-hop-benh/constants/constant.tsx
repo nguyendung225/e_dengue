@@ -616,8 +616,11 @@ export const INITIAL_TRUONG_HOP_BENH: truongHopBenh = {
     coSoQuanLyId: null,
     trangThaiPhanHoi: null,
     trangThaiTheoDoi: null,
+    capDoBenhRaVienId: null,
+    capDoBenhRaVienTen: null,
     ///object
     coSoDieuTri: null,
+    capDoBenhRaVien: null,
     coSoQuanLy: null,
     donViCongTacNbc: null,
     benhVienChuyenToi: null,
