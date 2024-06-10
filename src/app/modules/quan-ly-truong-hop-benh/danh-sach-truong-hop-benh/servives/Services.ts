@@ -56,6 +56,11 @@ export const exportPdfFile = (id: number) => {
     });
 }
 
+export const updateXacNhanTrangThaiTHB = (id: number, data: any) => {
+    let url = API_URL + `truong-hop-benh/${id}/xac-nhan-trang-thai`;
+    return axios.put(url, data)
+}
+
 export const addNewOdich = (data: IThongTinODich) => {
     let url = API_URL + "o-dich";
     return axios.post(url, data);
