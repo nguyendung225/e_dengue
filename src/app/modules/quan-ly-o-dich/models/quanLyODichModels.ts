@@ -1,18 +1,24 @@
 import { doiTuongMacBenh, truongHopBenh } from "../../quan-ly-truong-hop-benh/danh-sach-truong-hop-benh/model/Model";
 
+export interface  iConfigTable {
+    totalElement: number;
+    totalPages: number;
+    numberOfElements: number;
+}
+
 export interface ISearchObjModel {
-    keyword?: string;
-    tinhId?: string;
-    huyenId?: string;
-    xaId?: string;
-    ngayKhoiPhatTuNgay?: string;
-    ngayKhoiPhatDenNgay?: string;
-    ngayTaoBaoCaoTuNgay?: string;
-    ngayTaoBaoCaoDenNgay?: string;
-    ngayKetThucTuNgay?: string;
-    ngayKetThucDenNgay?: string;
-    trangThaiId?: string;
-    donViBaoCaoId?: string;
+    keyword?: string | null;
+    tinhId?: number | null;
+    huyenId?: number | null;
+    xaId?: number | null;
+    ngayKhoiPhatTuNgay?: string | null;
+    ngayKhoiPhatDenNgay?: string | null;
+    ngayTaoBaoCaoTuNgay?: string | null;
+    ngayTaoBaoCaoDenNgay?: string | null;
+    ngayKetThucTuNgay?: string | null;
+    ngayKetThucDenNgay?: string | null;
+    trangThaiId?: number | null;
+    donViBaoCaoId?: number | null;
     PageNumber?: number;
     PageSize?: number;
 }

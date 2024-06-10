@@ -4,8 +4,8 @@ import LabelRequired from "../../component/LabelRequired";
 import { Button, Col, Row } from "react-bootstrap";
 import { OCTAutocomplete, OCTKTSVG, OCTTextValidator } from "@oceantech/oceantech-ui";
 import { Dispatch, SetStateAction, useState } from "react";
-import { getListHuyen, getListTinh, getListXa } from "../../services";
-import { initSearchObj } from "../constants/constants";
+import { getListDmDonViThucHienXetNghiem, getListDmTinhTrangHienTai, getListHuyen, getListTinh, getListXa } from "../../services";
+import { SEARCH_OBJECT_INIT } from "../constants/constants";
 import { ISearchObjModel } from "../models/quanLyODichModels";
 
 type TProps = {
@@ -33,15 +33,13 @@ export const FilterSearchBox = ({ setODichList }: TProps) => {
             .max(new Date(), "Không được lớn hơn ngày hiện tại"),
     });
 
-    const handleSearch = (values: ISearchObjModel) => {
-        // Xử lý call api tìm kiếm
-    }
+    const handleSearch = (values: ISearchObjModel) => {}
 
     return (
         <>
             <Formik
                 validationSchema={validationSchema}
-                initialValues={initSearchObj}
+                initialValues={SEARCH_OBJECT_INIT}
                 onSubmit={handleSearch}
             >
                 {({
@@ -113,7 +111,7 @@ export const FilterSearchBox = ({ setODichList }: TProps) => {
                                                     name="tinhId"
                                                     options={[]}
                                                     searchFunction={getListTinh}
-                                                    getOptionLabel={(option) => option.tenTinh}
+                                                    getOptionLabel={(option) => option?.tenTinh}
                                                     searchObject={{}}
                                                     onChange={(value) => setFieldValue("tinhId", value?.id)}
                                                 />
@@ -129,7 +127,7 @@ export const FilterSearchBox = ({ setODichList }: TProps) => {
                                                     name="huyenId"
                                                     options={[]}
                                                     searchFunction={getListHuyen}
-                                                    getOptionLabel={(option) => option.tenHuyen}
+                                                    getOptionLabel={(option) => option?.tenHuyen}
                                                     searchObject={{}}
                                                     onChange={(value) => setFieldValue("huyenId", value?.id)}
                                                 />
@@ -145,7 +143,7 @@ export const FilterSearchBox = ({ setODichList }: TProps) => {
                                                     name="xaId"
                                                     options={[]}
                                                     searchFunction={getListXa}
-                                                    getOptionLabel={(option) => option.tenXa}
+                                                    getOptionLabel={(option) => option?.tenXa}
                                                     searchObject={{}}
                                                     onChange={(value) => setFieldValue("xaId", value?.id)}
                                                 />
@@ -254,8 +252,8 @@ export const FilterSearchBox = ({ setODichList }: TProps) => {
                                                     urlData="data.data"
                                                     name="trangThaiId"
                                                     options={[]}
-                                                    // searchFunction={getListDmTinhTrangHienTai}
-                                                    // getOptionLabel={(option) => option.tenTrangThai}
+                                                    searchFunction={getListDmTinhTrangHienTai}
+                                                    getOptionLabel={(option) => option?.tenTrangThai}
                                                     searchObject={{}}
                                                     onChange={(value) => setFieldValue("trangThaiId", value?.id)}
                                                 />
@@ -270,8 +268,8 @@ export const FilterSearchBox = ({ setODichList }: TProps) => {
                                                     urlData="data.data"
                                                     name="donViBaoCaoId"
                                                     options={[]}
-                                                    // searchFunction={getListDmDonViThucHienXetNghiem}
-                                                    // getOptionLabel={(option) => option.tenDonViBaoCao}
+                                                    searchFunction={getListDmDonViThucHienXetNghiem}
+                                                    getOptionLabel={(option) => option?.tenDonViBaoCao}
                                                     searchObject={{}}
                                                     onChange={(value) => setFieldValue("donViBaoCaoId", value?.id)}
                                                 />
