@@ -1,60 +1,34 @@
-import * as Yup from "yup";
-import { Formik } from "formik";
+import { useFormikContext } from "formik";
 import LabelRequired from "../../component/LabelRequired";
 import { Button, Col, Row } from "react-bootstrap";
 import { OCTAutocomplete, OCTKTSVG, OCTTextValidator } from "@oceantech/oceantech-ui";
-import { Dispatch, SetStateAction, useState } from "react";
-import { getListDmDonViThucHienXetNghiem, getListDmTinhTrangHienTai, getListHuyen, getListTinh, getListXa } from "../../services";
-import { SEARCH_OBJECT_INIT } from "../constants/constants";
+import { useEffect, useState } from "react";
+import { getListBenhChanDoan, getListCoSoBaoCao, getListHuyenByTinhId, getListTinh, getListXaByHuyenId} from "../../services";
+import { TRANG_THAI_O_DICH } from "../constants/constants";
 import { ISearchObjModel } from "../models/quanLyODichModels";
+import AsyncAutoComplete from "../../component/input-field/AsyncAutoComplete";
+import { localStorageItem } from "../../utils/LocalStorage";
+import { KEY_LOCALSTORAGE } from "../../auth/core/_consts";
+import { authRoles } from "../../auth/authRoles";
 
-type TProps = {
-    setODichList: Dispatch<SetStateAction<never[]>>;
-}
-
-export const FilterSearchBox = ({ setODichList }: TProps) => {
+export const FilterSearchBox = () => {
     const [shouldOpenAdvanceSearch, setShouldOpenAdvanceSearch] = useState<boolean>(false);
-
-    const validationSchema = Yup.object().shape({
-        ngayKhoiPhatTuNgay: Yup.date()
-            .max(new Date(), "Không được lớn hơn ngày hiện tại"),
-        ngayKhoiPhatDenNgay: Yup.date()
-            .min(Yup.ref("ngayKhoiPhatTuNgay"), "Ngày khởi phát đến phải lớn hơn ngày bắt đầu")
-            .max(new Date(), "Không được lớn hơn ngày hiện tại"),
-        ngayTaoBaoCaoTuNgay: Yup.date()
-            .max(new Date(), "Không được lớn hơn ngày hiện tại"),
-        ngayTaoBaoCaoDenNgay: Yup.date()
-            .min(Yup.ref("ngayTaoBaoCaoTuNgay"), "Ngày khởi phát đến phải lớn hơn ngày bắt đầu")
-            .max(new Date(), "Không được lớn hơn ngày hiện tại"),
-        ngayKetThucTuNgay: Yup.date()
-            .max(new Date(), "Không được lớn hơn ngày hiện tại"),
-        ngayKetThucDenNgay: Yup.date()
-            .min(Yup.ref("ngayKetThucTuNgay"), "Ngày khởi phát đến phải lớn hơn ngày bắt đầu")
-            .max(new Date(), "Không được lớn hơn ngày hiện tại"),
-    });
-
-    const handleSearch = (values: ISearchObjModel) => {}
-
+    const { values, handleChange, errors, touched, setFieldValue, setValues } = useFormikContext<ISearchObjModel>();
+    const userData = localStorageItem.get(KEY_LOCALSTORAGE.USER_INFOMATION);
+    
+    useEffect(()=>{
+        setValues({
+          ...values,
+          tinh:  userData?.tinhInfo,
+          huyen: userData?.huyenInfo,
+          xa: userData?.xaInfo,
+        })
+    }, [])
+          
     return (
-        <>
-            <Formik
-                validationSchema={validationSchema}
-                initialValues={SEARCH_OBJECT_INIT}
-                onSubmit={handleSearch}
-            >
-                {({
-                    errors,
-                    values,
-                    touched,
-                    handleSubmit,
-                    handleChange,
-                    setFieldValue,
-                }) => {
-                    return (
-                        <form onSubmit={handleSubmit}>
                             <div>
                                 <Row className="border-bottom spaces pb-15">
-                                    <Col xs={6} sm={6} md={6} lg={6}>
+                                    <Col xs={12} lg={9}>
                                         <OCTTextValidator
                                             className="d-flex"
                                             placeholder="Nhập tên ổ dịch muốn tìm"
@@ -64,8 +38,8 @@ export const FilterSearchBox = ({ setODichList }: TProps) => {
                                             onChange={handleChange}
                                         />
                                     </Col>
-                                    <Col xs={6} sm={6} md={3} lg={3}>
-                                        <div className="d-flex align-items-center spaces gap-10">
+                                    <Col xs={12} lg={3} >
+                                        <div className="d-flex align-items-center spaces gap-10 search-action">
                                             <Button
                                                 className="button-primary"
                                                 type="submit"
@@ -106,14 +80,27 @@ export const FilterSearchBox = ({ setODichList }: TProps) => {
                                                     className="spaces fw-500 mb-5"
                                                 />
                                                 <OCTAutocomplete
-                                                    className="spaces h-25 min-w-256"
+                                                    className="spaces h-25"
                                                     urlData="data.data"
-                                                    name="tinhId"
+                                                    name="tinh"
                                                     options={[]}
                                                     searchFunction={getListTinh}
                                                     getOptionLabel={(option) => option?.tenTinh}
+                                                    value={values.tinh}
+                                                    isDisabled={
+                                                        userData?.username === authRoles.TINH ||
+                                                        userData?.username === authRoles.HUYEN ||
+                                                        userData?.username === authRoles.XA
+                                                    }
                                                     searchObject={{}}
-                                                    onChange={(value) => setFieldValue("tinhId", value?.id)}
+                                                    onChange={(selectedOption) =>
+                                                        setValues({
+                                                            ...values,
+                                                            tinh: selectedOption,
+                                                            huyen: null,
+                                                            xa: null,
+                                                        })
+                                                    }
                                                 />
                                             </Col>
                                             <Col xs={12} sm={6} md={3} lg={3} className="spaces mt-5">
@@ -122,14 +109,26 @@ export const FilterSearchBox = ({ setODichList }: TProps) => {
                                                     className="spaces fw-500 mb-5"
                                                 />
                                                 <OCTAutocomplete
-                                                    className="spaces h-25 min-w-256"
+                                                    className="spaces h-25"
                                                     urlData="data.data"
-                                                    name="huyenId"
+                                                    name="huyen"
                                                     options={[]}
-                                                    searchFunction={getListHuyen}
+                                                    searchFunction={() => values?.tinh?.id && getListHuyenByTinhId(values?.tinh?.id)}
                                                     getOptionLabel={(option) => option?.tenHuyen}
+                                                    value={values.huyen}
+                                                    isDisabled={
+                                                        userData?.username === authRoles.HUYEN ||
+                                                        userData?.username === authRoles.XA ||
+                                                        !values?.tinh?.id
+                                                    }
                                                     searchObject={{}}
-                                                    onChange={(value) => setFieldValue("huyenId", value?.id)}
+                                                    onChange={(selectedOption) =>
+                                                        setValues({
+                                                            ...values,
+                                                            huyen: selectedOption,
+                                                            xa: null,
+                                                        })
+                                                    }
                                                 />
                                             </Col>
                                             <Col xs={12} sm={6} md={3} lg={3} className="spaces mt-5">
@@ -138,14 +137,42 @@ export const FilterSearchBox = ({ setODichList }: TProps) => {
                                                     className="spaces fw-500 mb-5"
                                                 />
                                                 <OCTAutocomplete
-                                                    className="spaces h-25 min-w-256"
+                                                    className="spaces h-25"
                                                     urlData="data.data"
-                                                    name="xaId"
+                                                    name="xa"
                                                     options={[]}
-                                                    searchFunction={getListXa}
+                                                    searchFunction={() => values?.huyen?.id && getListXaByHuyenId(values?.huyen?.id)}
                                                     getOptionLabel={(option) => option?.tenXa}
+                                                    value={values.xa}
+                                                    isDisabled={
+                                                        userData?.username === authRoles.XA ||
+                                                        !values?.huyen?.id
+                                                    }
                                                     searchObject={{}}
-                                                    onChange={(value) => setFieldValue("xaId", value?.id)}
+                                                    onChange={(value) => setFieldValue("xa", value)}
+                                                    dependencies={[values?.huyen]}
+                                                />
+                                            </Col>
+                                            <Col xs={12} sm={6} md={3} lg={3} className="spaces mt-5">
+                                                <LabelRequired
+                                                    label="Bệnh"
+                                                    className="spaces fw-500 mb-5"
+                                                />
+                                                <OCTAutocomplete
+                                                    menuPlacement="bottom"
+                                                    isMulti
+                                                    getOptionValue={option => option.benhChanDoanId}
+                                                    onChange={(selectedOption) =>
+                                                        setFieldValue("listBenhTruyenNhiemId", selectedOption)
+                                                    }
+                                                    className="spaces h-30"
+                                                    name="listBenhTruyenNhiemId"
+                                                    options={[]}
+                                                    value={values?.listBenhTruyenNhiemId}
+                                                    getOptionLabel={(option) => option?.tenBenhChanDoan}
+                                                    searchObject={{}}
+                                                    searchFunction={getListBenhChanDoan}
+                                                    urlData="data.data"
                                                 />
                                             </Col>
                                         </Row>
@@ -187,12 +214,12 @@ export const FilterSearchBox = ({ setODichList }: TProps) => {
                                                 />
                                                 <OCTTextValidator
                                                     className="spaces flex-1"
-                                                    name="ngayTaoBaoCaoTuNgay"
+                                                    name="ngayBaoCaoTuNgay"
                                                     type="date"
-                                                    value={values?.ngayTaoBaoCaoTuNgay}
+                                                    value={values?.ngayBaoCaoTuNgay}
                                                     onChange={handleChange}
-                                                    errors={errors?.ngayTaoBaoCaoTuNgay}
-                                                    touched={touched?.ngayTaoBaoCaoTuNgay}
+                                                    errors={errors?.ngayBaoCaoTuNgay}
+                                                    touched={touched?.ngayBaoCaoTuNgay}
                                                 />
                                             </Col>
                                             <Col xs={12} sm={6} md={3} lg={3} className="spaces mt-5">
@@ -202,12 +229,12 @@ export const FilterSearchBox = ({ setODichList }: TProps) => {
                                                 />
                                                 <OCTTextValidator
                                                     className="spaces flex-1"
-                                                    name="ngayTaoBaoCaoDenNgay"
+                                                    name="ngayBaoCaoDenNgay"
                                                     type="date"
-                                                    value={values?.ngayTaoBaoCaoDenNgay}
+                                                    value={values?.ngayBaoCaoDenNgay}
                                                     onChange={handleChange}
-                                                    errors={errors?.ngayTaoBaoCaoDenNgay}
-                                                    touched={touched?.ngayTaoBaoCaoDenNgay}
+                                                    errors={errors?.ngayBaoCaoDenNgay}
+                                                    touched={touched?.ngayBaoCaoDenNgay}
                                                 />
                                             </Col>
                                         </Row>
@@ -248,41 +275,29 @@ export const FilterSearchBox = ({ setODichList }: TProps) => {
                                                     className="spaces fw-500 mb-5"
                                                 />
                                                 <OCTAutocomplete
-                                                    className="spaces h-25 min-w-256"
+                                                    className="spaces h-25"
                                                     urlData="data.data"
                                                     name="trangThaiId"
-                                                    options={[]}
-                                                    searchFunction={getListDmTinhTrangHienTai}
-                                                    getOptionLabel={(option) => option?.tenTrangThai}
-                                                    searchObject={{}}
-                                                    onChange={(value) => setFieldValue("trangThaiId", value?.id)}
+                                                    options={TRANG_THAI_O_DICH}
+                                                    getOptionLabel={(option) => option?.value}
+                                                    onChange={(option) => setFieldValue("trangThaiId", option?.code)}
                                                 />
                                             </Col>
-                                            <Col xs={12} sm={6} md={3} lg={3} className="spaces mt-5">
-                                                <LabelRequired
-                                                    label="Đơn vị báo cáo"
-                                                    className="spaces fw-500 mb-5"
-                                                />
-                                                <OCTAutocomplete
-                                                    className="spaces h-25 min-w-256"
-                                                    urlData="data.data"
-                                                    name="donViBaoCaoId"
-                                                    options={[]}
-                                                    searchFunction={getListDmDonViThucHienXetNghiem}
-                                                    getOptionLabel={(option) => option?.tenDonViBaoCao}
-                                                    searchObject={{}}
-                                                    onChange={(value) => setFieldValue("donViBaoCaoId", value?.id)}
+                                            <Col xs={12} sm={6} md={3} lg={3} className="spaces mt-10">
+                                                <AsyncAutoComplete
+                                                    menuPlacement="top"
+                                                    params={{}}
+                                                    label="Cơ sở báo cáo"
+                                                    displayField='tenCoSo'
+                                                    service={getListCoSoBaoCao}
+                                                    handleChange={(value) => setFieldValue("donViBaoCao", value)}
+                                                    value={values?.donViBaoCao}
                                                 />
                                             </Col>
                                         </Row>
                                     </>
                                 )}
                             </div>
-                        </form>
-                    );
-                }}
-            </Formik>
-        </>
     )
 }
 

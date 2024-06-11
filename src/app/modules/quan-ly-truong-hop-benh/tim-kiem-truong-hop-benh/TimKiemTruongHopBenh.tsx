@@ -6,18 +6,22 @@ import { SEARCH_OBJECT_INIT, truongHopBenhColumns } from "./constants/constants"
 import { searchThbByPage } from "./services/TimKiemThbServices";
 import { useContext, useEffect, useState } from "react";
 import AppContext from "../../../AppContext";
-import { SearchObjectModel } from "../models/TimKiemTruongHopBenhModels";
+import { ISearchObjectModel } from "../models/TimKiemTruongHopBenhModels";
 import { toast } from "react-toastify";
 import SearchAdvanceForm from "./components/SearchAdvanceForm";
+import { convertListSearchObject } from "../../utils/FunctionUtils";
+import { localStorageItem } from "../../utils/LocalStorage";
+import { KEY_LOCALSTORAGE } from "../../auth/core/_consts";
 type Props = {};
 
 const TimKiemTruongHopBenh = (props: Props) => {
   const { setPageLoading } = useContext(AppContext);
-  const [listDataTHB, setlistDataTHB] = useState<SearchObjectModel[]>([]);
+  const [listDataTHB, setlistDataTHB] = useState<ISearchObjectModel[]>([]);
   const [configTable, setConfigTable] = useState<any>({});
-  const [searchObj, setSearchObj] = useState<SearchObjectModel>(SEARCH_OBJECT_INIT);
-
-  const updatePageData = async (searchData: SearchObjectModel) => {
+  const [searchObj, setSearchObj] = useState<ISearchObjectModel>(SEARCH_OBJECT_INIT);
+  const userData = localStorageItem.get(KEY_LOCALSTORAGE.USER_INFOMATION)
+    
+  const updatePageData = async (searchData: ISearchObjectModel) => {
     try {
       setPageLoading(true);
       const { data } = await searchThbByPage(searchData);
@@ -36,27 +40,48 @@ const TimKiemTruongHopBenh = (props: Props) => {
   };
 
   useEffect(() => {
-    let tinhTrangHienNay: { [key: string]: number } = {};
-    
-    searchObj.listTinhTrangHienNay?.forEach((value: any, index: number) => {
-      tinhTrangHienNay[`listTinhTrangHienNay[${index}]`] = value.code;
-    });
-    delete searchObj.listTinhTrangHienNay;
+    setSearchObj((prev) => ({
+      ...prev,
+      tinhId: userData?.tinhInfo,
+      huyenId: userData?.huyenInfo,
+      xaId: userData?.xaInfo,
+    }));
+  }, []);
 
-    const searchObjTemp: SearchObjectModel = {
-      ...searchObj,
+  useEffect(() => {
+    let {
+      listTinhTrangHienNay,
+      tinh,
+      huyen,
+      xa,
+      coSoDieuTri,
+      donViThucHienXn,
+      coSoGhiNhan,
+      gioiTinh,
+      ngheNghiep,
+      kqXetNghiem,
+      phanLoaiQuanLy,
+      ...newSearchObject
+    } = searchObj;
+    const tinhTrangHienNay = convertListSearchObject(
+      listTinhTrangHienNay as any[],
+      "listTinhTrangHienNay"
+    );
+
+    const searchObjTemp: any = {
+      ...newSearchObject,
       ...tinhTrangHienNay,
-      gioiTinh: searchObj.gioiTinh?.code,
-      ngheNghiepId: searchObj.ngheNghiepId?.id,
-      phanLoaiQuanLy: searchObj?.phanLoaiQuanLy?.code,
-      tinhId: searchObj.tinhId?.id,
-      huyenId: searchObj.huyenId?.id,
-      xaId: searchObj.xaId?.xaId,
-      coSoGhiNhanId: searchObj.coSoGhiNhanId?.id,
-      kqXetNghiem: searchObj.kqXetNghiem?.code,
-      donViThucHienXn: searchObj.donViThucHienXn?.id,
-      coSoDieuTriId: searchObj.coSoDieuTriId?.id
-    }
+      gioiTinh,
+      ngheNghiepId: ngheNghiep?.id,
+      phanLoaiQuanLy: phanLoaiQuanLy?.code,
+      tinhId: tinh?.id,
+      huyenId: huyen?.id,
+      xaId: xa?.xaId,
+      coSoGhiNhanId: coSoGhiNhan?.id,
+      kqXetNghiem,
+      donViThucHienXn: donViThucHienXn?.id,
+      coSoDieuTriId: coSoDieuTri?.id,
+    }; 
     updatePageData(searchObjTemp);
   }, [searchObj]);
 

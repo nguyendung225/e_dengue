@@ -335,8 +335,8 @@ export const MEDICAL_INCIDENT_REPORT_STATUS =  {
 }
 
 export const STATUS_THB = {
-    ONTIME: 0,
-    OVERTIME: 1
+    ONTIME: true,
+    OVERTIME: false
 }
 
 export const printStyles = {

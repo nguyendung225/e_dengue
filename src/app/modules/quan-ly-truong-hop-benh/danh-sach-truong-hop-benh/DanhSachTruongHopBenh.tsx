@@ -11,14 +11,14 @@ import TimKiemTHBNangCaoModal from "./components/TimKiemTHBNangCaoModal";
 import { toast } from "react-toastify";
 import AppContext from "../../../AppContext";
 import ModalXacNhanTHB from "./components/ModalXacNhanTHB";
-import { SearchObjectModel } from "../models/TimKiemTruongHopBenhModels";
+import { ISearchObjectModel } from "../models/TimKiemTruongHopBenhModels";
 import { searchThbByPage } from "../tim-kiem-truong-hop-benh/services/TimKiemThbServices";
 import { IDropdownButton, TruongHopBenh } from "./model/Model";
 import { deleteTruongHopBenh, getThongTinTruongHopBenh } from "./servives/Services";
 import { SEARCH_OBJECT_INIT } from "../tim-kiem-truong-hop-benh/constants/constants";
 import ConfirmDialog from "../../component/confirm-dialog/ConfirmDialog";
 import DropdownButton from "../../component/button/DropdownButton";
-import { formatDataViewTHB } from "../../utils/FunctionUtils";
+import { convertListSearchObject, formatDataViewTHB } from "../../utils/FunctionUtils";
 import { localStorageItem } from "../../utils/LocalStorage";
 import { KEY_LOCALSTORAGE } from "../../auth/core/_consts";
 import { authRoles } from "../../auth/authRoles";
@@ -30,37 +30,61 @@ const DanhSachTruongHopBenh = () => {
     const [openSearchAdvanceDialog, setOpenSearchAdvanceDialog] = useState<boolean>(false);
     const [shouldOpenXacNhanThbDialog, setShouldOpenXacNhanThbDialog] = useState<boolean>(false);
     const [truongHopBenhList, setTruongHopBenhList] = useState<any>([]);
-    const [searchObject, setSearchObject] = useState<SearchObjectModel>(SEARCH_OBJECT_INIT);
+    const [searchObject, setSearchObject] = useState<ISearchObjectModel>(SEARCH_OBJECT_INIT);
     const [dataRow, setDataRow] = useState<TruongHopBenh>(INIT_TRUONG_HOP_BENH);
     const [dataForm, setDataForm] = useState<TruongHopBenh>(dataRow);
     const [configTable, setConfigTable] = useState<any>({});
     const [searchKeyword, setsSearchKeyword] = useState<string>("");
     const [exportedFileList, setExportedFileList] = useState<IDropdownButton[]>([]);
-    const roleUser = localStorageItem.get(KEY_LOCALSTORAGE.USER_INFOMATION)?.username;
+    const [userStatus, setUserStatus] = useState<boolean>(false);
+    const userData = localStorageItem.get(KEY_LOCALSTORAGE.USER_INFOMATION);
+
+    useEffect(() => {
+      setUserStatus(true);
+      userStatus &&
+        setSearchObject((prev) => ({
+          ...prev,
+          tinhId: userData?.tinhInfo,
+          huyenId: userData?.huyenInfo,
+          xaId: userData?.xaInfo,
+        }));
+    }, [userStatus]);
 
     const getTruongHopBenhList = async (selectFirstRow?: boolean) => {
         try {
             setPageLoading(true);
-            let tinhTrangHienNay: { [key: string]: number } = {};
-            
-            searchObject.listTinhTrangHienNay?.forEach((value: any, index: number) => {
-                tinhTrangHienNay[`listTinhTrangHienNay[${index}]`] = value.code;
-            });
-            delete searchObject.listTinhTrangHienNay;
+            let {
+              listTinhTrangHienNay,
+              tinh,
+              huyen,
+              xa,
+              coSoDieuTri,
+              donViThucHienXn,
+              coSoGhiNhan,
+              gioiTinh,
+              ngheNghiep,
+              kqXetNghiem,
+              phanLoaiQuanLy,
+              ...newSearchObject
+            } = searchObject;
+            const tinhTrangHienNay = convertListSearchObject(
+              listTinhTrangHienNay as any[],
+              "listTinhTrangHienNay"
+            );
 
-            const searchObjTemp: SearchObjectModel = {
-                ...searchObject,
+            const searchObjTemp: any = {
+                ...newSearchObject,
                 ...tinhTrangHienNay,
-                gioiTinh: searchObject.gioiTinh?.code,
-                ngheNghiepId: searchObject.ngheNghiepId?.id,
-                phanLoaiQuanLy: searchObject.phanLoaiQuanLy?.code,
-                tinhId: searchObject.tinhId?.id,
-                huyenId: searchObject.huyenId?.id,
-                xaId: searchObject.xaId?.xaId,
-                coSoGhiNhanId: searchObject.coSoGhiNhanId?.id,
-                kqXetNghiem: searchObject.kqXetNghiem?.id,
-                donViThucHienXn: searchObject.donViThucHienXn?.id,
-                coSoDieuTriId: searchObject.coSoDieuTriId?.id
+                gioiTinh,
+                ngheNghiepId: ngheNghiep?.id,
+                phanLoaiQuanLy: phanLoaiQuanLy?.code,
+                tinhId: tinh?.id,
+                huyenId: huyen?.id,
+                xaId: xa?.xaId,
+                coSoGhiNhanId: coSoGhiNhan?.id,
+                kqXetNghiem,
+                donViThucHienXn: donViThucHienXn?.id,
+                coSoDieuTriId: coSoDieuTri?.id
             }
             const { data } = await searchThbByPage(searchObjTemp);
             handleSelectFirstRow(data?.data?.data, selectFirstRow);
@@ -215,7 +239,7 @@ const DanhSachTruongHopBenh = () => {
                         <span>Sai thông tin chẩn đoán</span>
                     </div>
                     <div className="spaces mt-4">
-                        <span className="color-dark-red fs-18"> [Chữ Đỏ] </span>
+                        <span className="color-dark-red fs-18"> [CHỮ ĐỎ] </span>
                         &nbsp; Quá hạn nộp báo cáo hoặc phân loại
                     </div>
                     <div className="spaces mt-4">
@@ -230,11 +254,11 @@ const DanhSachTruongHopBenh = () => {
                         <span className="title">Thông tin trường hợp bệnh</span>
                     </div>
                     <div className="d-flex spaces gap-10">
-                        {(roleUser === authRoles.HUYEN || roleUser === authRoles.TINH)
+                        {(userData?.username === authRoles.HUYEN || userData?.username === authRoles.TINH)
                             && dataRow?.truongHopBenh?.trangThaiPhanHoi === TRANG_THAI_PHAN_HOI.CHUA_XAC_NHAN
                             && 
                                 <Button
-                                    className={`button-primary ${roleUser === authRoles.TINH ?  'disabled' : ''}`}
+                                    className={`button-primary ${userData?.username === authRoles.TINH ?  'disabled' : ''}`}
                                     onClick={() => setShouldOpenXacNhanThbDialog(true)}
                                 >
                                     Xác nhận
