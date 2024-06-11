@@ -59,6 +59,9 @@ export const listGender: OptionReactSelect[] = [
 
 export const regex = {
     phone: /^(?:\+84|0)(?:3|5|7|8|9)\d{8}$/,
+    cccd: /^(?:\d{9}|\d{12})$/,
+    address: /^[a-zA-ZÀ-ỹà-ỹ0-9\s,/-]*$/,
+    name: /^[a-zA-ZÀ-ỹ\s]+$/
 }
 
 export const CODE_GROUP_CERTIFICATE = {

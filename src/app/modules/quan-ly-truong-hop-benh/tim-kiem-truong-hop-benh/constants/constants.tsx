@@ -2,11 +2,6 @@ import moment from "moment";
 import { SearchObjectModel } from "../../models/TimKiemTruongHopBenhModels";
 import { renderStatusThb } from "../../../utils/FormatUtils";
 import { PHAN_LOAI_CHAN_DOAN } from "../../danh-sach-truong-hop-benh/constants/constant";
-import { localStorageItem } from "../../../utils/LocalStorage";
-import { KEY_LOCALSTORAGE } from "../../../auth/core/_consts";
-import { authRoles } from "../../../auth/authRoles";
-
-const userInfo = localStorageItem.get(KEY_LOCALSTORAGE.USER_INFOMATION);
 
 export const truongHopBenhColumns = [
   {
@@ -153,9 +148,9 @@ export const SEARCH_OBJECT_INIT: SearchObjectModel = {
   thoiGianKetThuc: null,
   benhIds: null,
   listTrangThai: null,
-  tinhId: (userInfo?.username === authRoles.TINH || userInfo?.username === authRoles.HUYEN || userInfo?.username === authRoles.XA) ? userInfo?.tinhInfo : null,
-  huyenId: (userInfo?.username === authRoles.HUYEN || userInfo?.username === authRoles.XA) ? userInfo?.huyenInfo : null,
-  xaId: userInfo?.username === authRoles.XA ? userInfo?.xaInfo : null,
+  tinhId: null,
+  huyenId: null,
+  xaId: null,
   hoTen: "",
   gioiTinh: null,
   ngheNghiepId: null,
@@ -181,7 +176,7 @@ export const SEARCH_OBJECT_INIT: SearchObjectModel = {
   },
   listTinhTrangHienNay: [],
   tuNgayNhapBaoCao: moment().subtract(1, 'months').startOf('month').format('YYYY-MM-DD'),
-  denNgayNhapBaoCao: moment().endOf('month').format('YYYY-MM-DD'),
+  denNgayNhapBaoCao: moment().format('YYYY-MM-DD'),
   coSoGhiNhanId: null,
 };
 

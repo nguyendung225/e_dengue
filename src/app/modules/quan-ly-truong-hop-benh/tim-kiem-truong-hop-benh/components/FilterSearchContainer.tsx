@@ -22,14 +22,14 @@ const FilterSearchContainer = ({
     };
 
     const validationSchema = Yup.object().shape({
-        TuNgayNhapBaoCao: Yup.date()
+        tuNgayNhapBaoCao: Yup.date()
             .nullable()
             .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
-            .max(Yup.ref('DenNgayNhapBaoCao'), 'Ngày không được sau ngày nhập báo cáo đến'),
-        DenNgayNhapBaoCao: Yup.date()
+            .max(Yup.ref('denNgayNhapBaoCao'), 'Ngày không được sau ngày nhập báo cáo đến'),
+        denNgayNhapBaoCao: Yup.date()
             .nullable()
             .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
-            .min(Yup.ref('TuNgayNhapBaoCao'), 'Ngày không được trước ngày nhập báo cáo từ'),
+            .min(Yup.ref('tuNgayNhapBaoCao'), 'Ngày không được trước ngày nhập báo cáo từ'),
         tuNgayKhoiPhat: Yup.date()
             .nullable()
             .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')

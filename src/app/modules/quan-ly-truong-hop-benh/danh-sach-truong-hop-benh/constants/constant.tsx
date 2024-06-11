@@ -13,6 +13,7 @@ import { doiTuongMacBenh, truongHopBenh, TruongHopBenh } from "../model/Model";
 import { exportToFile } from "../../../utils/FunctionUtils";
 import { TYPE } from "../../../utils/Constant";
 import { exportPdfFile, exportWordFile } from "../servives/Services";
+import { regex } from "../../../constant";
 
 export const TRANG_THAI_PHAN_HOI = {
     QUA_7_NGAY_CHUA_XN: -1,
@@ -55,16 +56,15 @@ const randerTrangThaiPhanHoi = (trangThaiPhanHoi: number, ngayTao: any) => {
         case TRANG_THAI_PHAN_HOI.DA_XN_DUNG:
             return <OCTKTSVG path="/media/svg/icons/check-circle-fill.svg" svgClassName="spaces w-16 h-16 mr-10 color-bright-cyan"/>
         case TRANG_THAI_PHAN_HOI.CHUA_XAC_NHAN:
-            isDifferenceGreaterThan7Days(ngayTao) 
+           return isDifferenceGreaterThan7Days(ngayTao) 
             ? <OCTKTSVG path="/media/svg/icons/exclamation-circle-fill.svg" svgClassName="spaces w-16 h-16 mr-10 color-red"/> 
             : <OCTKTSVG path="/media/svg/icons/exclamation-triangle-fill.svg" svgClassName="spaces w-16 h-16 mr-10 color-dark-orange"/>
-            break;
         case TRANG_THAI_PHAN_HOI.XN_SAI_THONG_TIN_HANH_CHINH:
             return <OCTKTSVG path="/media/svg/icons/question-circle-fill.svg" svgClassName="spaces w-16 h-16 mr-10 color-steel-blue"/>
         case TRANG_THAI_PHAN_HOI.XN_SAI_THONG_TIN_CHAN_DOAN: 
             return <OCTKTSVG path="/media/svg/icons/question-circle-fill.svg" svgClassName="spaces w-16 h-16 mr-10 color-green"/>
         default:
-           break;
+           return;
     }
 }
 
@@ -174,87 +174,148 @@ export const KeyTab = {
 
 export const hanhChinhSchema = Yup.object().shape({
     doiTuongMacBenh: Yup.object().shape({
-        hoTen: Yup.string().required("Bắt buộc nhập").nullable(),
-        ngaySinh: Yup.string().nullable().required("Bắt buộc nhập"),
+        hoTen: Yup.string().required("Bắt buộc nhập").nullable()
+            .matches(regex.name,"Họ tên không được chứa ký tự số hoặc ký tự đặc biệt"),
+        ngaySinh: Yup.date()
+            .nullable()
+            .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
+            .required("Bắt buộc nhập"),
         danToc: Yup.object().nullable().required("Bắt buộc nhập"),
         ngheNghiep: Yup.object().nullable().required("Bắt buộc nhập"),
-        tinhHienNay: Yup.object().nullable().required("Bắt buộc nhập"),
-        huyenHienNay: Yup.object().nullable().required("Bắt buộc nhập"),
-        xaHienNay: Yup.object().nullable().required("Bắt buộc nhập"),
+        tinhHienNay: Yup.object().nullable().required("Bắt buộc chọn"),
+        huyenHienNay: Yup.object().nullable().required("Bắt buộc chọn"),
+        xaHienNay: Yup.object().nullable().required("Bắt buộc chọn"),
         cmnd: Yup.string().when("haveCmnd", {
             is: true,
-            then: Yup.string().nullable().required("Bắt buộc nhập"),
+            then: Yup.string().nullable().required("Bắt buộc nhập")
+                .matches(regex.cccd, "Căn cước phải có 9 hoặc 12 chữ số"),
             otherwise: Yup.string().nullable().notRequired()
         }),
         dienThoai: Yup.string().when("haveDienThoai", {
             is: true,
-            then: Yup.string().nullable().required("Bắt buộc nhập"),
+            then: Yup.string().nullable().required("Bắt buộc nhập")
+                .matches(regex.phone,"Số điện thoại không hợp lệ"),
             otherwise: Yup.string().nullable().notRequired()
         }),
-        diaChiHienNay: Yup.string().nullable().required("Bắt buộc nhập"),
+        diaChiHienNay: Yup.string().nullable().required("Bắt buộc nhập")
+            .matches(regex.address,"Địa chỉ không hợp lệ"),
+        diaChiThuongTru: Yup.string().nullable().required("Bắt buộc nhập")
+            .matches(regex.address,"Địa chỉ không hợp lệ"),
+        tinhThuongTru: Yup.object().nullable().required("Bắt buộc chọn"),
+        huyenThuongTru: Yup.object().nullable().required("Bắt buộc chọn"),
+        xaThuongTru: Yup.object().nullable().required("Bắt buộc chọn")
     })
 });
 
 export const chanDoanSchema = hanhChinhSchema.shape({
     truongHopBenh: Yup.object().shape({
+        ngayNhapVien: Yup.date()
+        .nullable()
+        .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
+        .required("Bắt buộc nhập")
+        .when("ngayRaVien", {
+            is: ( ngayRaVien: string | null ) => ngayRaVien,
+            then: Yup.date()
+            .nullable()
+            .required("Bắt buộc nhập")
+            .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
+            .max(Yup.ref("ngayRaVien"), "Ngày không thể lớn hơn ngày ra viện/chuyển viện/tử vong"),
+            otherwise: Yup.date()
+            .nullable()
+            .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
+            .required("Bắt buộc nhập")
+        }),
+        ngayRaVien: Yup.date()
+            .nullable()
+            .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
+            .when("tinhTrangHienNay", {
+                is: ( tinhTrangHienNay : number ) => 
+                    ( +tinhTrangHienNay === CURENT_STATUS.RA_VIEN || +tinhTrangHienNay === CURENT_STATUS.CHUYEN_VIEN || +tinhTrangHienNay === CURENT_STATUS.TU_VONG ),
+                then: Yup.date()
+                    .nullable()
+                    .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
+                    .required("Bắt buộc nhập")
+                    .min(Yup.ref("ngayNhapVien"), "Ngày không thể nhỏ hơn ngày nhập viện"),
+                otherwise: Yup.date().nullable()
+            }),
+        ngayKhoiPhat: Yup.date()
+            .nullable()
+            .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
+            .required("Bắt buộc nhập")
+            .max(Yup.ref("ngayNhapVien"), "Ngày không thể lớn hơn ngày nhập viện"),
         tinhTrangHienNay: Yup.string().required("Bắt buộc nhập").nullable(),
-        ngayNhapVien: Yup.string().required("Bắt buộc nhập").nullable(),
         phanLoaiChanDoan: Yup.string().required("Bắt buộc nhập").nullable(),
-        ngayThucHienXn: Yup.string().when("layMauXetNghiem", {
+        ngayThucHienXn: Yup.date().when("layMauXetNghiem", {
             is: LAY_MAU_XN,
-            then: Yup.string().nullable().required("Bắt buộc nhập"),
-            otherwise: Yup.string().nullable().notRequired()
+            then: Yup.date().nullable()
+            .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
+            .required("Bắt buộc nhập"),
+            otherwise: Yup.date().nullable().notRequired(),
+        }),
+        ngayTraKetQuaXn: Yup.date().when(["layMauXetNghiem", "ngayThucHienXn"], {
+            is: ( layMauXetNghiem: number, ngayThucHienXn: string | null ) =>
+                layMauXetNghiem === LAY_MAU_XN && ngayThucHienXn,
+            then: Yup.date()
+                .nullable()
+                .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
+                .min(Yup.ref("ngayThucHienXn"), "Ngày không thể nhỏ hơn ngày lấy mẫu"),
+            otherwise: Yup.date().nullable().notRequired()
         }),
         donViXetNghiemObject: Yup.object().when("layMauXetNghiem", {
             is: LAY_MAU_XN,
-            then: Yup.object().nullable().required("Bắt buộc nhập"),
+            then: Yup.object().nullable()
+            .required("Bắt buộc nhập"),
             otherwise: Yup.object().nullable().notRequired()
         }),
         loaiXetNghiemKhac: Yup.string().when("loaiXetNghiem", {
             is: TYPE_TEST_CODE.LOAI_KHAC,
             then: Yup.string().nullable().required("Bắt buộc nhập"),
             otherwise: Yup.string().nullable().notRequired()
-
         }),
         tinhTrangKhac: Yup.string().when("tinhTrangHienNay", {
             is: `${CURENT_STATUS.TINH_TRANG_KHAC}`,
             then: Yup.string().nullable().required("Bắt buộc nhập"),
             otherwise: Yup.string().nullable().notRequired()
-
         }),
         benhVienChuyenToi: Yup.object().when("tinhTrangHienNay", {
             is: `${CURENT_STATUS.CHUYEN_VIEN}`,
             then: Yup.object().nullable().required("Bắt buộc nhập"),
             otherwise: Yup.object().nullable().notRequired()
-
         }),
         chanDoanRaVien: Yup.string().when("tinhTrangHienNay", {
             is: `${CURENT_STATUS.RA_VIEN}`,
             then: Yup.string().nullable().required("Bắt buộc nhập"),
             otherwise: Yup.string().nullable().notRequired()
-
         }),
-        soLanSuDung: Yup.string().when("suDungVacXin", {
-            is: CO_SU_DUNG_VAXIN,
-            then: Yup.string().nullable().required("Bắt buộc nhập"),
-            otherwise: Yup.string().nullable().notRequired()
-
-        })
-
+        soLanSuDung: Yup.number().when("suDungVacXin", {
+            is: (suDungVacXin: number) => suDungVacXin === CO_SU_DUNG_VAXIN,
+            then: Yup.number()
+                .nullable()
+                .required("Bắt buộc nhập")
+                .typeError("Phải là giá trị số"),
+            otherwise: Yup.number()
+                .nullable()
+                .notRequired()
+                .typeError("Phải là giá trị số")
+        }),
     })
 });
 
 export const ghiNhanSchema = chanDoanSchema.shape({
     truongHopBenh: Yup.object().shape({
         ...(hanhChinhSchema.fields.truongHopBenh as Yup.ObjectSchema<any>)?.fields,
-        tenNguoiBaoCao: Yup.string().required("Bắt buộc nhập").nullable(),
-        dienThoaiNguoiBaoCao: Yup.string().required("Bắt buộc nhập").nullable(),
-        emailNguoiBaoCao: Yup.string().required("Bắt buộc nhập").nullable(),
+        tenNguoiBaoCao: Yup.string().required("Bắt buộc nhập").nullable()
+            .matches(regex.name,"Tên không được chứa ký số hoặc ký tự đặc biệt"),
+        dienThoaiNguoiBaoCao: Yup.string()
+            .required("Bắt buộc nhập")
+            .nullable()
+            .matches(regex.phone, "Số điện thoại không hợp lệ"),
+        emailNguoiBaoCao: Yup.string().required("Bắt buộc nhập").nullable()
+            .email("Định dạng email không hợp lệ"),
         donViCongTacNbc: Yup.object().required("Bắt buộc nhập").nullable(),
         coSoDieuTri: Yup.object().required("Bắt buộc nhập").nullable(),
         coSoQuanLy: Yup.object().required("Bắt buộc nhập").nullable(),
         noiPhatHien: Yup.string().required("Bắt buộc nhập").nullable(),
-
     })
 })
 

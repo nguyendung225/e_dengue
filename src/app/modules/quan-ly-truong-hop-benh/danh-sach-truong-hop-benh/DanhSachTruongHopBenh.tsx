@@ -56,7 +56,7 @@ const DanhSachTruongHopBenh = () => {
                 phanLoaiQuanLy: searchObject.phanLoaiQuanLy?.code,
                 tinhId: searchObject.tinhId?.id,
                 huyenId: searchObject.huyenId?.id,
-                xaId: searchObject.xaId?.id,
+                xaId: searchObject.xaId?.xaId,
                 coSoGhiNhanId: searchObject.coSoGhiNhanId?.id,
                 kqXetNghiem: searchObject.kqXetNghiem?.id,
                 donViThucHienXn: searchObject.donViThucHienXn?.id,
@@ -87,7 +87,7 @@ const DanhSachTruongHopBenh = () => {
             id = dataTemp?.[0]?.truongHopBenhId
         }
         setTruongHopBenhList(dataTemp);
-        getThongTinChiTietTHB(String(id));
+        id && getThongTinChiTietTHB(String(id));
     };
 
     const handleDeleteTruongHopBenh = async () => {
@@ -213,6 +213,13 @@ const DanhSachTruongHopBenh = () => {
                     <div className="d-flex align-items-center spaces mt-4 line-height-16">
                         <OCTKTSVG path="/media/svg/icons/question-circle-fill.svg" svgClassName="spaces w-16 h-16 mr-10 color-green"/>
                         <span>Sai thông tin chẩn đoán</span>
+                    </div>
+                    <div className="spaces mt-4">
+                        <span className="color-dark-red fs-18"> [Chữ Đỏ] </span>
+                        &nbsp; Quá hạn nộp báo cáo hoặc phân loại
+                    </div>
+                    <div className="spaces mt-4">
+                        <i className="text-primary">[IN NGHIÊNG]</i> &nbsp; Lưu nháp
                     </div>
                 </div>
             </div>

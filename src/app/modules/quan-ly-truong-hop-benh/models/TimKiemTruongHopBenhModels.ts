@@ -40,9 +40,9 @@ export interface CheckTrungParams {
     HoTen?: string;
     NgaySinh?: string;
     GioiTinh?: number;
-    TinhId?: number;
-    HuyenId?: number;
-    XaId?: number;
+    TinhId?: number | null;
+    HuyenId?: number | null;
+    XaId?: number | null;
     PageNumber?: number;
     PageSize?: number;
 }
@@ -53,9 +53,9 @@ export const INIT_VALUE_CHECK_TRUNG: CheckTrungParams = {
     HoTen: '',
     NgaySinh: '',
     GioiTinh: 0,
-    TinhId: 0,
-    HuyenId: 0,
-    XaId: 0,
+    TinhId: null,
+    HuyenId: null,
+    XaId: null,
     PageNumber: 1,
     PageSize: 10
 };

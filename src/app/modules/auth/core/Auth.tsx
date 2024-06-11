@@ -76,27 +76,35 @@ const setAuthoritiesToLocalStorage = (tokenDecode: any) => {
 }
 
 const setUserInfomation = async () => {
-    try {
-        const { data } = await getThongTinUser()
-        const dataTemp = {
-          ...data.data,
-          tinhInfo: {
-            id: data?.data.tinhId,
-            tenTinh: data?.data.tenTinh,
-          },
-          huyenInfo: {
-            id: data?.data.huyenId,
-            tenHuyen: data?.data.tenHuyen,
-          },
-          xaInfo: {
-            id: data?.data.xaId,
-            tenXa: data?.data.tenXa,
-          },
-        };
-        localStorage.setItem(KEY_LOCALSTORAGE.USER_INFOMATION, JSON.stringify(dataTemp));
-    } catch (error) {
-        console.error(error)
-    }
+  try {
+      const { data } = await getThongTinUser();
+      
+      const dataTemp = {
+          ...data?.data,
+          ...(data?.data?.tinhId && {
+              tinhInfo: {
+                  id: data.data.tinhId,
+                  tenTinh: data.data.tenTinh,
+              }
+          }),
+          ...(data?.data?.huyenId && {
+              huyenInfo: {
+                  id: data.data.huyenId,
+                  tenHuyen: data.data.tenHuyen,
+              }
+          }),
+          ...(data?.data?.xaId && {
+              xaInfo: {
+                  xaId: data.data.xaId,
+                  tenXa: data.data.tenXa,
+              }
+          }),
+      };
+
+      localStorage.setItem(KEY_LOCALSTORAGE.USER_INFOMATION, JSON.stringify(dataTemp));
+  } catch (error) {
+      console.error(error);
+  }
 }
 
 const AuthInit: FC<WithChildren> = ({ children }) => {

@@ -15,7 +15,7 @@ export interface truongHopBenh {
     layMauXetNghiem: number | null;
     suDungVacXin: number | null;
     soLanSuDung: number | null;
-    loaiXetNghiem: string | null;
+    loaiXetNghiem: number | null;
     loaiXetNghiemKhac: string | null;
     dinhLoaiXetNghiemKhac: string | null;
     ketQuaXetNghiem: string | null;

@@ -34,7 +34,8 @@ const ThongTinChanDoanTab = ({ onlyView }: Props) => {
                 chanDoanRaVien: "",
                 benhVienChuyenToiId: null,
                 benhVienChuyenToi: null,
-                tinhTrangKhac: null
+                tinhTrangKhac: null,
+                ngayRaVien: null
             }
         }
         setValues(newValue)
@@ -150,11 +151,11 @@ const ThongTinChanDoanTab = ({ onlyView }: Props) => {
                         type="date"
                         name="truongHopBenh.ngayRaVien"
                         onChange={handleChange}
-                        value={values.truongHopBenh?.ngayRaVien}
+                        value={values.truongHopBenh?.ngayRaVien || ""}
                         disabled={configByStatus?.ngayRaVienChuyenVienTuVong?.disabled || onlyView}
                         isRequired={configByStatus?.ngayRaVienChuyenVienTuVong?.require}
                         errors={errors?.truongHopBenh?.ngayRaVien}
-                        touched={touched?.truongHopBenh?.ngayRaVien}                      
+                        touched={touched?.truongHopBenh?.ngayRaVien}        
                     />
                 </Col>
                 <Col xl={3}>
@@ -237,7 +238,7 @@ const ThongTinChanDoanTab = ({ onlyView }: Props) => {
                         values?.truongHopBenh?.suDungVacXin === CO_SU_DUNG_VAXIN && (
                             <OCTTextValidator
                                 lable="Số lần tiêm, uống"
-                                type="text"
+                                type="number"
                                 name="truongHopBenh.soLanSuDung"
                                 value={values?.truongHopBenh?.soLanSuDung}
                                 onChange={handleChange}
@@ -319,7 +320,9 @@ const ThongTinChanDoanTab = ({ onlyView }: Props) => {
                             name="truongHopBenh.ngayTraKetQuaXn"
                             value={values?.truongHopBenh?.ngayTraKetQuaXn}
                             onChange={handleChange}
-                            disabled={onlyView}
+                            errors={errors?.truongHopBenh?.ngayTraKetQuaXn}
+                            touched={touched?.truongHopBenh?.ngayTraKetQuaXn}
+                            disabled={onlyView} 
                         />
                     </Col>
                     <Col xl={3}>
