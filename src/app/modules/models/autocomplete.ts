@@ -4,6 +4,8 @@ import { ActionMeta, MenuPlacement } from "react-select";
 export interface AutoCompleteProps {
   options: any[];
   isClearable?: boolean;
+  hideSelectedOptions?: boolean;
+  multiCheckBox?: boolean;
   isYeuCauKham?: boolean;
   getOptionLabel?: (option: any) => string;
   getOptionValue?: (option: any) => string;

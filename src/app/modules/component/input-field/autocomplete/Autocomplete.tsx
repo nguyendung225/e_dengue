@@ -4,12 +4,13 @@ import React, { ChangeEvent, FC, useEffect, useState } from "react";
 import { Form, OverlayTrigger, Tooltip } from "react-bootstrap";
 import Select, { GetOptionLabel, mergeStyles } from "react-select";
 import { toast } from "react-toastify";
-import { AutoCompleteProps } from "../../models/autocomplete";
-import { KEY, TYPE } from "../../utils/Constant";
-import { autocompleteStyle, multiValueRemove } from "./StyleComponent";
-import TextValidator from "./TextValidator";
-import { removeDiacritics } from "../../utils/FunctionUtils";
-import useMultiLanguage from "../../../hook/useMultiLanguage";
+import useMultiLanguage from "../../../../hook/useMultiLanguage";
+import { AutoCompleteProps } from "../../../models/autocomplete";
+import { KEY, TYPE } from "../../../utils/Constant";
+import { removeDiacritics } from "../../../utils/FunctionUtils";
+import { MultiCheckBoxComponents } from "./MultiCheckBoxComponents";
+import { autocompleteStyle, multiValueRemove } from "../StyleComponent";
+import TextValidator from "../TextValidator";
 
 const Autocomplete: FC<AutoCompleteProps> = (props: AutoCompleteProps) => {
   const {
@@ -184,7 +185,7 @@ const Autocomplete: FC<AutoCompleteProps> = (props: AutoCompleteProps) => {
       
     </Tooltip>:<div></div>
   );
-
+  
   return (
     <OverlayTrigger
     placement="top"
@@ -225,6 +226,7 @@ const Autocomplete: FC<AutoCompleteProps> = (props: AutoCompleteProps) => {
               errors={props.errors}
             />
             : <Select
+              {...props}
               getOptionLabel={(option: GetOptionLabel<any>) =>
                 props.getOptionLabel
                   ? props.getOptionLabel(option)
@@ -241,6 +243,7 @@ const Autocomplete: FC<AutoCompleteProps> = (props: AutoCompleteProps) => {
                 ? <button className="button-primary w-100" onClick={props?.onAddNew}>Thêm mới</button>
                 : <span>Không tìm thấy lựa chọn cho {inputValue}</span>
               }
+              components={props?.multiCheckBox ? MultiCheckBoxComponents : {}}
               className={combinedClassName}
               name={props?.name}
               value={selectedValue}
@@ -256,15 +259,15 @@ const Autocomplete: FC<AutoCompleteProps> = (props: AutoCompleteProps) => {
               placeholder={<p className="custom-placeholder spaces m-0">{props?.placeholder || "Chọn..."}</p>}
               onChange={handleChange}
               menuPortalTarget={props?.menuPortalTarget}
-              isMulti={props?.isMulti}
-              closeMenuOnSelect={props?.closeMenuOnSelect}
+              isMulti={props?.multiCheckBox ? true : props.isMulti}
+              closeMenuOnSelect={props?.closeMenuOnSelect || !props?.multiCheckBox}
               menuPlacement={props?.menuPlacement ? props?.menuPlacement : "auto"}
               onMenuScrollToBottom={props?.isSrcoll ? handleScrollToBottom : undefined}
               onKeyDown={handleKeyDown}
               onInputChange={handleInputChange}
-              hideSelectedOptions={props?.isReadOnly}
+              hideSelectedOptions={props?.hideSelectedOptions || !props?.multiCheckBox}
               menuIsOpen={props?.isReadOnly ? false : undefined}
-              isSearchable={props?.isReadOnly ? false : props?.isSearchable !== undefined ? props?.isSearchable : true}
+              isSearchable={(props?.isReadOnly || props?.multiCheckBox) ? false : props?.isSearchable !== undefined ? props?.isSearchable : true}
               isClearable={props?.isReadOnly ? false : (props?.isClearable !== undefined ? props?.isClearable : true)}
               filterOption={customFilterOption}
             />

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Button, Col, Row } from 'react-bootstrap'
-import Autocomplete from './input-field/Autocomplete';
+import Autocomplete from './input-field/autocomplete/Autocomplete';
 
 type ISearch = {
     pin?: string;

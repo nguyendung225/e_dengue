@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import "./style.scss"
 import { IItemSearch } from '../models/advancedSearch';
 import { TYPE } from '../utils/Constant';
-import Autocomplete from './input-field/Autocomplete';
+import Autocomplete from './input-field/autocomplete/Autocomplete';
 import TextValidator from './input-field/TextValidator';
 
 type Props = {
