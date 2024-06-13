@@ -1,7 +1,7 @@
 import { OCTTextValidator } from "@oceantech/oceantech-ui";
 import moment from "moment";
 import * as Yup from "yup";
-import Autocomplete from "../../component/input-field/Autocomplete";
+import Autocomplete from "../../component/input-field/autocomplete/Autocomplete";
 import { CURENT_STATUS, TYPE_TEST_CODE } from "../../quan-ly-truong-hop-benh/danh-sach-truong-hop-benh/config/config";
 import { CO_SU_DUNG_VAXIN, GENDER_OPT, INITIAL_DOI_TUONG_MAC_BENH, INITIAL_TRUONG_HOP_BENH, LAY_MAU_XN } from "../../quan-ly-truong-hop-benh/danh-sach-truong-hop-benh/constants/constant";
 import { getListHoatDongChongDich } from "../../services";
