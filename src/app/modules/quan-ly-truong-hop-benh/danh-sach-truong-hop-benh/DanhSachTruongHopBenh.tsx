@@ -38,7 +38,7 @@ const DanhSachTruongHopBenh = () => {
     const [exportedFileList, setExportedFileList] = useState<IDropdownButton[]>([]);
     const roleUser = localStorageItem.get(KEY_LOCALSTORAGE.USER_INFOMATION)?.username;
 
-    const getTruongHopBenhList = async () => {
+    const getTruongHopBenhList = async (selectFirstRow?: boolean) => {
         try {
             setPageLoading(true);
             let tinhTrangHienNay: { [key: string]: number } = {};
@@ -63,11 +63,7 @@ const DanhSachTruongHopBenh = () => {
                 coSoDieuTriId: searchObject.coSoDieuTriId?.id
             }
             const { data } = await searchThbByPage(searchObjTemp);
-            const dataTemp = data?.data?.data.map((item: any, index: number) => {
-                return index === 0 ? {...item, isChecked: true} : item;
-            })
-            setTruongHopBenhList(dataTemp);
-            dataTemp[0] && getThongTinChiTietTHB(dataTemp?.[0]?.truongHopBenhId);
+            handleSelectFirstRow(data?.data?.data, selectFirstRow);
             setConfigTable({
                 totalPages: data?.data?.totalPages,
                 totalElements: data?.data?.total,
@@ -81,12 +77,25 @@ const DanhSachTruongHopBenh = () => {
         }
     }
 
+    const handleSelectFirstRow = (data: any[], selectFirstRow?: boolean) => {
+        let dataTemp = data;
+        let id = dataRow?.truongHopBenh?.truongHopBenhId
+        if (selectFirstRow) {
+            dataTemp = data.map((item: any, index: number) => {
+                return index === 0 ? { ...item, isChecked: true } : item;
+            });
+            id = dataTemp?.[0]?.truongHopBenhId
+        }
+        setTruongHopBenhList(dataTemp);
+        getThongTinChiTietTHB(String(id));
+    };
+
     const handleDeleteTruongHopBenh = async () => {
         const id = dataRow?.truongHopBenh?.truongHopBenhId
         try {
             setPageLoading(true);
             id && await deleteTruongHopBenh(id);
-            getTruongHopBenhList();
+            getTruongHopBenhList(true);
             setOpenDeleteTruongHopBenh(false);
         } catch (error) {
             console.error(error);
@@ -115,7 +124,7 @@ const DanhSachTruongHopBenh = () => {
     }
 
     useEffect(() => {
-        getTruongHopBenhList();
+        getTruongHopBenhList(true);
     }, [searchObject])
 
     useEffect(()=>{

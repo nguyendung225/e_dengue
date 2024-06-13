@@ -357,63 +357,67 @@ export const formatDataViewTHB = (data: TruongHopBenh) => {
         truongHopBenh: {
             ...data?.truongHopBenh,
             capDoBenh: {
-                id: data?.truongHopBenh.capDoBenhId,
-                tenCapDo: data?.truongHopBenh.capDoBenhTen
+                id: data?.truongHopBenh?.capDoBenhId,
+                tenCapDo: data?.truongHopBenh?.capDoBenhTen
+            },
+            capDoBenhRaVien: {
+                id: data?.truongHopBenh?.capDoBenhRaVienId,
+                tenCapDo: data?.truongHopBenh?.capDoBenhRaVienTen
             },
             benhVienChuyenToi: {
-                id: data?.truongHopBenh.benhVienChuyenToiId,
-                tenCoSo: data?.truongHopBenh.benhVienChuyenToiTen
+                id: data?.truongHopBenh?.benhVienChuyenToiId,
+                tenCoSo: data?.truongHopBenh?.benhVienChuyenToiTen
             },
             donViXetNghiemObject: {
-                id: data?.truongHopBenh.donViXetNghiem,
-                tenCoSo: data?.truongHopBenh.donViXetNghiemTen
+                id: data?.truongHopBenh?.donViXetNghiem,
+                tenCoSo: data?.truongHopBenh?.donViXetNghiemTen
             },
             donViCongTacNbc: {
-                id: data?.truongHopBenh.donViCongTacNbcId,
-                tenCoSo: data?.truongHopBenh.donViCongTacNbcTen
+                id: data?.truongHopBenh?.donViCongTacNbcId,
+                tenCoSo: data?.truongHopBenh?.donViCongTacNbcTen
             },
             coSoDieuTri: {
-                id: data?.truongHopBenh.coSoDieuTriId,
-                tenCoSo: data?.truongHopBenh.coSoDieuTriTen
+                id: data?.truongHopBenh?.coSoDieuTriId,
+                tenCoSo: data?.truongHopBenh?.coSoDieuTriTen
             },
             coSoQuanLy: {
-                id: data?.truongHopBenh.coSoQuanLyId,
-                tenCoSo: data?.truongHopBenh.coSoQuanLyTen
+                id: data?.truongHopBenh?.coSoQuanLyId,
+                tenCoSo: data?.truongHopBenh?.coSoQuanLyTen
             }
         },
         doiTuongMacBenh: {
             ...data?.doiTuongMacBenh,
             ngheNghiep: {
-                id: data?.doiTuongMacBenh.ngheNghiepId,
-                tenNghe: data?.doiTuongMacBenh.ngheNghiepTen
+                id: data?.doiTuongMacBenh?.ngheNghiepId,
+                tenNghe: data?.doiTuongMacBenh?.ngheNghiepTen
             },
             danToc: {
-                id: data?.doiTuongMacBenh.danTocId,
-                tenDanToc: data?.doiTuongMacBenh.danTocTen
+                id: data?.doiTuongMacBenh?.danTocId,
+                tenDanToc: data?.doiTuongMacBenh?.danTocTen
             },
             tinhHienNay: {
-                id: data?.doiTuongMacBenh.tinhIdHienNay,
-                tenTinh: data?.doiTuongMacBenh.tinhTenHienNay
+                id: data?.doiTuongMacBenh?.tinhIdHienNay,
+                tenTinh: data?.doiTuongMacBenh?.tinhTenHienNay
             },
             huyenHienNay: {
-                id: data?.doiTuongMacBenh.huyenIdHienNay,
-                tenHuyen: data?.doiTuongMacBenh.huyenTenHienNay
+                id: data?.doiTuongMacBenh?.huyenIdHienNay,
+                tenHuyen: data?.doiTuongMacBenh?.huyenTenHienNay
             },
             xaHienNay: {
-                xaId: data?.doiTuongMacBenh.xaIdHienNay,
-                tenXa: data?.doiTuongMacBenh.xaTenHienNay
+                xaId: data?.doiTuongMacBenh?.xaIdHienNay,
+                tenXa: data?.doiTuongMacBenh?.xaTenHienNay
             },
             tinhThuongTru: {
-                id: data?.doiTuongMacBenh.tinhIdThuongTru,
-                tenTinh: data?.doiTuongMacBenh.tinhTenThuongTru
+                id: data?.doiTuongMacBenh?.tinhIdThuongTru,
+                tenTinh: data?.doiTuongMacBenh?.tinhTenThuongTru
             },
             huyenThuongTru: {
-                id: data?.doiTuongMacBenh.huyenIdThuongTru,
-                tenHuyen: data?.doiTuongMacBenh.huyenTenThuongTru
+                id: data?.doiTuongMacBenh?.huyenIdThuongTru,
+                tenHuyen: data?.doiTuongMacBenh?.huyenTenThuongTru
             },
             xaThuongTru: {
-                xaId: data?.doiTuongMacBenh.xaIdThuongTru,
-                tenXa: data?.doiTuongMacBenh.xaTenThuongTru
+                xaId: data?.doiTuongMacBenh?.xaIdThuongTru,
+                tenXa: data?.doiTuongMacBenh?.xaTenThuongTru
             }
         }
     };

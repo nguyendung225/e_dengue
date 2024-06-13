@@ -56,10 +56,9 @@ const DanhSachODich = () => {
                 <OCTTable
                     id="profile"
                     data={oDichList}
-                    columns={dsOBenhColumns}
+                    columns={dsOBenhColumns()}
                     searchObject={searchObject}
                     setSearchObject={setSearchObj}
-                    type={TYPE.SINGLE}
                     fixedColumnsCount={0}
                     notDelete={true}
                     notEdit={true}

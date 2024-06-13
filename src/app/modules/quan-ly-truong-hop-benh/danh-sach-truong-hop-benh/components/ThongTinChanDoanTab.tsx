@@ -77,15 +77,28 @@ const ThongTinChanDoanTab = ({ onlyView }: Props) => {
     return (
         <>
             <Row className='spaces mt-24'>
-                <Col xl={4}>
+                <Col xl={6}>
                     <OCTAutocomplete
                         lable="Phân độ lâm sàng/ Phân loại thể bệnh"
                         searchFunction={getListDmCapDoBenh}
                         urlData='data.data'
-                        getOptionLabel={(option) => option.tenCapDo}
+                        getOptionLabel={(option) => option?.tenCapDo}
                         options={[]}
                         value={values.truongHopBenh?.capDoBenh}
                         onChange={(option) => setFieldValue("truongHopBenh.capDoBenh", option)}
+                        searchObject={{}}
+                        isDisabled={onlyView}
+                    />
+                </Col>
+                <Col xl={6}>
+                    <OCTAutocomplete
+                        lable="Phân độ lâm sàng/ Phân loại thể bệnh ra viện"
+                        searchFunction={getListDmCapDoBenh}
+                        urlData='data.data'
+                        getOptionLabel={(option) => option?.tenCapDo}
+                        options={[]}
+                        value={values.truongHopBenh?.capDoBenhRaVien}
+                        onChange={(option) => setFieldValue("truongHopBenh.capDoBenhRaVien", option)}
                         searchObject={{}}
                         isDisabled={onlyView}
                     />

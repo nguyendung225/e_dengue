@@ -61,8 +61,4 @@ export const updateXacNhanTrangThaiTHB = (id: number, data: any) => {
     return axios.put(url, data)
 }
 
-export const addNewOdich = (data: IThongTinODich) => {
-    let url = API_URL + "o-dich";
-    return axios.post(url, data);
-}
 

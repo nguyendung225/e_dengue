@@ -1,16 +1,21 @@
-import { OCTKTSVG } from "@oceantech/oceantech-ui"
+import { OCTKTSVG, OCTTable } from "@oceantech/oceantech-ui"
 import { useFormikContext } from "formik"
 import { Button } from "react-bootstrap"
-import TableCustom from "../../component/table/table-custom/TableCustom"
 import { dsBienPhapPhongChongColumns, INITIAL_BIEN_PHAP_TRIEN_KHAI } from "../constants/constants"
 import { IThongTinODich } from "../models/quanLyODichModels"
 
 const BienPhapPhongChongBox = () => {
-    const { values, handleChange, setValues, setFieldValue } = useFormikContext<IThongTinODich>()
+    const { values, handleChange, setValues, setFieldValue, errors, touched } = useFormikContext<IThongTinODich>()
 
     const handleAddRow = () => {
         setValues(prev => {
-            return { ...prev, bienPhapTrienKhaiList: [...prev.bienPhapTrienKhaiList, INITIAL_BIEN_PHAP_TRIEN_KHAI] }
+            return {
+                ...prev,
+                bienPhapTrienKhaiList: [
+                    ...prev.bienPhapTrienKhaiList,
+                    { ...INITIAL_BIEN_PHAP_TRIEN_KHAI }
+                ]
+            }
         });
     };
 
@@ -35,15 +40,16 @@ const BienPhapPhongChongBox = () => {
                 </Button>
             </div>
             <div className="border-top spaces pt-10">
-                <TableCustom
-                    updatePageData={() => { }}
+                <OCTTable
                     id="bien-phap-phong-chong"
                     data={values?.bienPhapTrienKhaiList}
                     columns={dsBienPhapPhongChongColumns({
                         handleDeleteRow,
                         handleChange,
                         values,
-                        setFieldValue
+                        setFieldValue,
+                        errors,
+                        touched
                     })}
                     notDelete={true}
                     notEdit={true}

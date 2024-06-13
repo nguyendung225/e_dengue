@@ -126,7 +126,7 @@ const SearchAdvanceForm = () => {
                             name="ngheNghiepId"
                             options={[]}
                             value={values?.ngheNghiepId}
-                            getOptionLabel={(option) => option.tenNghe}
+                            getOptionLabel={(option) => option?.tenNghe}
                             searchObject={{}}
                             searchFunction={getListNgheNghiep}
                             urlData="data.data"
@@ -155,8 +155,8 @@ const SearchAdvanceForm = () => {
                         />
                         <OCTAutocomplete
                             isMulti
-                            getOptionLabel={(option) => option.name}
-                            getOptionValue={option => option.code}
+                            getOptionLabel={(option) => option?.name}
+                            getOptionValue={option => option?.code}
                             menuPlacement="bottom"
                             onChange={(selectedOption) =>
                                 setFieldValue("listTinhTrangHienNay", selectedOption)
@@ -194,7 +194,7 @@ const SearchAdvanceForm = () => {
                                 options={[]}
                                 value={values.tinhId}
                                 isDisabled={roleUser === authRoles.TINH || roleUser === authRoles.HUYEN || roleUser === authRoles.XA}
-                                getOptionLabel={(option) => option.tenTinh}
+                                getOptionLabel={(option) => option?.tenTinh}
                                 searchObject={{}}
                                 searchFunction={getListTinh}
                                 urlData='data.data'
@@ -220,7 +220,7 @@ const SearchAdvanceForm = () => {
                                 options={[]}
                                 value={values?.huyenId}
                                 isDisabled={roleUser === authRoles.HUYEN || roleUser === authRoles.XA}
-                                getOptionLabel={(option) => option.tenHuyen}
+                                getOptionLabel={(option) => option?.tenHuyen}
                                 searchObject={{}}
                                 searchFunction={() =>  values?.tinhId?.id && getListHuyenByTinhId(values?.tinhId?.id)}
                                 dependencies={[values?.tinhId]}
@@ -243,7 +243,7 @@ const SearchAdvanceForm = () => {
                                 options={[]}
                                 value={values?.xaId}
                                 isDisabled={roleUser === authRoles.XA}
-                                getOptionLabel={(option) => option.tenXa}
+                                getOptionLabel={(option) => option?.tenXa}
                                 searchObject={{}}
                                 searchFunction={() =>  values?.huyenId?.id  && getListXaByHuyenId(values?.huyenId?.id)}
                                 dependencies={[values?.huyenId]}
@@ -472,7 +472,7 @@ const SearchAdvanceForm = () => {
                                         name="donViThucHienXn"
                                         options={[]}
                                         value={values?.donViThucHienXn}
-                                        getOptionLabel={(option) => option.tenDonVi}
+                                        getOptionLabel={(option) => option?.tenDonVi}
                                         searchObject={{}}
                                         searchFunction={getListDmDonViThucHienXetNghiem}
                                         urlData='data.data'
