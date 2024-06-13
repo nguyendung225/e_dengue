@@ -48,7 +48,7 @@ const ModalPhieuIn = ({show, handleCloseDialog, children, title, size, stylePrin
         </Modal.Body>
 
         <Modal.Footer className="py-3">
-          <Button className='btn-outline' onClick={handleCloseDialog}>
+          <Button className='button-primary' onClick={handleCloseDialog}>
             Hủy
           </Button>
 

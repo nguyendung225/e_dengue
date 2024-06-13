@@ -1,3 +1,4 @@
+import { color } from "echarts"
 import { OptionReactSelect } from "../models/models"
 
 export const RESPONSE_STATUS_CODE = {
@@ -337,6 +338,14 @@ export const STATUS_THB = {
 }
 
 export const printStyles = {
+    color: {
+        dark_red: {
+            color: "#DC3545"
+        },
+        primary: {
+            color: "#1a5e83"
+        }
+    },
 	box_square: {
 		display: "inline-block",
 		border: "1px solid #333",
@@ -387,8 +396,17 @@ export const printStyles = {
 		},
         _100persent: {
             width: "100%",
+        },
+        _100: {
+            width: "100px"
+        },
+        _45: {
+            width: "50px"
         }
-	},
+    },
+    margin_x_auto: {
+        margin: "0 auto"
+    },
     marginLeft: {
         _10px: {
             marginLeft: "10px",
@@ -422,11 +440,20 @@ export const printStyles = {
 			marginBottom: "80px",
 		},
 	},
-	fontSize: {
-		_15px: {
-			fontSize: "15px",
-		}
-	},
+    fontSize: {
+        _14px: {
+            fontSize: "14px",
+        },
+        _15px: {
+            fontSize: "15px",
+        },
+        _16px: {
+            fontSize: "16px",
+        },
+        _18px: {
+            fontSize: "18px",
+        },
+    },
 	fontWeight: {
 		bold: {
 			fontWeight: "bold",
@@ -449,6 +476,9 @@ export const printStyles = {
 	},
 	text_center: {
 		textAlign: "center" as "center",
+	},
+	text_start: {
+		textAlign: "start" as "start",
 	},
 	header: {
 		fontWeight: "bold",
@@ -476,7 +506,13 @@ export const printStyles = {
     },
     border: {
         top_gray: {
-            borderTop: "1px solid #333"
+            borderTop: "1px solid #333",
+        },
+        black: {
+            border: "1px solid #000",
+        },
+        collapse: {
+            borderCollapse: "collapse" as "collapse"
         }
     },
     imageContainer: {
@@ -484,5 +520,10 @@ export const printStyles = {
         flexWrap: "wrap" as "wrap",
         justifyContent: "space-between",
         gap: "10px",
-    }
+    },
+    padding: {
+        _10: {
+            paddingLeft: "10px"
+        }
+    },
 };
