@@ -51,7 +51,7 @@ const TimKiemTruongHopBenh = (props: Props) => {
       phanLoaiQuanLy: searchObj?.phanLoaiQuanLy?.code,
       tinhId: searchObj.tinhId?.id,
       huyenId: searchObj.huyenId?.id,
-      xaId: searchObj.xaId?.id,
+      xaId: searchObj.xaId?.xaId,
       coSoGhiNhanId: searchObj.coSoGhiNhanId?.id,
       kqXetNghiem: searchObj.kqXetNghiem?.code,
       donViThucHienXn: searchObj.donViThucHienXn?.id,

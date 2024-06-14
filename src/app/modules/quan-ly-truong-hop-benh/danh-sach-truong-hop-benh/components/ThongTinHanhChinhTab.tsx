@@ -15,6 +15,9 @@ import { TruongHopBenh } from '../model/Model';
 import { toast } from 'react-toastify';
 import DanhSachTHBModal from './DanhSachTHB';
 import { formatDataViewTHB } from './../../../utils/FunctionUtils';
+import { localStorageItem } from '../../../utils/LocalStorage';
+import { KEY_LOCALSTORAGE } from '../../../auth/core/_consts';
+import { authRoles } from '../../../auth/authRoles';
 type Props = {
     onlyView?: boolean
 }
@@ -33,6 +36,38 @@ const ThongTinHanhChinhTab = ({ onlyView }: Props) => {
     const [dSCheckTrung, setDSCheckTrung] = useState<any[]>([])
     const [openModalDS, setOpenModalDS] = useState(false)
     const [configTable, setConfigTable] = useState<any>({});
+    const userData = localStorageItem.get(KEY_LOCALSTORAGE.USER_INFOMATION)
+    
+    useEffect(() => {
+      setDataCheckTrung({
+        ...dataCheckTrung,
+        TinhId: dataCheckTrung?.TinhId
+          ? dataCheckTrung?.TinhId
+          : userData?.tinhInfo?.id,
+        HuyenId: dataCheckTrung?.HuyenId
+          ? dataCheckTrung?.HuyenId
+          : userData?.huyenInfo?.id,
+        XaId: dataCheckTrung?.XaId
+          ? dataCheckTrung?.XaId
+          : userData?.xaInfo?.xaId,
+      });
+
+      setValues({
+        ...values,
+        doiTuongMacBenh: {
+          ...values?.doiTuongMacBenh,
+          tinhHienNay: values?.doiTuongMacBenh?.tinhHienNay
+            ? values?.doiTuongMacBenh?.tinhHienNay
+            : userData?.tinhInfo,
+          huyenHienNay: values?.doiTuongMacBenh?.huyenHienNay
+            ? values?.doiTuongMacBenh?.huyenHienNay
+            : userData?.huyenInfo,
+          xaHienNay: values?.doiTuongMacBenh?.xaHienNay
+            ? values?.doiTuongMacBenh?.xaHienNay
+            : userData?.xaInfo,
+        },
+      });
+    }, []);
 
     const handleCheckTrung = async (params: CheckTrungParams) => {
         try {
@@ -301,9 +336,9 @@ const ThongTinHanhChinhTab = ({ onlyView }: Props) => {
                     onChange={(option) => handleChangeTinhHienNay(option)}
                     isRequired
                     value={values.doiTuongMacBenh?.tinhHienNay}
-                    errors={errors.doiTuongMacBenh?.tinhHienNay}
+                    errors={errors.doiTuongMacBenh?.tinhHienNay || ""}
                     touched={touched.doiTuongMacBenh?.tinhHienNay}
-                    isDisabled={onlyView}
+                    isDisabled={userData?.username === authRoles.TINH || userData?.username === authRoles.HUYEN || userData?.username === authRoles.XA || onlyView}
 
                 />
             </Col>
@@ -317,7 +352,7 @@ const ThongTinHanhChinhTab = ({ onlyView }: Props) => {
                     options={[]}
                     searchObject={{}}
                     value={values.doiTuongMacBenh?.huyenHienNay}
-                    isDisabled={!values.doiTuongMacBenh?.tinhHienNay || onlyView}
+                    isDisabled={userData?.username === authRoles.HUYEN || userData?.username === authRoles.XA || !values.doiTuongMacBenh?.tinhHienNay?.id || onlyView}
                     onChange={(option) => handleChangeHuyenHienNay(option)}
                     dependencies={[values.doiTuongMacBenh?.tinhHienNay]}
                     isRequired
@@ -335,7 +370,7 @@ const ThongTinHanhChinhTab = ({ onlyView }: Props) => {
                     options={[]}
                     searchObject={{}}
                     value={values.doiTuongMacBenh?.xaHienNay}
-                    isDisabled={!values.doiTuongMacBenh?.huyenHienNay || onlyView}
+                    isDisabled={userData?.username === authRoles.XA || !values.doiTuongMacBenh?.huyenHienNay?.id || onlyView}
                     onChange={handleChangeXaHienNay}
                     dependencies={[values?.doiTuongMacBenh?.huyenHienNay]}
                     isRequired
@@ -354,6 +389,9 @@ const ThongTinHanhChinhTab = ({ onlyView }: Props) => {
                     value={values.doiTuongMacBenh?.diaChiThuongTru}
                     name="doiTuongMacBenh.diaChiThuongTru"
                     onChange={handleChange}
+                    isRequired
+                    errors={errors.doiTuongMacBenh?.diaChiThuongTru}
+                    touched={touched.doiTuongMacBenh?.diaChiThuongTru}
                     disabled={onlyView}
                 />
             </Col>
@@ -370,9 +408,11 @@ const ThongTinHanhChinhTab = ({ onlyView }: Props) => {
                     onChange={(option) => {
                         handleChangeTinh(setValues, 'doiTuongMacBenh', 'tinhThuongTru', 'huyenThuongTru', "xaThuongTru", option)
                     }}
+                    isRequired
                     isDisabled={onlyView}
                     value={values.doiTuongMacBenh?.tinhThuongTru}
-
+                    errors={errors.doiTuongMacBenh?.tinhThuongTru}
+                    touched={touched.doiTuongMacBenh?.tinhThuongTru}
                 />
             </Col>
             <Col xl={3}>
@@ -389,6 +429,9 @@ const ThongTinHanhChinhTab = ({ onlyView }: Props) => {
                     onChange={(option) => {
                         handleChangeHuyen(setValues, 'doiTuongMacBenh', 'huyenThuongTru', 'xaThuongTru', option)
                     }}
+                    isRequired
+                    errors={errors.doiTuongMacBenh?.huyenThuongTru}
+                    touched={touched.doiTuongMacBenh?.huyenThuongTru}
                     dependencies={[values.doiTuongMacBenh?.tinhThuongTru]}
                 />
             </Col>
@@ -406,6 +449,9 @@ const ThongTinHanhChinhTab = ({ onlyView }: Props) => {
                     onChange={(option) => {
                         handleChangeXa(setValues, 'doiTuongMacBenh', 'xaThuongTru', option)
                     }}
+                    isRequired
+                    errors={errors.doiTuongMacBenh?.xaThuongTru}
+                    touched={touched.doiTuongMacBenh?.xaThuongTru}
                     dependencies={[values.doiTuongMacBenh?.huyenThuongTru]}
                 />
             </Col>

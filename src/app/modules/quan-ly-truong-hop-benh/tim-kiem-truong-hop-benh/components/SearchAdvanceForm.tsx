@@ -1,7 +1,7 @@
 import { OCTAutocomplete, OCTTextValidator } from "@oceantech/oceantech-ui"
 import { Button, Col, Row } from "react-bootstrap"
 import { KTSVG } from "../../../../../_metronic/helpers"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useFormikContext } from "formik";
 import { SearchObjectModel } from "../../models/TimKiemTruongHopBenhModels";
@@ -18,7 +18,17 @@ const SearchAdvanceForm = () => {
     const location = useLocation();
     const { values, handleChange, errors, touched, setFieldValue, setValues } = useFormikContext<SearchObjectModel>();
     const roleUser = localStorageItem.get(KEY_LOCALSTORAGE.USER_INFOMATION)?.username;
+    const userData = localStorageItem.get(KEY_LOCALSTORAGE.USER_INFOMATION)
     
+    useEffect(() => {
+      setValues({
+        ...values,
+        tinhId: userData?.tinhInfo,
+        huyenId: userData?.huyenInfo,
+        xaId: userData?.xaInfo
+      });
+    }, []);
+
     return (
         <>
             {location.pathname === "/tim-kiem-truong-hop-benh" && (
@@ -219,8 +229,8 @@ const SearchAdvanceForm = () => {
                                 name="huyenId"
                                 options={[]}
                                 value={values?.huyenId}
-                                isDisabled={roleUser === authRoles.HUYEN || roleUser === authRoles.XA}
-                                getOptionLabel={(option) => option?.tenHuyen}
+                                isDisabled={roleUser === authRoles.HUYEN || roleUser === authRoles.XA || !values?.tinhId?.id}
+                                getOptionLabel={(option) => option.tenHuyen}
                                 searchObject={{}}
                                 searchFunction={() =>  values?.tinhId?.id && getListHuyenByTinhId(values?.tinhId?.id)}
                                 dependencies={[values?.tinhId]}
@@ -242,8 +252,8 @@ const SearchAdvanceForm = () => {
                                 name="xaId"
                                 options={[]}
                                 value={values?.xaId}
-                                isDisabled={roleUser === authRoles.XA}
-                                getOptionLabel={(option) => option?.tenXa}
+                                isDisabled={roleUser === authRoles.XA || !values?.huyenId?.id}
+                                getOptionLabel={(option) => option.tenXa}
                                 searchObject={{}}
                                 searchFunction={() =>  values?.huyenId?.id  && getListXaByHuyenId(values?.huyenId?.id)}
                                 dependencies={[values?.huyenId]}

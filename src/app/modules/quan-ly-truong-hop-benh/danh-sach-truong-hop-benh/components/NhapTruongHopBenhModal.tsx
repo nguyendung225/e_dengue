@@ -36,7 +36,6 @@ const NhapTruongHopBenhModal = (props: TProps) => {
                 coSoQuanLyId: data?.truongHopBenh?.coSoQuanLy?.id,
                 donViCongTacNbcId: data?.truongHopBenh?.donViCongTacNbc?.id,
                 capDoBenhRaVienId: data?.truongHopBenh?.capDoBenhRaVien?.id
-
             },
             doiTuongMacBenh: {
                 ...data?.doiTuongMacBenh,
@@ -74,6 +73,7 @@ const NhapTruongHopBenhModal = (props: TProps) => {
             centered
             animation
             size="xl"
+            backdrop="static"
         >
             <Modal.Header closeButton>
                 <Modal.Title>

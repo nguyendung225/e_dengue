@@ -108,10 +108,10 @@ export const CONFIG_BY_CURRENT_STATUS = {
 }
 
 export const TYPE_TEST_CODE = {
-    LOAI_TEST_NHANH: '0',
-    LOAI_MAC_ELISA: '1',
-    LOAI_PCR: '2',
-    LOAI_KHAC: '3',
+    LOAI_TEST_NHANH: 0,
+    LOAI_MAC_ELISA: 1,
+    LOAI_PCR: 2,
+    LOAI_KHAC: 3,
 }
 
 export const CONFIG_BY_TYPE_TEST = {
