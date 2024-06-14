@@ -33,6 +33,8 @@ export enum TYPE {
     WORD = "WORD",
     PDF = "PDF",
     IMAGE_PNG = "image/png",
+    MONEY = "MONEY",
+    NUMBER_FLOAT = "NUMBER_FLOAT"
 }
 
 export enum EXTENSIONS {

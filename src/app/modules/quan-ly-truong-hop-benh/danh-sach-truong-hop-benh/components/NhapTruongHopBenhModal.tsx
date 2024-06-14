@@ -26,9 +26,47 @@ const NhapTruongHopBenhModal = (props: TProps) => {
     }, [activeTab]);
 
     const formatData = (data: TruongHopBenh): TruongHopBenh => {
+        const {
+			donViXetNghiemObject,
+			coSoDieuTri,
+			coSoQuanLy,
+			benhVienChuyenToi,
+			donViCongTacNbc,
+			benhVienChuyenToiTen,
+            capDoBenh,
+			capDoBenhRaVien,
+			capDoBenhTen,
+			coSoQuanLyTen,
+			coSoDieuTriTen,
+			capDoBenhRaVienTen,
+			donViXetNghiemTen,
+			donViCongTacNbcTen,
+			...thbRest
+		} = data.truongHopBenh;
+
+        const {
+            ngheNghiep,
+            danToc,
+            huyenHienNay,
+            tinhHienNay, 
+            xaHienNay,
+            tinhThuongTru,
+            huyenThuongTru,
+            xaThuongTru,
+            danTocTen,
+            ngheNghiepTen,
+            huyenTenHienNay,
+            huyenTenThuongTru,
+            xaTenThuongTru,
+            xaTenHienNay,
+            tinhTenHienNay,
+            tinhTenThuongTru,
+            ...dtbmRest
+        } = data.doiTuongMacBenh;
+
         return {
             truongHopBenh: {
-                ...data?.truongHopBenh,
+                ...thbRest,
                 capDoBenhId: data?.truongHopBenh?.capDoBenh?.id,
                 benhVienChuyenToiId: data?.truongHopBenh?.benhVienChuyenToi?.id,
                 donViXetNghiem: data?.truongHopBenh?.donViXetNghiemObject?.id,
@@ -38,7 +76,7 @@ const NhapTruongHopBenhModal = (props: TProps) => {
                 capDoBenhRaVienId: data?.truongHopBenh?.capDoBenhRaVien?.id
             },
             doiTuongMacBenh: {
-                ...data?.doiTuongMacBenh,
+                ...dtbmRest,
                 ngheNghiepId: data?.doiTuongMacBenh?.ngheNghiep?.id,
                 danTocId: data?.doiTuongMacBenh?.danToc?.id,
                 huyenIdHienNay: data?.doiTuongMacBenh?.huyenHienNay?.id,

@@ -35,7 +35,7 @@ export interface truongHopBenh {
     trangThaiPhanHoi: number | null;
     trangThaiTheoDoi: number | null;
     capDoBenhRaVienId: string | null;
-    capDoBenhRaVienTen: string | null;
+    capDoBenhRaVienTen?: string | null;
     //object
     capDoBenhRaVien?: any
     noiPhatHien: string | null;

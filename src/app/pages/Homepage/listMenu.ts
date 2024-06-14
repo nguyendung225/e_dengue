@@ -69,4 +69,21 @@ export const allMenu: TMenu[] = [
       },
     ]
   },
+{
+    title: "Báo cáo",
+    to: "/bao-cao-tuan",
+    name: "danh-sach-o-dich",
+    permission: PERMISSIONS.SU_CO,
+    ability: PERMISSION_ABILITY.VIEW,
+    subMenu: [
+        {
+            title: "Danh sách báo cáo tuần",
+            to: "/bao-cao-tuan",
+            hasBullet: false,
+            icon: "/media/svg/icons/list-ul.svg",
+            permission: PERMISSIONS.THONG_KE,
+            ability: PERMISSION_ABILITY.VIEW,
+        }
+    ]
+},
 ]
