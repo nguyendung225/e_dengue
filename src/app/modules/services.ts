@@ -1,4 +1,5 @@
 import axios from "axios";
+import { paramsConfig } from "./utils/ParamsUtils";
 const API_URL = process.env.REACT_APP_API_URL;
 
 export const getListBenhChanDoan = () => {
@@ -120,4 +121,14 @@ export const getListCoSoDieuTri = (params: any) => {
 export const getListCoSoBaoCao = (params: any) => {
     let url = API_URL + `co-so/co-so-bao-cao/${params?.keyword}`;
     return axios.get(url);
+}
+
+export const getListTuanTrongNam = (params: any) => {
+    let url = API_URL + `common/week-of-year`;
+    return axios.get(url, paramsConfig(params));
+}
+
+export const getListNgayTrongTuan = (params: any) => {
+    let url = API_URL + `common/day-in-week`;
+    return axios.get(url, paramsConfig(params));
 }

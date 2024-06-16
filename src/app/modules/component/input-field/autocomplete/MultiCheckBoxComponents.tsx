@@ -50,7 +50,6 @@ const MenuList = (props: any) => {
 };
 
 const CustomMultiValue = ({ index, getValue, children, selectProps }: any) => {
-    console.log(selectProps)
 
     const values = getValue();
     if (index === 0) {
