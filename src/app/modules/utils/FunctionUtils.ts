@@ -4,7 +4,7 @@ import { useIntl } from "react-intl";
 import { toast } from "react-toastify";
 import { IItemSearch } from "../profile/models/ProfileModels";
 import { localStorageItem } from "./LocalStorage";
-import { NUMBER_EXCEPT_THIS_SYMBOLS, TYPE, VARIABLE_STRING, EXTENSIONS } from "./Constant";
+import { NUMBER_EXCEPT_THIS_SYMBOLS, TYPE, VARIABLE_STRING, EXTENSIONS, CHECK_NULL_INFO } from "./Constant";
 import { TMenu, allMenu } from "../../pages/Homepage/listMenu";
 import { RESPONSE_STATUS_CODE } from "./Constant";
 import generatePDF, { Options } from "react-to-pdf";
@@ -418,7 +418,13 @@ export const formatDataViewTHB = (data: TruongHopBenh) => {
             xaThuongTru: {
                 xaId: data?.doiTuongMacBenh?.xaIdThuongTru,
                 tenXa: data?.doiTuongMacBenh?.xaTenThuongTru
-            }
+            },
+            ...(data?.doiTuongMacBenh?.dienThoai === CHECK_NULL_INFO.NULL_PHONE
+                ? { dienThoai: "", haveDienThoai: false }
+                : {}),
+            ...(data?.doiTuongMacBenh.cmnd === CHECK_NULL_INFO.NULL_CMND
+                ? { cmnd: "", haveCmnd: false }
+                : {}),
         }
     };
     return newData

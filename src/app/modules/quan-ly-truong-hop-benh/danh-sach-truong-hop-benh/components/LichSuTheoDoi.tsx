@@ -17,6 +17,9 @@ const LichSuTheoDoi = () => {
                 const res = await getThongTinTheoDoi(id);
                 setdata(res?.data?.data?.thbLichSuTheoDoi)
             }
+            else {
+                setdata([])
+            }
         } catch (error) {
             console.error(error);
             toast.error(error as string);
@@ -39,6 +42,7 @@ const LichSuTheoDoi = () => {
                     notEdit={true}
                     noToolbar={true}
                     unSelectedAll={true}
+                    noPagination
                 />
             </div>
         </div>

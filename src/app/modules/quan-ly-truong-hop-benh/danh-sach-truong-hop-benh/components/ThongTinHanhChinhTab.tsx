@@ -10,7 +10,7 @@ import { calculateAge } from '../../../utils/AppFunction';
 import { handleChangeHuyen, handleChangeTinh, handleChangeXa, handleSetConfigTable, haveInfomation } from '../../../utils/FunctionUtils';
 import { CheckTrungParams, INIT_VALUE_CHECK_TRUNG } from '../../models/TimKiemTruongHopBenhModels';
 import { checkTrungTruongHopBenh } from '../../tim-kiem-truong-hop-benh/services/TimKiemThbServices';
-import { CMND_CHECK_TRUNG, GENDER_OPT } from '../constants/constant';
+import { CMND_CHECK_TRUNG, GENDER_OPT, renderTrangThaiPhanHoi } from '../constants/constant';
 import { TruongHopBenh } from '../model/Model';
 import { toast } from 'react-toastify';
 import DanhSachTHBModal from './DanhSachTHB';
@@ -173,8 +173,21 @@ const ThongTinHanhChinhTab = ({ onlyView }: Props) => {
 
     return (
         <Row>
-            <Col xl={12}>
-                {values?.doiTuongMacBenh?.maSo && <div className='fw-bold spaces mt-12'>MÃ SỐ : {values?.doiTuongMacBenh?.maSo}</div>}
+            <Col xl={6}>
+                {values?.doiTuongMacBenh?.maSo && (
+                    <div className="fw-bold spaces mt-18">
+                        MÃ SỐ : {values?.doiTuongMacBenh?.maSo}
+                    </div>
+                )}
+            </Col>
+            <Col xl={6}>
+                <div className="spaces mt-18">
+                    {renderTrangThaiPhanHoi(
+                        values?.truongHopBenh?.trangThaiPhanHoi as number,
+                        values?.truongHopBenh?.ngayTao as string,
+                        true
+                    )}
+                </div>
             </Col>
             <Col xl={3}>
                 <OCTTextValidator

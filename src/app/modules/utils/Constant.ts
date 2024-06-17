@@ -532,3 +532,9 @@ export const printStyles = {
         }
     },
 };
+
+//BE tra ra 1 neu field bang null
+export const CHECK_NULL_INFO = {
+    NULL_PHONE: "1",
+    NULL_CMND: "1"
+}
