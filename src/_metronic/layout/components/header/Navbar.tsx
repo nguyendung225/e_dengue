@@ -15,7 +15,7 @@ const Navbar = () => {
   useEffect(() => {
     if (!accessTokenDecode) return;
     setAccessTokenInfo(JSON.parse(accessTokenDecode));
-  },[accessTokenDecode, accessTokenInfo])
+  },[accessTokenDecode])
 
   return (
     <div className='app-navbar flex-shrink-0'>

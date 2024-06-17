@@ -1,7 +1,7 @@
 import { OCTKTSVG, OCTTable } from "@oceantech/oceantech-ui";
 import "./styles/danhSachThb.scss";
 import { TYPE } from "../../utils/Constant";
-import { danhSachThbColumns, getExportedFileList,TRANG_THAI_PHAN_HOI, INIT_TRUONG_HOP_BENH } from "./constants/constant";
+import { danhSachThbColumns, getExportedFileList,TRANG_THAI_PHAN_HOI, INIT_TRUONG_HOP_BENH, HINH_THUC_CO_SO } from "./constants/constant";
 import { Button } from "react-bootstrap";
 import InputSearch from "../../component/input-field/InputSearch";
 import ThongTinThb from "./components/ThongTinThb";
@@ -157,7 +157,15 @@ const DanhSachTruongHopBenh = () => {
     useEffect(()=>{
         setExportedFileList(getExportedFileList(dataRow, setPageLoading));
     }, [dataRow])
-    
+
+    const isChuaXacNhanOrXacNhanSaiThongTin = [
+        TRANG_THAI_PHAN_HOI.CHUA_XAC_NHAN,
+        TRANG_THAI_PHAN_HOI.XN_SAI_THONG_TIN_HANH_CHINH,
+        TRANG_THAI_PHAN_HOI.XN_SAI_THONG_TIN_CHAN_DOAN
+    ].includes(dataRow?.truongHopBenh?.trangThaiPhanHoi as number);
+    const isTuyenHuyenOrTuyenXa = userData?.phanLoaiCoSo === HINH_THUC_CO_SO.TuyenHuyen 
+    || userData?.phanLoaiCoSo === HINH_THUC_CO_SO.TuyenXa;
+
     return (
         <div className="page-container">
             <div className="left-content-container">
@@ -262,16 +270,11 @@ const DanhSachTruongHopBenh = () => {
                         <span className="title color-dark-red">Thông tin trường hợp bệnh</span>
                     </div>
                     <div className="d-flex spaces gap-10">
-                        {(userData?.username === authRoles.HUYEN || userData?.username === authRoles.TINH)
-                            && dataRow?.truongHopBenh?.trangThaiPhanHoi === TRANG_THAI_PHAN_HOI.CHUA_XAC_NHAN
-                            && 
-                                <Button
-                                    className={`button-primary ${userData?.username === authRoles.TINH ?  'disabled' : ''}`}
-                                    onClick={() => setShouldOpenXacNhanThbDialog(true)}
-                                >
-                                    Xác nhận
-                                </Button>
-                        }                    
+                        {isTuyenHuyenOrTuyenXa && isChuaXacNhanOrXacNhanSaiThongTin && (
+                            <Button className={"button-primary"} onClick={() => setShouldOpenXacNhanThbDialog(true)}>
+                                Xác nhận
+                            </Button>
+                        )}                 
                         {
                             dataRow?.truongHopBenh?.trangThaiPhanHoi !== TRANG_THAI_PHAN_HOI.DA_XN_DUNG && (
                                 <>

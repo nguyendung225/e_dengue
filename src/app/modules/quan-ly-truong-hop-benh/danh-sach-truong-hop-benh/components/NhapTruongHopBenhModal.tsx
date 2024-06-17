@@ -124,6 +124,7 @@ const NhapTruongHopBenhModal = (props: TProps) => {
                 initialValues={dataRow}
                 validationSchema={validationSchema}
                 onSubmit={handleSubmit}
+                enableReinitialize
             >
                 {formikProps => (
                     <Form noValidate>

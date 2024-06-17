@@ -466,3 +466,22 @@ export const getListYear = (tuNam: number, denNam: number) => {
 
   return listYear;
 };
+
+export function cmpNormalizeString(str1, str2) {
+    const formattedName1 = str1
+        .replace(/^(quận|huyện|Thành phố)\s+/i, "")
+        .trim()
+        .toLowerCase();
+    const formattedName2 = str2
+        .replace(/^(quận|huyện|Thành phố)\s+/i, "")
+        .trim()
+        .toLowerCase();
+    const normalizeString = (str) =>
+        str
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase();
+    const normalizedStr1 = normalizeString(formattedName1);
+    const normalizedStr2 = normalizeString(formattedName2);
+    return normalizedStr1 === normalizedStr2;
+}

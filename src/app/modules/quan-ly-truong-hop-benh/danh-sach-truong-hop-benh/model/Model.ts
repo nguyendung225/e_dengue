@@ -51,6 +51,8 @@ export interface truongHopBenh {
     donViCongTacNbcTen?: string | null;
     coSoDieuTriTen?: string | null;
     coSoQuanLyTen?: string | null;
+    kinhDo?: string | null;
+    viDo?: string | null;
 }
 
 export interface doiTuongMacBenh {
