@@ -1,7 +1,5 @@
 import axios from "axios";
 import { TruongHopBenh } from "../model/Model";
-import { IThongTinODich } from "../../../quan-ly-o-dich/models/quanLyODichModels";
-
 const API_URL = process.env.REACT_APP_API_URL;
 
 export const AddTruongHopBenh = (data: TruongHopBenh) => {
@@ -61,4 +59,59 @@ export const updateXacNhanTrangThaiTHB = (id: number, data: any) => {
     return axios.put(url, data)
 }
 
+export const exportFileMau = () => {
+    const url = API_URL + 'truong-hop-benh/import-excel/download-file-template'
+    return axios({
+        url: url,
+        method: "GET",
+        responseType: "blob",
+    });
+}
 
+export const exportFileHanhChinh = () => {
+    const url = API_URL + 'truong-hop-benh/import-excel/download-file-tinh-huyen-xa'
+    return axios({
+        url: url,
+        method: "GET",
+        responseType: "blob",
+    });
+}
+
+export const exportInvalidTHB = (id: string) => {
+    const url = API_URL + 'truong-hop-benh/import-excel/download-file-error'
+    return axios({
+        url: url,
+        method: "GET",
+        responseType: "blob",
+        params: { fileUploadId: id }
+    });
+}
+
+export const importValidTHB = (id: string) => {
+    const url = API_URL + 'truong-hop-benh/import-excel/save'
+    return axios({
+        url: url,
+        method: "GET",
+        responseType: "blob",
+        params: { fileUploadId: id }
+    });
+}
+
+export const fileUpload = (file: File) => {
+    let url = `${API_URL}truong-hop-benh/import-excel/upload-file`;
+    let formData = new FormData();
+    formData.append(`file`, file);
+    const config = {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    };
+    return axios.post(url, formData, config);
+};
+
+export const checkData = (id: string) => {
+    let url = API_URL + `truong-hop-benh/import-excel/check-data`;
+    return axios.get(url, {
+        params: { fileUploadId: id },
+    });
+}

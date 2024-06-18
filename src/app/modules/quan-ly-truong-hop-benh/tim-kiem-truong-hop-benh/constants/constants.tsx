@@ -27,7 +27,7 @@ export const truongHopBenhColumns = [
     cellStyle: {
       textAlign: "center",
     },
-    render: (rowData: any) => PHAN_LOAI_CHAN_DOAN.find((item) => item.code === rowData.phanLoaiChanDoan)?.name,
+    render: (rowData: any) => PHAN_LOAI_CHAN_DOAN.find((item) => item.code === rowData?.phanLoaiChanDoan)?.name,
   },
   {
     name: "Tình trạng hiện tại",
@@ -38,7 +38,7 @@ export const truongHopBenhColumns = [
     cellStyle: {
       textAlign: "left",
     },
-    render: (rowData: any) => TINH_TRANG_HIEN_NAY.find((item) => item.code === rowData.tinhTrangHienNay)?.name,
+    render: (rowData: any) => TINH_TRANG_HIEN_NAY.find((item) => item.code === rowData?.tinhTrangHienNay)?.name,
   },
   {
     name: "Tỉnh",
@@ -99,7 +99,7 @@ export const truongHopBenhColumns = [
     cellStyle: {
       textAlign: "center",
     },
-    render: (rowData: any) => rowData.ngayKhoiPhat && moment(rowData.ngayKhoiPhat).format("DD-MM-YYYY"),
+    render: (rowData: any) => rowData?.ngayKhoiPhat && moment(rowData?.ngayKhoiPhat).format("DD-MM-YYYY"),
   },
   {
     name: "Ngày nhập viện",
@@ -110,7 +110,7 @@ export const truongHopBenhColumns = [
     cellStyle: {
       textAlign: "center",
     },
-    render: (rowData: any) => rowData.ngayNhapVien && moment(rowData.ngayNhapVien).format("DD-MM-YYYY"),
+    render: (rowData: any) => rowData?.ngayNhapVien && moment(rowData?.ngayNhapVien).format("DD-MM-YYYY"),
   },
   {
     name: "Ngày báo cáo",
@@ -121,7 +121,7 @@ export const truongHopBenhColumns = [
     cellStyle: {
       textAlign: "center",
     },
-    render: (rowData: any) => rowData.ngayTao && moment(rowData.ngayTao).format("DD-MM-YYYY"),
+    render: (rowData: any) => rowData?.ngayTao && moment(rowData?.ngayTao).format("DD-MM-YYYY"),
   },
   {
     name: "TT",
@@ -261,4 +261,222 @@ export const PHAN_LOAI_QUAN_LY = [
     code: 4,
     name: "Cơ sở quản lý",
   },
+];
+
+export const truongHopBenhExcelColumns = [
+    {
+        name: "STT",
+        field: "stt",
+        render: (row: any, index: number, stt: number) => <span>{stt}</span>,
+    },
+    {
+        name: "Họ và tên",
+        field: "hoTen",
+        headerStyle: {
+            minWidth: "140px",
+        },
+        cellStyle: {
+            textAlign: "left",
+        },
+    },
+    {
+        name: "Mã số quản lý",
+        field: "maSoQuanLy",
+        headerStyle: {
+            minWidth: "140px",
+        },
+    },
+    {
+        name: "CMND",
+        field: "cmnd",
+        headerStyle: {
+            minWidth: "140px",
+        },
+    },
+
+    {
+        name: "Ngày sinh",
+        field: "ngaySinh",
+        headerStyle: {
+            minWidth: "140px",
+        },
+    },
+    {
+        name: "Giới tính",
+        field: "gioiTinh",
+        headerStyle: {
+            minWidth: "140px",
+        },
+    },
+    {
+        name: "Dân tộc",
+        field: "danToc",
+        headerStyle: {
+            minWidth: "140px",
+        },
+    },
+    {
+        name: "Nghề nghiệp",
+        field: "ngheNghiep",
+        headerStyle: {
+            minWidth: "140px",
+        },
+    },
+    {
+        name: "Tỉnh nơi ở hiện nay",
+        field: "tinhNoiOHienNay",
+        headerStyle: {
+            minWidth: "140px",
+        },
+    },
+    {
+        name: "Huyện nơi ở hiện nay",
+        field: "huyenNoiOHienNay",
+        headerStyle: {
+            minWidth: "140px",
+        },
+    },
+    {
+        name: "Xã nơi ở hiện nay",
+        field: "xaNoiOHienNay",
+        headerStyle: {
+            minWidth: "140px",
+        },
+    },
+    {
+        name: "Địa chỉ nơi ở hiện nay",
+        field: "diaChiNoiOHienNay",
+        headerStyle: {
+            minWidth: "200px",
+        },
+        cellStyle: {
+            textAlign: "left",
+        },
+    },
+    {
+        name: "Địa chỉ nơi làm việc",
+        field: "diaChiNoiLamViec",
+        headerStyle: {
+            minWidth: "200px",
+        },
+        cellStyle: {
+            textAlign: "left",
+        },
+    },
+    {
+        name: "Số điện thoại",
+        field: "soDienThoai",
+        headerStyle: {
+            minWidth: "140px",
+        },
+    },
+    {
+        name: "Bệnh chẩn đoán ICD",
+        field: "benhChanDoanIcd",
+        headerStyle: {
+            minWidth: "140px",
+        },
+    },
+    {
+        name: "Sử dụng vắc xin",
+        field: "suDungVacxin",
+        headerStyle: {
+            minWidth: "140px",
+        },
+    },
+    {
+        name: "Số lần tiêm uống",
+        field: "soLanTiemUong",
+        headerStyle: {
+            minWidth: "140px",
+        },
+    },
+    {
+        name: "Phân loại chẩn đoán",
+        field: "phanLoaiChanDoan",
+        headerStyle: {
+            minWidth: "140px",
+        },
+    },
+    {
+        name: "Lấy mẫu xét nghiệm",
+        field: "layMauXetNghiem",
+        headerStyle: {
+            minWidth: "140px",
+        },
+    },
+    {
+        name: "Loại xét nghiệm",
+        field: "loaiXetNghiem",
+        headerStyle: {
+            minWidth: "140px",
+        },
+    },
+    {
+        name: "Kết quả xét nghiệm",
+        field: "ketQuaXetNghiem",
+        headerStyle: {
+            minWidth: "140px",
+        },
+    },
+    {
+        name: "Ngày khởi phát",
+        field: "ngayKhoiPhat",
+        headerStyle: {
+            minWidth: "140px",
+        },
+    },
+    {
+        name: "Ngày nhập viện",
+        field: "ngayNhapVien",
+        headerStyle: {
+            minWidth: "140px",
+        },
+    },
+    {
+        name: "Ngày ra viện",
+        field: "ngayRaVien",
+        headerStyle: {
+            minWidth: "140px",
+        },
+    },
+    {
+        name: "Tình trạng hiện nay",
+        field: "tinhTrangHienNay",
+        headerStyle: {
+            minWidth: "140px",
+        },
+    },
+    {
+        name: "Họ tên NBC",
+        field: "hoTenNbc",
+        headerStyle: {
+            minWidth: "140px",
+        },
+    },
+    {
+        name: "Số điện thoại NBC",
+        field: "soDienThoaiNbc",
+        headerStyle: {
+            minWidth: "140px",
+        },
+    },
+    {
+        name: "Email NBC",
+        field: "emailNbc",
+        headerStyle: {
+            minWidth: "140px",
+        },
+    },
+    {
+        name: "Thông tin không hợp lệ",
+        field: "tt",
+        headerStyle: {
+            minWidth: "200px",
+        },
+        cellStyle: {
+            textAlign: "left",
+        },
+        render: (row: any, index: number, stt: number) => <span className="white-sp-preline">{row?.thongTinLoi}</span>,
+    },
 ];

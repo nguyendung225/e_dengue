@@ -12,6 +12,7 @@ import TimKiemTruongHopBenh from "../modules/quan-ly-truong-hop-benh/tim-kiem-tr
 import DanhSachODich from "../modules/quan-ly-o-dich/DanhSachODich";
 import ThemMoiODich from "../modules/quan-ly-o-dich/ThemMoiODich";
 import BaoCaoTuan from "../modules/bao-cao/BaoCaoTuan";
+import NhapTuExcel from "../modules/quan-ly-truong-hop-benh/danh-sach-truong-hop-benh/components/NhapTuExcel";
 
 
 interface PrivateRouteProps {
@@ -49,6 +50,7 @@ const PrivateRoutes = () => {
         <Route path="/danh-sach-o-dich" element={<PrivateRoute auth={PERMISSIONS.SU_CO} ability={PERMISSION_ABILITY.VIEW} component={DanhSachODich} redirect="/danh-sach-o-dich" />} />
         <Route path="/them-moi-o-dich" element={<PrivateRoute auth={PERMISSIONS.SU_CO} ability={PERMISSION_ABILITY.VIEW} component={ThemMoiODich} redirect="/danh-sach-o-dich" />} />
         <Route path="/bao-cao-tuan" element={<PrivateRoute auth={PERMISSIONS.SU_CO} ability={PERMISSION_ABILITY.VIEW} component={BaoCaoTuan} redirect="/bao-cao-tuan" />} />
+        <Route path="/nhap-tu-excel" element={<PrivateRoute auth={PERMISSIONS.SU_CO} ability={PERMISSION_ABILITY.VIEW} component={NhapTuExcel} redirect="/nhap-tu-excel" />} />
         <Route path="/chinh-sua-o-dich/:id" element={<PrivateRoute auth={PERMISSIONS.SU_CO} ability={PERMISSION_ABILITY.VIEW} component={ThemMoiODich} redirect="/danh-sach-o-dich" />} />
         {/* Pages */}
         <Route path="menu-test" element={<MenuTestPage />} />
