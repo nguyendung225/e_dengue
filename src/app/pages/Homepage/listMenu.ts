@@ -42,6 +42,14 @@ export const allMenu: TMenu[] = [
         permission: PERMISSIONS.THONG_KE,
         ability: PERMISSION_ABILITY.VIEW,
       },
+      {
+        title: "Nhập THB từ Excel",
+        to: "/nhap-tu-excel",
+        hasBullet: false,
+        icon: "/media/icons/export-excel.svg",
+        permission: PERMISSIONS.THONG_KE,
+        ability: PERMISSION_ABILITY.VIEW,
+      },
     ]
   },
   {

@@ -141,6 +141,7 @@ export function setupAxios(axios: any) {
   axios.defaults.timeout = 15000
   axios.defaults.headers.common = {
     Accept: 'application/json',
+      'Content-Type': 'application/json charset=UTF-8',
   }
   axios.interceptors.request.use(handleRequest, handleError)
   axios.interceptors.response.use(handleResponse, handleError)
