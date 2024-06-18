@@ -1,37 +1,73 @@
+import { AnyCnameRecord } from "dns";
 
-export interface SearchObjectModel {
-    keyword?: string;
+interface ITinh {
+    id: number;
+    tenTinh: string;
+}
+
+interface IHuyen {
+    id: number;
+    tenHuyen: string;
+}
+
+interface IXa {
+    xaId: number;
+    tenXa: string;
+}
+
+interface ICoSoDieuTri {
+    id: number;
+    tenCoSo: string;
+}
+
+interface ICoSoGhiNhan {
+    id: number;
+    tenCoSo: string;
+}
+
+interface IDonViThucHienXn {
+    id: number;
+    tenCoSo: string;
+}
+
+interface IPhanLoaiQuanLy {
+    code: number,
+    name: string
+}
+
+export interface ISearchObjectModel {
+    keyword?: string | null;
     thoiGianBatDau?: string | null;
     thoiGianKetThuc?: string | null;
     benhIds?: number[] | null;
     listTrangThai?: number[] | null;
-    tinhId?: number | any | null;
-    huyenId?: number | any | null;
-    xaId?: number | any | null;
-    hoTen?: string;
-    gioiTinh?: number | any | null;
-    ngheNghiepId?: number | any | null;
+    tinh?: ITinh | null;
+    huyen?: IHuyen | null;
+    xa?: IXa | null;
+    hoTen?: string | null;
+    gioiTinh?: number | null;
+    ngheNghiep?: any;
     tuNgayKhoiPhat?: string | null;
     denNgayKhoiPhat?: string | null;
     tuNgayNhapVien?: string | null;
     denNgayNhapVien?: string | null;
     tuNgayRaVien?: string | null;
     denNgayRaVien?: string | null;
-    kqXetNghiem?: number | any | null;
+    kqXetNghiem?: number | null;
     tuNgayLayMau?: string | null;
     denNgayLayMau?: string | null;
-    donViThucHienXn?: number | any | null;
+    donViThucHienXn?: IDonViThucHienXn | null;
     tuNgayTraKetQuaXn?: string | null;
     denNgayTraKetQuaXn?: string | null;
-    coSoDieuTriId?: number| any | null;
+    coSoDieuTri?: ICoSoDieuTri | null;
     isNopTroLen?: boolean | null;
     pageNumber: number;
     pageSize: number;
-    phanLoaiQuanLy?: number | any | null;
+    phanLoaiQuanLy?: IPhanLoaiQuanLy | null;
     tuNgayNhapBaoCao?: string | null;
     denNgayNhapBaoCao?: string | null;
     listTinhTrangHienNay?: number[] | null;
-    coSoGhiNhanId?: number | any | null;
+    coSoGhiNhan?: ICoSoGhiNhan | null;
 }
 
 export interface CheckTrungParams {

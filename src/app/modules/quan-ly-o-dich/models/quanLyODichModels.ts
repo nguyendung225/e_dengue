@@ -1,26 +1,47 @@
 import { doiTuongMacBenh, truongHopBenh } from "../../quan-ly-truong-hop-benh/danh-sach-truong-hop-benh/model/Model";
 
-export interface  iConfigTable {
+export interface  IConfigTable {
     totalElement: number;
     totalPages: number;
     numberOfElements: number;
 }
 
+interface ITinh {
+    id: number,
+    tenTinh: string
+}
+
+interface IHuyen {
+    id: number,
+    tenHuyen: string
+}
+
+interface IXa {
+    xaId: number,
+    tenXa: string
+}
+
+interface IDonViBaoCao {
+    id: number,
+    tenCoSo: string
+}
+
 export interface ISearchObjModel {
     keyword?: string | null;
-    tinhId?: number | null;
-    huyenId?: number | null;
-    xaId?: number | null;
+    tinh?: ITinh | null
+    huyen?: IHuyen | null;
+    xa?: IXa | null;
     ngayKhoiPhatTuNgay?: string | null;
     ngayKhoiPhatDenNgay?: string | null;
-    ngayTaoBaoCaoTuNgay?: string | null;
-    ngayTaoBaoCaoDenNgay?: string | null;
+    ngayBaoCaoTuNgay?: string | null;
+    ngayBaoCaoDenNgay?: string | null;
     ngayKetThucTuNgay?: string | null;
     ngayKetThucDenNgay?: string | null;
     trangThaiId?: number | null;
-    donViBaoCaoId?: number | null;
-    PageNumber?: number;
-    PageSize?: number;
+    donViBaoCao?: IDonViBaoCao | null;
+    listBenhTruyenNhiemId?: number[] | null;
+    pageNumber?: number;
+    pageSize?: number;
 }
 
 export const initalSearchObject = {

@@ -1,8 +1,7 @@
 import moment from "moment";
-import { SearchObjectModel } from "../../models/TimKiemTruongHopBenhModels";
+import { ISearchObjectModel } from "../../models/TimKiemTruongHopBenhModels";
 import { renderStatusThb } from "../../../utils/FormatUtils";
 import { PHAN_LOAI_CHAN_DOAN } from "../../danh-sach-truong-hop-benh/constants/constant";
-
 export const truongHopBenhColumns = [
   {
     name: "STT",
@@ -126,14 +125,14 @@ export const truongHopBenhColumns = [
   },
   {
     name: "TT",
-    field: "luuStatus",
+    field: "isQuaHanNopBaoCao",
     headerStyle: {
       minWidth: "50px",
     },
     cellStyle: {
       textAlign: "center",
     },
-    render: (rowData: any) =>  renderStatusThb(rowData.luuStatus)
+    render: (rowData: any) =>  renderStatusThb(rowData.isQuaHanNopBaoCao)
   },
 ];
 
@@ -142,18 +141,18 @@ export const GENDER_OPTION = [
   { name: "Nữ ", code: 1 },
 ];
 
-export const SEARCH_OBJECT_INIT: SearchObjectModel = {
-  keyword: "",
+export const SEARCH_OBJECT_INIT: ISearchObjectModel = {
+  keyword: null,
   thoiGianBatDau: null,
   thoiGianKetThuc: null,
   benhIds: null,
   listTrangThai: null,
-  tinhId: null,
-  huyenId: null,
-  xaId: null,
-  hoTen: "",
+  tinh: null,
+  huyen: null,
+  xa: null,
+  hoTen: null,
   gioiTinh: null,
-  ngheNghiepId: null,
+  ngheNghiep: null,
   tuNgayKhoiPhat: null,
   denNgayKhoiPhat: null,
   tuNgayNhapVien: null,
@@ -166,7 +165,7 @@ export const SEARCH_OBJECT_INIT: SearchObjectModel = {
   donViThucHienXn: null,
   tuNgayTraKetQuaXn: null,
   denNgayTraKetQuaXn: null,
-  coSoDieuTriId: null,
+  coSoDieuTri: null,
   isNopTroLen: null,
   pageNumber: 1,
   pageSize: 10,
@@ -177,7 +176,7 @@ export const SEARCH_OBJECT_INIT: SearchObjectModel = {
   listTinhTrangHienNay: [],
   tuNgayNhapBaoCao: moment().subtract(1, 'months').startOf('month').format('YYYY-MM-DD'),
   denNgayNhapBaoCao: moment().format('YYYY-MM-DD'),
-  coSoGhiNhanId: null,
+  coSoGhiNhan: null,
 };
 
 export const TINH_TRANG_HIEN_NAY = [

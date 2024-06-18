@@ -126,7 +126,7 @@ const NhapTruongHopBenhModal = (props: TProps) => {
                 onSubmit={handleSubmit}
             >
                 {formikProps => (
-                    <Form>
+                    <Form noValidate>
                         <Modal.Body>
                             <TabMenu
                                 danhsachTabs={tabTruongHopBenh}

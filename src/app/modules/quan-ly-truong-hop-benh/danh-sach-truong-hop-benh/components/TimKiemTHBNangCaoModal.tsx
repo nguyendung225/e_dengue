@@ -1,17 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import FilterSearchContainer from "../../tim-kiem-truong-hop-benh/components/FilterSearchContainer";
 import { OCTKTSVG } from "@oceantech/oceantech-ui";
-import { SearchObjectModel } from "../../models/TimKiemTruongHopBenhModels";
+import { ISearchObjectModel } from "../../models/TimKiemTruongHopBenhModels";
 import SearchAdvanceForm from "../../tim-kiem-truong-hop-benh/components/SearchAdvanceForm";
 import { SEARCH_OBJECT_INIT } from "../../tim-kiem-truong-hop-benh/constants/constants";
 import { useFormikContext } from "formik";
+import { localStorageItem } from "../../../utils/LocalStorage";
+import { KEY_LOCALSTORAGE } from "../../../auth/core/_consts";
 
 type Props = {
   show: boolean;
   handleClose: () => void;
-  searchObject: SearchObjectModel;
-  setSearchObject: React.Dispatch<React.SetStateAction<SearchObjectModel>>
+  searchObject: ISearchObjectModel;
+  setSearchObject: React.Dispatch<React.SetStateAction<ISearchObjectModel>>
 };
 
 type TFilterSearchContainerChildProps = {
@@ -19,7 +21,18 @@ type TFilterSearchContainerChildProps = {
 }
 
 const FilterSearchContainerChild = ({ handleClose }: TFilterSearchContainerChildProps) => {
-  const { setValues } = useFormikContext<SearchObjectModel>();
+  const { setValues } = useFormikContext<ISearchObjectModel>();
+  const [isReSetForm,setIsResetForm] = useState<boolean>(false)
+  const userData = localStorageItem.get(KEY_LOCALSTORAGE.USER_INFOMATION);
+  
+  useEffect(() => {
+    setValues({
+      ...SEARCH_OBJECT_INIT,
+      tinh: userData?.tinhInfo || null,
+      huyen: userData?.huyenInfo || null,
+      xa: userData?.xaInfo || null,
+    });
+  }, [isReSetForm]);
 
   return (
     <>
@@ -42,7 +55,7 @@ const FilterSearchContainerChild = ({ handleClose }: TFilterSearchContainerChild
         </Button>
         <Button
           className="button-primary spaces height-100 d-flex align-items-center"
-          onClick={() => setValues(SEARCH_OBJECT_INIT)}
+          onClick={() => setIsResetForm(prev=>!prev)}
         >
           <OCTKTSVG
             path="/media/svg/icons/recycle.svg"

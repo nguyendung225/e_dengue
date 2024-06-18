@@ -26,7 +26,48 @@ export const checkInvalidDate = (intl: any) => {
     });
 }
 
-export const integerValidation = Yup.string()
-    .required("Bắt buộc nhập")
-    .nullable()
-    .test('is-integer', 'Vui lòng nhập một số nguyên', (value) => /^\d+$/.test(value || ""));
+export const isValidDate = (value: any) => {
+  if (value) {
+    return true;
+  }
+
+  const selectedDate = new Date(value);
+
+  if (isNaN(selectedDate.getTime())) {
+    return false;
+  }
+
+  const selectedDay = selectedDate.getDate();
+  const selectedMonth = selectedDate.getMonth() + 1;
+  const selectedYear = selectedDate.getFullYear();
+
+  if (
+    (selectedMonth === 2 &&
+      selectedDay > 28 &&
+      !(
+        selectedYear % 4 === 0 &&
+        (selectedYear % 100 !== 0 || selectedYear % 400 === 0)
+      )) ||
+    (selectedMonth === 2 &&
+      selectedDay > 29 &&
+      selectedYear % 4 === 0 &&
+      (selectedYear % 100 !== 0 || selectedYear % 400 === 0)) ||
+    ((selectedMonth === 4 ||
+      selectedMonth === 6 ||
+      selectedMonth === 9 ||
+      selectedMonth === 11) &&
+      selectedDay > 30) ||
+    ((selectedMonth === 1 ||
+      selectedMonth === 3 ||
+      selectedMonth === 5 ||
+      selectedMonth === 7 ||
+      selectedMonth === 8 ||
+      selectedMonth === 10 ||
+      selectedMonth === 12) &&
+      selectedDay > 31)
+  ) {
+    return false;
+  }
+
+  return true;
+};

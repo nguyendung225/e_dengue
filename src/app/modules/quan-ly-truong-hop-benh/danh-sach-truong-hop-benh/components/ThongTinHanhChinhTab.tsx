@@ -397,7 +397,7 @@ const ThongTinHanhChinhTab = ({ onlyView }: Props) => {
             </Col>
             <Col xl={3}>
                 <OCTAutocomplete
-                    lable="Tỉnh/TP thường chú"
+                    lable="Tỉnh/TP thường trú"
                     menuPlacement="top"
                     searchFunction={getListTinh}
                     urlData='data.data'
@@ -418,7 +418,7 @@ const ThongTinHanhChinhTab = ({ onlyView }: Props) => {
             <Col xl={3}>
                 <OCTAutocomplete
                     menuPlacement="top"
-                    lable="Quận/Huyện thường chú"
+                    lable="Quận/Huyện thường trú"
                     searchFunction={() => getListHuyenByTinhId(values.doiTuongMacBenh?.tinhThuongTru?.id)}
                     urlData='data.data'
                     getOptionLabel={(option) => option?.tenHuyen}

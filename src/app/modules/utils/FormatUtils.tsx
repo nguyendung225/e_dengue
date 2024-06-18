@@ -146,7 +146,7 @@ export const renderMedicalIncidentReportStatus = (reportStatus: number) => {
     }
 }
 
-export const renderStatusThb = (statusThb:number) => {
+export const renderStatusThb = (statusThb: boolean) => {
     switch (statusThb) {
         case STATUS_THB.ONTIME:
             return (

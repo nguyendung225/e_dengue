@@ -14,6 +14,7 @@ import { exportToFile } from "../../../utils/FunctionUtils";
 import { TYPE } from "../../../utils/Constant";
 import { exportPdfFile, exportWordFile } from "../servives/Services";
 import { regex } from "../../../constant";
+import { isValidDate } from "../../../utils/ValidationSchema";
 
 export const TRANG_THAI_PHAN_HOI = {
     QUA_7_NGAY_CHUA_XN: -1,
@@ -175,9 +176,11 @@ export const KeyTab = {
 export const hanhChinhSchema = Yup.object().shape({
     doiTuongMacBenh: Yup.object().shape({
         hoTen: Yup.string().required("Bắt buộc nhập").nullable()
-            .matches(regex.name,"Họ tên không được chứa ký tự số hoặc ký tự đặc biệt"),
+            .matches(regex.name,"Họ tên không được chứa ký tự số hoặc ký tự đặc biệt")
+            .max(50, "Không được quá 50 ký tự"),
         ngaySinh: Yup.date()
             .nullable()
+            .test('isValidDate', 'Ngày không hợp lệ', isValidDate)
             .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
             .required("Bắt buộc nhập"),
         danToc: Yup.object().nullable().required("Bắt buộc nhập"),
@@ -198,9 +201,11 @@ export const hanhChinhSchema = Yup.object().shape({
             otherwise: Yup.string().nullable().notRequired()
         }),
         diaChiHienNay: Yup.string().nullable().required("Bắt buộc nhập")
-            .matches(regex.address,"Địa chỉ không hợp lệ"),
+            .matches(regex.address,"Địa chỉ không hợp lệ")
+            .max(250, "Không được quá 250 ký tự"),
         diaChiThuongTru: Yup.string().nullable().required("Bắt buộc nhập")
-            .matches(regex.address,"Địa chỉ không hợp lệ"),
+            .matches(regex.address,"Địa chỉ không hợp lệ")
+            .max(250, "Không được quá 250 ký tự"),
         tinhThuongTru: Yup.object().nullable().required("Bắt buộc chọn"),
         huyenThuongTru: Yup.object().nullable().required("Bắt buộc chọn"),
         xaThuongTru: Yup.object().nullable().required("Bắt buộc chọn")
@@ -211,22 +216,26 @@ export const chanDoanSchema = hanhChinhSchema.shape({
     truongHopBenh: Yup.object().shape({
         ngayNhapVien: Yup.date()
         .nullable()
+        .test('isValidDate', 'Ngày không hợp lệ', isValidDate)
         .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
         .required("Bắt buộc nhập")
         .when("ngayRaVien", {
             is: ( ngayRaVien: string | null ) => ngayRaVien,
             then: Yup.date()
             .nullable()
+            .test('isValidDate', 'Ngày không hợp lệ', isValidDate)
             .required("Bắt buộc nhập")
             .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
             .max(Yup.ref("ngayRaVien"), "Ngày không thể lớn hơn ngày ra viện/chuyển viện/tử vong"),
             otherwise: Yup.date()
             .nullable()
+            .test('isValidDate', 'Ngày không hợp lệ', isValidDate)
             .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
             .required("Bắt buộc nhập")
         }),
         ngayRaVien: Yup.date()
             .nullable()
+            .test('isValidDate', 'Ngày không hợp lệ', isValidDate)
             .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
             .when("tinhTrangHienNay", {
                 is: ( tinhTrangHienNay : number ) => 
@@ -240,6 +249,7 @@ export const chanDoanSchema = hanhChinhSchema.shape({
             }),
         ngayKhoiPhat: Yup.date()
             .nullable()
+            .test('isValidDate', 'Ngày không hợp lệ', isValidDate)
             .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
             .required("Bắt buộc nhập")
             .max(Yup.ref("ngayNhapVien"), "Ngày không thể lớn hơn ngày nhập viện"),
@@ -248,6 +258,7 @@ export const chanDoanSchema = hanhChinhSchema.shape({
         ngayThucHienXn: Yup.date().when("layMauXetNghiem", {
             is: LAY_MAU_XN,
             then: Yup.date().nullable()
+            .test('isValidDate', 'Ngày không hợp lệ', isValidDate)
             .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
             .required("Bắt buộc nhập"),
             otherwise: Yup.date().nullable().notRequired(),
@@ -257,6 +268,7 @@ export const chanDoanSchema = hanhChinhSchema.shape({
                 layMauXetNghiem === LAY_MAU_XN && ngayThucHienXn,
             then: Yup.date()
                 .nullable()
+                .test('isValidDate', 'Ngày không hợp lệ', isValidDate)
                 .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
                 .min(Yup.ref("ngayThucHienXn"), "Ngày không thể nhỏ hơn ngày lấy mẫu"),
             otherwise: Yup.date().nullable().notRequired()
@@ -305,7 +317,8 @@ export const ghiNhanSchema = chanDoanSchema.shape({
     truongHopBenh: Yup.object().shape({
         ...(hanhChinhSchema.fields.truongHopBenh as Yup.ObjectSchema<any>)?.fields,
         tenNguoiBaoCao: Yup.string().required("Bắt buộc nhập").nullable()
-            .matches(regex.name,"Tên không được chứa ký số hoặc ký tự đặc biệt"),
+            .matches(regex.name,"Tên không được chứa ký số hoặc ký tự đặc biệt")
+            .max(50, "Không được quá 50 ký tự"),
         dienThoaiNguoiBaoCao: Yup.string()
             .required("Bắt buộc nhập")
             .nullable()
@@ -617,19 +630,19 @@ export const LichSuTheoDoiColumns = [
 export const getExportedFileList = (thongTinTHB: TruongHopBenh, setPageLoading: React.Dispatch<React.SetStateAction<boolean>>) => {
     const exportedFileList = [
         {
-            title: "Báo cáo thb.docx",
+            title: "Xuất báo cáo theo thông tư 54 - Word",
             handleClick: () => exportToFile({
                 exportAPI: () => thongTinTHB?.truongHopBenh?.truongHopBenhId && exportWordFile(thongTinTHB?.truongHopBenh?.truongHopBenhId), 
-                fileName: "Báo cáo thb",
+                fileName: "Báo cáo trường hợp bệnh theo thông tư 54",
                 type: TYPE.WORD,
                 setPageLoading
             }),
         },
         {
-            title: "Báo cáo thb.pdf",
+            title: "Xuất báo cáo theo thông tư 54 - Pdf",
             handleClick: () => exportToFile({
                 exportAPI: () => thongTinTHB?.truongHopBenh?.truongHopBenhId && exportPdfFile(thongTinTHB?.truongHopBenh?.truongHopBenhId), 
-                fileName: "Báo cáo thb",
+                fileName: "Báo cáo trường hợp bệnh theo thông tư 54",
                 type: TYPE.PDF,
                 setPageLoading
             }),

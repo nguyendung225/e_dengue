@@ -3,9 +3,9 @@ import moment from "moment";
 import { Link } from "react-router-dom";
 import { GENDER_OPT, INITIAL_DOI_TUONG_MAC_BENH, INITIAL_TRUONG_HOP_BENH } from "../../quan-ly-truong-hop-benh/danh-sach-truong-hop-benh/constants/constant";
 import { getListHoatDongChongDich } from "../../services";
-import { BienPhapTrienKhai, ISearchObjModel, IThongTinODich, ODich, SoCaMac, TienSuDichTe, XetNghiem, iConfigTable } from "../models/quanLyODichModels";
+import { BienPhapTrienKhai, ISearchObjModel, IThongTinODich, ODich, SoCaMac, TienSuDichTe, XetNghiem, IConfigTable } from "../models/quanLyODichModels";
 
-const TRANG_THAI_O_DICH = [
+export const TRANG_THAI_O_DICH = [
     {
         code: 0,
         value: "Đang hoạt động"
@@ -16,103 +16,109 @@ const TRANG_THAI_O_DICH = [
     }
 ]
 
-export const dsOBenhColumns = () => {
-    return [
-        {
-            name: "#",
-            field: "",
-            render: (row: any, index: number, stt: number) => <span>{stt}</span>
+
+export const dsOBenhColumns = [
+    {
+        name: "#",
+        field: "",
+        render: (row: any, index: number, stt: number) => <span>{stt}</span>
+    },
+    {
+        name: "Tên bệnh",
+        field: "benhTruyenNhiemTen",
+        cellStyle: {
+            minWidth: "250px",
+            textAlign: "left",
         },
-        {
-            name: "Địa điểm xảy ra ổ dịch",
-            field: "diaDiem",
-            headerStyle: {
-                minWidth: "250px"
-            },
-            cellStyle: {
-                textAlign: "left",
-            },
-            render: (rowData: any) => {
-                return (
-                    <Link to={`/chinh-sua-o-dich/${rowData?.oDichId}`} className="cursor-pointer text-primary">
-                        {rowData?.tenODich + " - " + rowData?.xaTen + " - " + rowData?.huyenTen + " - " + rowData?.tinhTen}
-                    </Link>
-                )
-            }
+    },
+    {
+        name: "Địa điểm xảy ra ổ dịch",
+        field: "diaDiem",
+        cellStyle: {
+            minWidth: "250px",
+            textAlign: "left",
         },
-        {
-            name: "Trạng thái",
-            field: "trangThai",
-            headerStyle: {
-                minWidth: "120px"
-            },
-            render: (rowData: any) => {
-                return <div className={`${rowData?.trangThai === TRANG_THAI_O_DICH[0].code ? "text-danger" : ""}`}>
-                    {TRANG_THAI_O_DICH.find((item: any) => item.code === rowData?.trangThai)?.value}
-                </div>
-            }
-        },
-        {
-            name: "Ngày khởi phát",
-            field: "ngayKhoiPhat",
-            cellStyle: {
-                minWidth: "100px",
-                textAlign: "center",
-            },
-            render: (rowData: any) => rowData?.ngayKhoiPhat ? moment(rowData?.ngayKhoiPhat).format("DD/MM/YYYY") : null
-        },
-        {
-            name: "Ngày kết thúc",
-            field: "ngayKetThuc",
-            cellStyle: {
-                minWidth: "100px",
-                textAlign: "center",
-            },
-            render: (rowData: any) => rowData?.ngayKetThuc ? moment(rowData?.ngayKetThuc).format("DD/MM/YYYY") : null
-        },
-        {
-            name: "Số ca mắc",
-            field: "soCaMac",
-            cellStyle: {
-                minWidth: "100px",
-                textAlign: "center",
-            },
-        },
-        {
-            name: "Số ca tử vong",
-            field: "soCaTuVong",
-            cellStyle: {
-                minWidth: "100px",
-                textAlign: "center",
-            },
-        },
-        {
-            name: "Ngày báo cáo",
-            field: "ngayBaoCao",
-            cellStyle: {
-                minWidth: "100px",
-                textAlign: "center",
-            },
-            render: (rowData: any) => rowData?.ngayBaoCao ? moment(rowData?.ngayBaoCao).format("DD/MM/YYYY") : null
-        },
-        {
-            name: "Đơn vị báo cáo",
-            field: "coSoBaoCaoTen",
-            cellStyle: {
-                minWidth: "200px",
-                textAlign: "left",
-            },
-        },
-        {
-            name: "Tỉnh báo cáo",
-            field: "tinhBaoCaoTen",
-            cellStyle: {
-                minWidth: "100px",
-                textAlign: "center",
-            },
+        render: (rowData: any) => {
+            return (
+                <Link to={`/chinh-sua-o-dich/${rowData?.oDichId}`} className="cursor-pointer text-primary">
+                    {rowData?.tenODich + " - " + rowData?.xaTen + " - " + rowData?.huyenTen + " - " + rowData?.tinhTen}
+                </Link>
+            )
         }
-    ]
-}
+    },
+    {
+        name: "Trạng thái",
+        field: "trangThai",
+        headerStyle: {
+            minWidth: "120px"
+        },
+        render: (rowData: any) => {
+            return <div className={`${rowData?.trangThai === TRANG_THAI_O_DICH[0].code ? "text-danger" : ""}`}>
+                {TRANG_THAI_O_DICH.find((item: any) => item.code === rowData?.trangThai)?.value}
+            </div>
+        }
+    },
+    {
+        name: "Ngày khởi phát",
+        field: "ngayKhoiPhat",
+        cellStyle: {
+            minWidth: "100px",
+            textAlign: "center",
+        },
+        render: (rowData: any) => rowData?.ngayKhoiPhat ? moment(rowData?.ngayKhoiPhat).format("DD/MM/YYYY") : null
+    },
+    {
+        name: "Ngày kết thúc",
+        field: "ngayKetThuc",
+        cellStyle: {
+            minWidth: "100px",
+            textAlign: "center",
+        },
+        render: (rowData: any) => rowData?.ngayKetThuc ? moment(rowData?.ngayKetThuc).format("DD/MM/YYYY") : null
+    },
+    {
+        name: "Số ca mắc",
+        field: "soCaMac",
+        cellStyle: {
+            minWidth: "100px",
+            textAlign: "center",
+        },
+    },
+    {
+        name: "Số ca tử vong",
+        field: "soCaTuVong",
+        cellStyle: {
+            minWidth: "100px",
+            textAlign: "center",
+        },
+    },
+    {
+        name: "Ngày báo cáo",
+        field: "ngayBaoCao",
+        cellStyle: {
+            minWidth: "100px",
+            textAlign: "center",
+        },
+        render: (rowData: any) => rowData?.ngayBaoCao ? moment(rowData?.ngayBaoCao).format("DD/MM/YYYY") : null
+    },
+    {
+        name: "Đơn vị báo cáo",
+        field: "coSoBaoCaoTen",
+        cellStyle: {
+            minWidth: "200px",
+            textAlign: "left",
+        },
+    },
+    {
+        name: "Tỉnh báo cáo",
+        field: "tinhBaoCaoTen",
+        cellStyle: {
+            minWidth: "100px",
+            textAlign: "center",
+        },
+    }
+]
+
 
 export const dsTienXuBenhNhanColumns = [
     {
@@ -563,7 +569,7 @@ export const columnTHB = [
 
 ]
 
-export const INITIAL_CONFIG_TABLE: iConfigTable = {
+export const INITIAL_CONFIG_TABLE: IConfigTable = {
     totalElement: 0,
     totalPages: 0,
     numberOfElements: 0,
@@ -571,19 +577,20 @@ export const INITIAL_CONFIG_TABLE: iConfigTable = {
 
 export const SEARCH_OBJECT_INIT: ISearchObjModel = {
     keyword: null,
-    tinhId: null,
-    huyenId: null,
-    xaId: null,
+    tinh: null,
+    huyen: null,
+    xa: null,
     ngayKhoiPhatTuNgay: null,
     ngayKhoiPhatDenNgay: null,
-    ngayTaoBaoCaoTuNgay: null,
-    ngayTaoBaoCaoDenNgay: null,
+    ngayBaoCaoTuNgay:  moment().subtract(1, 'months').startOf('month').format('YYYY-MM-DD'),
+    ngayBaoCaoDenNgay: moment().format('YYYY-MM-DD'),
     ngayKetThucTuNgay: null,
     ngayKetThucDenNgay: null,
     trangThaiId: null,
-    donViBaoCaoId: null,
-    PageNumber: 1,
-    PageSize: 10
+    donViBaoCao: null,
+    listBenhTruyenNhiemId: null,
+    pageNumber: 1,
+    pageSize: 10
 };
 
 export const TRANG_THAI = [

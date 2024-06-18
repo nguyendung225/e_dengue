@@ -210,7 +210,7 @@ export const exportToFile = async (props: IPropsExport) => {
       link.setAttribute("download", `${fileName}.${EXTENSIONS[type]}`);
       document.body.appendChild(link);
       link.click();
-      toast.success("Export thành công");
+      toast.success("Xuất báo cáo thành công");
     } else {
       toast.error("Lỗi hệ thống");
     }
@@ -431,3 +431,19 @@ export const handleSetConfigTable = (setConfigTable, data: configTable) => {
         numberOfElements: data?.numberOfElements,
     })
 }
+
+export const convertListSearchObject = (
+  arr: any[] = [],
+  propertyName: string
+) => {
+  if (Array.isArray(arr)) {
+    const transformedObject: { [key: string]: number | string } = {};
+
+    arr.forEach((value: any, index: number) => {
+      transformedObject[`${propertyName}[${index}]`] = value?.id || value?.code;
+    });
+
+    return transformedObject;
+  }
+  return null;
+};

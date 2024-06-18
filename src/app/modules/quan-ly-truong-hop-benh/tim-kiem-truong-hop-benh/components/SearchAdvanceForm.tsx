@@ -4,10 +4,10 @@ import { KTSVG } from "../../../../../_metronic/helpers"
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useFormikContext } from "formik";
-import { SearchObjectModel } from "../../models/TimKiemTruongHopBenhModels";
+import { ISearchObjectModel } from "../../models/TimKiemTruongHopBenhModels";
 import { GENDER_OPTION, KQ_XET_NGHIEM, PHAN_LOAI_QUAN_LY, SEARCH_OBJECT_INIT, TINH_TRANG_HIEN_NAY } from "../constants/constants";
 import LabelRequired from "../../../component/LabelRequired";
-import { getListCoSoBaoCao, getListCoSoDieuTri, getListDmDonViThucHienXetNghiem, getListHuyenByTinhId, getListNgheNghiep, getListTinh, getListXaByHuyenId } from "../../../services";
+import { getListCoSoBaoCao, getListCoSoDieuTri, getListCoSoXetNghiem, getListHuyenByTinhId, getListNgheNghiep, getListTinh, getListXaByHuyenId } from "../../../services";
 import { localStorageItem } from "../../../utils/LocalStorage";
 import { KEY_LOCALSTORAGE } from "../../../auth/core/_consts";
 import { authRoles } from "../../../auth/authRoles";
@@ -16,19 +16,21 @@ import AsyncAutoComplete from "../../../component/input-field/AsyncAutoComplete"
 const SearchAdvanceForm = () => {
     const [openSearchAdvance, setOpenSearchAdvance] = useState<boolean>(false);
     const location = useLocation();
-    const { values, handleChange, errors, touched, setFieldValue, setValues } = useFormikContext<SearchObjectModel>();
-    const roleUser = localStorageItem.get(KEY_LOCALSTORAGE.USER_INFOMATION)?.username;
+    const { values, handleChange, errors, touched, setFieldValue, setValues } = useFormikContext<ISearchObjectModel>();
+    const [isReSetForm,setIsResetForm] = useState(false)
     const userData = localStorageItem.get(KEY_LOCALSTORAGE.USER_INFOMATION)
     
     useEffect(() => {
       setValues({
-        ...values,
-        tinhId: userData?.tinhInfo,
-        huyenId: userData?.huyenInfo,
-        xaId: userData?.xaInfo
+        ...SEARCH_OBJECT_INIT,
+        tinh: userData?.tinhInfo || null,
+        huyen: userData?.huyenInfo || null,
+        xa: userData?.xaInfo || null,
       });
-    }, []);
+    }, [isReSetForm]);
 
+    console.log("234234",values.tuNgayNhapBaoCao);
+    
     return (
         <>
             {location.pathname === "/tim-kiem-truong-hop-benh" && (
@@ -45,7 +47,7 @@ const SearchAdvanceForm = () => {
                                         placeholder="Tìm kiếm theo họ tên/ mã số bệnh nhân/ CMND/ Số điện thoại"
                                         onChange={handleChange}
                                         className="spaces width-100"
-                                        value={values?.keyword}
+                                        value={values?.keyword || ""}
                                     />
                                 </div>
                             </Col>
@@ -77,7 +79,7 @@ const SearchAdvanceForm = () => {
                                     </Button>
                                     <Button
                                         className="button-primary spaces height-100 flex flex-middle"
-                                        onClick={() => setValues(SEARCH_OBJECT_INIT)}
+                                        onClick={() => { setIsResetForm(prev => !prev) }}
                                     >
                                         <KTSVG
                                             path="/media/svg/icons/recycle.svg"
@@ -94,7 +96,12 @@ const SearchAdvanceForm = () => {
 
             <div className="spaces mt-14 form-search">
                 <Row>
-                    <Col xs={12} sm={6} md={4} xl={2}>
+                    <Col
+                        xs={12}
+                        sm={6}
+                        md={location.pathname === "/danh-sach-truong-hop-benh" ? 6 : 4}
+                        xl={location.pathname === "/danh-sach-truong-hop-benh" ? 3 : 2}
+                    >
                         <LabelRequired
                             label="Họ tên"
                             className="spaces fw-500"
@@ -103,10 +110,17 @@ const SearchAdvanceForm = () => {
                             name="hoTen"
                             type="text"
                             onChange={handleChange}
-                            value={values.hoTen}
+                            value={values.hoTen || ""}
+                            errors={errors?.hoTen}
+                            touched={touched?.hoTen}
                         />
                     </Col>
-                    <Col xs={12} sm={6} md={4} lg={2}>
+                    <Col 
+                        xs={12} 
+                        sm={6} 
+                        md={location.pathname === "/danh-sach-truong-hop-benh" ? 6 : 4} 
+                        lg={2}
+                    >
                         <LabelRequired
                             label="Giới tính"
                             className="spaces fw-500"
@@ -114,15 +128,21 @@ const SearchAdvanceForm = () => {
                         <OCTAutocomplete
                             menuPlacement="bottom"
                             onChange={(selectedOption) => {
-                                setFieldValue("gioiTinh", selectedOption)
+                                setFieldValue("gioiTinh", selectedOption?.code)
                             }}
                             className="spaces h-30"
                             name="gioiTinh"
                             options={GENDER_OPTION}
-                            value={values?.gioiTinh}
+                            value={values?.gioiTinh || ""}
                         />
                     </Col>
-                    <Col xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <Col 
+                        xs={12} 
+                        sm={6} 
+                        md={location.pathname === "/danh-sach-truong-hop-benh" ? 6 : 4} 
+                        lg={4} 
+                        xl={location.pathname === "/danh-sach-truong-hop-benh" ? 3 : 2}
+                    >
                         <LabelRequired
                             label="Nghề nghiệp"
                             className="spaces fw-500"
@@ -130,19 +150,25 @@ const SearchAdvanceForm = () => {
                         <OCTAutocomplete
                             menuPlacement="bottom"
                             onChange={(selectedOption) =>
-                                setFieldValue("ngheNghiepId", selectedOption)
+                                setFieldValue("ngheNghiep", selectedOption)
                             }
                             className="spaces h-30"
-                            name="ngheNghiepId"
+                            name="ngheNghiep"
                             options={[]}
-                            value={values?.ngheNghiepId}
+                            value={values?.ngheNghiep || ""}
                             getOptionLabel={(option) => option?.tenNghe}
                             searchObject={{}}
                             searchFunction={getListNgheNghiep}
                             urlData="data.data"
                         />
                     </Col>
-                    <Col xs={12} sm={6} md={4} lg={3}>
+                    <Col 
+                        xs={12} 
+                        sm={6} 
+                        md={location.pathname === "/danh-sach-truong-hop-benh" ? 6 : 4} 
+                        lg={location.pathname === "/danh-sach-truong-hop-benh" ? 3: 4} 
+                        xl={location.pathname === "/danh-sach-truong-hop-benh" ? 2 : 2}
+                    >
                         <LabelRequired
                             label="Phân loại quản lý"
                             className="spaces fw-500"
@@ -158,7 +184,13 @@ const SearchAdvanceForm = () => {
                             value={values?.phanLoaiQuanLy}
                         />
                     </Col>
-                    <Col xs={12} sm={6} md={4} lg={3}>
+                    <Col 
+                        xs={12} 
+                        sm={6} 
+                        md={location.pathname === "/danh-sach-truong-hop-benh" ? 6 : 4} 
+                        lg={location.pathname === "/danh-sach-truong-hop-benh" ? 3: 4} 
+                        xl={location.pathname === "/danh-sach-truong-hop-benh" ? 2 : 2}
+                    >
                         <LabelRequired
                             label="Tình trạng hiện nay"
                             className="spaces fw-500"
@@ -194,16 +226,20 @@ const SearchAdvanceForm = () => {
                                 onChange={(selectedOption) =>
                                     setValues({
                                         ...values,
-                                        tinhId: selectedOption,
-                                        huyenId: null,
-                                        xaId: null,
+                                        tinh: selectedOption,
+                                        huyen: null,
+                                        xa: null,
                                     })
                                 }
                                 className="spaces h-30"
-                                name="tinhId"
+                                name="tinh"
                                 options={[]}
-                                value={values.tinhId}
-                                isDisabled={roleUser === authRoles.TINH || roleUser === authRoles.HUYEN || roleUser === authRoles.XA}
+                                value={values.tinh}
+                                isDisabled={
+                                    userData?.username === authRoles.TINH ||
+                                    userData?.username === authRoles.HUYEN ||
+                                    userData?.username === authRoles.XA
+                                }
                                 getOptionLabel={(option) => option?.tenTinh}
                                 searchObject={{}}
                                 searchFunction={getListTinh}
@@ -221,19 +257,26 @@ const SearchAdvanceForm = () => {
                                 onChange={(selectedOption) =>
                                     setValues({
                                         ...values,
-                                        huyenId: selectedOption,
-                                        xaId: null,
+                                        huyen: selectedOption,
+                                        xa: null,
                                     })
                                 }
                                 className="spaces h-30"
-                                name="huyenId"
+                                name="huyen"
                                 options={[]}
-                                value={values?.huyenId}
-                                isDisabled={roleUser === authRoles.HUYEN || roleUser === authRoles.XA || !values?.tinhId?.id}
+                                value={values?.huyen}
+                                isDisabled={
+                                    userData?.username === authRoles.HUYEN ||
+                                    userData?.username === authRoles.XA ||
+                                    !values?.tinh?.id
+                                }
                                 getOptionLabel={(option) => option.tenHuyen}
                                 searchObject={{}}
-                                searchFunction={() =>  values?.tinhId?.id && getListHuyenByTinhId(values?.tinhId?.id)}
-                                dependencies={[values?.tinhId]}
+                                searchFunction={() =>  
+                                    values?.tinh?.id && 
+                                    getListHuyenByTinhId(values?.tinh?.id)
+                                }
+                                dependencies={[values?.tinh]}
                                 urlData='data.data'
                             />
                         </Col>
@@ -246,17 +289,23 @@ const SearchAdvanceForm = () => {
                                 menuPlacement="bottom"
                                 maxMenuHeight={200}
                                 onChange={(selectedOption) =>
-                                    setFieldValue('xaId',selectedOption)
+                                    setFieldValue('xa',selectedOption)
                                 }
                                 className="spaces h-30"
-                                name="xaId"
+                                name="xa"
                                 options={[]}
-                                value={values?.xaId}
-                                isDisabled={roleUser === authRoles.XA || !values?.huyenId?.id}
+                                value={values?.xa}
+                                isDisabled={
+                                    userData?.username === authRoles.XA ||
+                                    !values?.huyen?.id
+                                }
                                 getOptionLabel={(option) => option.tenXa}
                                 searchObject={{}}
-                                searchFunction={() =>  values?.huyenId?.id  && getListXaByHuyenId(values?.huyenId?.id)}
-                                dependencies={[values?.huyenId]}
+                                searchFunction={() =>  
+                                    values?.huyen?.id  &&
+                                    getListXaByHuyenId(values?.huyen?.id)
+                                }
+                                dependencies={[values?.huyen]}
                                 urlData='data.data'
                             />
                         </Col>
@@ -269,7 +318,7 @@ const SearchAdvanceForm = () => {
                                 name="tuNgayNhapBaoCao"
                                 type="date"
                                 onChange={handleChange}
-                                value={values.tuNgayNhapBaoCao}
+                                value={values.tuNgayNhapBaoCao || ""}
                                 errors={errors?.tuNgayNhapBaoCao}
                                 touched={touched?.tuNgayNhapBaoCao}
                             />
@@ -283,20 +332,26 @@ const SearchAdvanceForm = () => {
                                 name="denNgayNhapBaoCao"
                                 type="date"
                                 onChange={handleChange}
-                                value={values.denNgayNhapBaoCao}
+                                value={values.denNgayNhapBaoCao || ""}
                                 errors={errors?.denNgayNhapBaoCao}
                                 touched={touched?.denNgayNhapBaoCao}
                             />
                         </Col>
-                        <Col xs={12} sm={6} md={4} lg={3} xl={2}>
+                        <Col
+                            xs={12}
+                            sm={6}
+                            md={location.pathname === "/danh-sach-truong-hop-benh" ? 6 : 4}
+                            lg={4}
+                            xl={location.pathname === "/danh-sach-truong-hop-benh" ? 4 : 2}
+                        >
                             <AsyncAutoComplete
                                 menuPlacement="top"
                                 params={{}}
                                 label="Cơ sở báo cáo"
                                 displayField='tenCoSo'
                                 service={getListCoSoBaoCao}
-                                handleChange={(value) => setFieldValue("coSoGhiNhanId", value)}
-                                value={values?.coSoGhiNhanId}
+                                handleChange={(value) => setFieldValue("coSoGhiNhan", value)}
+                                value={values?.coSoGhiNhan || ""}
                             />
                         </Col>
                     </Row>
@@ -314,7 +369,7 @@ const SearchAdvanceForm = () => {
                                         name="tuNgayKhoiPhat"
                                         type="date"
                                         onChange={handleChange}
-                                        value={values.tuNgayKhoiPhat}
+                                        value={values.tuNgayKhoiPhat || ""}
                                         errors={errors?.tuNgayKhoiPhat}
                                         touched={touched?.tuNgayKhoiPhat}
                                     />
@@ -328,7 +383,7 @@ const SearchAdvanceForm = () => {
                                         name="denNgayKhoiPhat"
                                         type="date"
                                         onChange={handleChange}
-                                        value={values.denNgayKhoiPhat}
+                                        value={values.denNgayKhoiPhat || ""}
                                         errors={errors?.denNgayKhoiPhat}
                                         touched={touched?.denNgayKhoiPhat}
                                     />
@@ -342,7 +397,7 @@ const SearchAdvanceForm = () => {
                                         name="tuNgayNhapVien"
                                         type="date"
                                         onChange={handleChange}
-                                        value={values.tuNgayNhapVien}
+                                        value={values.tuNgayNhapVien || ""}
                                         errors={errors?.tuNgayNhapVien}
                                         touched={touched?.tuNgayNhapVien}
                                     />
@@ -356,7 +411,7 @@ const SearchAdvanceForm = () => {
                                         name="denNgayNhapVien"
                                         type="date"
                                         onChange={handleChange}
-                                        value={values.denNgayNhapVien}
+                                        value={values.denNgayNhapVien || ""}
                                         errors={errors?.denNgayNhapVien}
                                         touched={touched?.denNgayNhapVien}
                                     />
@@ -370,7 +425,7 @@ const SearchAdvanceForm = () => {
                                         name="tuNgayRaVien"
                                         type="date"
                                         onChange={handleChange}
-                                        value={values.tuNgayRaVien}
+                                        value={values.tuNgayRaVien || ""}
                                         errors={errors?.tuNgayRaVien}
                                         touched={touched?.tuNgayRaVien}
                                     />
@@ -384,7 +439,7 @@ const SearchAdvanceForm = () => {
                                         name="denNgayRaVien"
                                         type="date"
                                         onChange={handleChange}
-                                        value={values.denNgayRaVien}
+                                        value={values.denNgayRaVien || ""}
                                         errors={errors?.denNgayRaVien}
                                         touched={touched?.denNgayRaVien}
                                     />
@@ -402,7 +457,7 @@ const SearchAdvanceForm = () => {
                                         name="tuNgayLayMau"
                                         type="date"
                                         onChange={handleChange}
-                                        value={values.tuNgayLayMau}
+                                        value={values.tuNgayLayMau || ""}
                                         errors={errors?.tuNgayLayMau}
                                         touched={touched?.tuNgayLayMau}
                                     />
@@ -416,7 +471,7 @@ const SearchAdvanceForm = () => {
                                         name="denNgayLayMau"
                                         type="date"
                                         onChange={handleChange}
-                                        value={values.denNgayLayMau}
+                                        value={values.denNgayLayMau || ""}
                                         errors={errors?.denNgayLayMau}
                                         touched={touched?.denNgayLayMau}
                                     />
@@ -430,7 +485,7 @@ const SearchAdvanceForm = () => {
                                         name="tuNgayTraKetQuaXn"
                                         type="date"
                                         onChange={handleChange}
-                                        value={values.tuNgayTraKetQuaXn}
+                                        value={values.tuNgayTraKetQuaXn || ""}
                                         errors={errors?.tuNgayTraKetQuaXn}
                                         touched={touched?.tuNgayTraKetQuaXn}
                                     />
@@ -444,7 +499,7 @@ const SearchAdvanceForm = () => {
                                         name="denNgayTraKetQuaXn"
                                         type="date"
                                         onChange={handleChange}
-                                        value={values.denNgayTraKetQuaXn}
+                                        value={values.denNgayTraKetQuaXn || ""}
                                         errors={errors?.denNgayTraKetQuaXn}
                                         touched={touched?.denNgayTraKetQuaXn}
                                     />
@@ -456,7 +511,7 @@ const SearchAdvanceForm = () => {
                                     />
                                     <OCTAutocomplete
                                         onChange={(selectedOption) =>
-                                            setFieldValue("kqXetNghiem", selectedOption)
+                                            setFieldValue("kqXetNghiem", selectedOption?.code)
                                         }
                                         className="spaces h-30"
                                         name="kqXetNghiem"
@@ -468,35 +523,26 @@ const SearchAdvanceForm = () => {
                         </div>
                         <div className="spaces mt-14">
                             <Row>
-                                <Col xs={12} sm={6} md={4}>
-                                    <LabelRequired
-                                        label="Đơn vị xét nghiệm"
-                                        className="spaces fw-500"
-                                    />
-                                    <OCTAutocomplete
+                                <Col xs={12} sm={6} md={location.pathname === "/danh-sach-truong-hop-benh" ? 6 : 4} lg={4}>
+                                    <AsyncAutoComplete
                                         menuPlacement="top"
-                                        onChange={(selectedOption) =>
-                                            setFieldValue("donViThucHienXn", selectedOption)
-                                        }
-                                        className="spaces h-30"
-                                        name="donViThucHienXn"
-                                        options={[]}
-                                        value={values?.donViThucHienXn}
-                                        getOptionLabel={(option) => option?.tenDonVi}
-                                        searchObject={{}}
-                                        searchFunction={getListDmDonViThucHienXetNghiem}
-                                        urlData='data.data'
+                                        params={{}}
+                                        label="Đơn vị xét nghiệm"
+                                        displayField='tenCoSo'
+                                        service={getListCoSoXetNghiem}
+                                        handleChange={(value) => setFieldValue("donViThucHienXn", value)}
+                                        value={values?.donViThucHienXn || ""}
                                     />
                                 </Col>
-                                <Col xs={12} sm={6} md={4}>
+                                <Col xs={12} sm={6} md={location.pathname === "/danh-sach-truong-hop-benh" ? 6 : 4} lg={4}>
                                     <AsyncAutoComplete
                                         menuPlacement="top"
                                         params={{}}
                                         label="Cơ sở điều trị"
                                         displayField='tenCoSo'
                                         service={getListCoSoDieuTri}
-                                        handleChange={(value) => setFieldValue("coSoDieuTriId", value)}
-                                        value={values?.coSoDieuTriId}
+                                        handleChange={(value) => setFieldValue("coSoDieuTri", value)}
+                                        value={values?.coSoDieuTri || ""}
                                     />
                                 </Col>
                             </Row>
