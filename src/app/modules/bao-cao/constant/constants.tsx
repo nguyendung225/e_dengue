@@ -1,5 +1,23 @@
+import moment from "moment";
 import { IColumns, IColumnsTotal } from "../../component/table/table-grouping/TableGrouping";
-import { TYPE } from "../../utils/Constant";
+import { IBaoCao, IDiaPhuong, ISearchBaoCao, ITongCong, iConfigTable } from "../model/model";
+
+export const INITIAL_CONFIG_TABLE: iConfigTable = {
+    totalElement: 0,
+    totalPages: 0,
+    numberOfElements: 0,
+}
+
+export const SEARCH_OBJECT_INIT : ISearchBaoCao = {
+    tinhIds: null,
+    huyenIds: null,
+    xaIds: null,
+    tuan: null,
+    nam: moment().year(),
+    tuNgay: moment().subtract(1, 'months').startOf('month').format('YYYY-MM-DD'),
+    denNgay: moment().format('YYYY-MM-DD'),
+    capDoRoot: null,
+}
 
 export const columnBaoCaoTuan: IColumns[] = [
     {
@@ -26,7 +44,49 @@ export const columnBaoCaoTuan: IColumns[] = [
         child: [
             {
                 name: "SXDH và SXHD có dấu hiệu cảnh báo",
-                field: "congChucVienChuc",
+                field: "sxhCanhBao",
+                headerStyle: {
+                    minWidth: "80px"
+                },
+                cellStyle: {
+                    fontSize: "16px"
+                },
+                child: [
+                    {
+                        name: "TS",
+                        field: "tongSoDauHieu",
+                        headerStyle: {
+                            minWidth: "80px"
+                        },
+                        cellStyle: {
+                            fontSize: "16px"
+                        }
+                    },
+                    {
+                        name: "≤15T",
+                        field: "tongSoDuoi15",
+                        headerStyle: {
+                            minWidth: "80px"
+                        },
+                        cellStyle: {
+                            fontSize: "16px"
+                        }
+                    },
+                    {
+                        name: "CD",
+                        field: "congDonDauHieu",
+                        headerStyle: {
+                            minWidth: "80px"
+                        },
+                        cellStyle: {
+                            fontSize: "16px"
+                        }
+                    },
+                ]
+            },
+            {
+                name: "SXH Dengue nặng",
+                field: "sxhNang",
                 headerStyle: {
                     minWidth: "80px"
                 },
@@ -46,7 +106,7 @@ export const columnBaoCaoTuan: IColumns[] = [
                     },
                     {
                         name: "≤15T",
-                        field: "hopDong111",
+                        field: "tongSoNangDuoi15",
                         headerStyle: {
                             minWidth: "80px"
                         },
@@ -55,50 +115,8 @@ export const columnBaoCaoTuan: IColumns[] = [
                         }
                     },
                     {
-                        name: "CD",
-                        field: "hopDong111",
-                        headerStyle: {
-                            minWidth: "80px"
-                        },
-                        cellStyle: {
-                            fontSize: "16px"
-                        }
-                    },
-                ]
-            },
-            {
-                name: "SXH Dengue nặng",
-                field: "hopDong111",
-                headerStyle: {
-                    minWidth: "80px"
-                },
-                cellStyle: {
-                    fontSize: "16px"
-                },
-                child: [
-                    {
-                        name: "TS",
-                        field: "congChucVienChuc",
-                        headerStyle: {
-                            minWidth: "80px"
-                        },
-                        cellStyle: {
-                            fontSize: "16px"
-                        }
-                    },
-                    {
-                        name: "≤15T",
-                        field: "hopDong111",
-                        headerStyle: {
-                            minWidth: "80px"
-                        },
-                        cellStyle: {
-                            fontSize: "16px"
-                        }
-                    },
-                    {
-                        name: "CD",
-                        field: "hopDong111",
+                        name: "cdNang",
+                        field: "congDonNang",
                         headerStyle: {
                             minWidth: "80px"
                         },
@@ -110,7 +128,7 @@ export const columnBaoCaoTuan: IColumns[] = [
             },
             {
                 name: "Tổng cộng mắc",
-                field: "hopDong111",
+                field: "tongSo",
                 headerStyle: {
                     minWidth: "80px"
                 },
@@ -120,7 +138,7 @@ export const columnBaoCaoTuan: IColumns[] = [
             },
             {
                 name: "Cộng dồn mắc",
-                field: "hopDong111",
+                field: "congDon",
                 headerStyle: {
                     minWidth: "80px"
                 },
@@ -136,7 +154,7 @@ export const columnBaoCaoTuan: IColumns[] = [
         child: [
             {
                 name: "Tổng số chết",
-                field: "congChucVienChuc",
+                field: "tongSoTuVong",
                 headerStyle: {
                     minWidth: "80px"
                 },
@@ -146,7 +164,7 @@ export const columnBaoCaoTuan: IColumns[] = [
             },
             {
                 name: "≤15T",
-                field: "hopDong111",
+                field: "tongSoTuVongDuoi15",
                 headerStyle: {
                     minWidth: "80px"
                 },
@@ -156,7 +174,7 @@ export const columnBaoCaoTuan: IColumns[] = [
             },
             {
                 name: "Cộng dồn chết",
-                field: "hopDong111",
+                field: "congDonTuVong",
                 headerStyle: {
                     minWidth: "80px"
                 },
@@ -166,7 +184,7 @@ export const columnBaoCaoTuan: IColumns[] = [
             },
             {
                 name: "Cộng dồn mắc",
-                field: "hopDong111",
+                field: "congDon",
                 headerStyle: {
                     minWidth: "80px"
                 },
@@ -178,65 +196,141 @@ export const columnBaoCaoTuan: IColumns[] = [
     },
 ];
 
-
 export const columnTotalBaoCao: IColumnsTotal[] = [
     {
         colSpan: 2,
         isTitle: true,
-        field: "",
+        field: "title",
         cellStyle: {
             fontSize: "15px",
             fontWeight: "bold",
             textAlign: "left",
             paddingLeft: "16px"
+        },
+        render: () => "Tổng cộng"
+    },
+    {
+        field: "tongSoDauHieu",
+        cellStyle: {
+            fontSize: "15px",
+            textAlign: "center"
         }
     },
     {
-        field: "heSoBacLuong",
-        type: TYPE.NUMBER_FLOAT
+        field: "tongSoDuoi15",
+        cellStyle: {
+            fontSize: "15px",
+            textAlign: "center"
+        }
     },
     {
-        field: "phuCapTnvk",
-        type: TYPE.NUMBER_FLOAT
+        field: "congDonDauHieu",
+        cellStyle: {
+            fontSize: "15px",
+            textAlign: "center"
+        }
     },
     {
-        field: "phuCapChucVu",
-        type: TYPE.NUMBER_FLOAT
+        field: "tongSoNang",
+        cellStyle: {
+            fontSize: "15px",
+            textAlign: "center"
+        }
     },
     {
-        field: "phuCapTrachNhiem",
-        type: TYPE.NUMBER_FLOAT
+        field: "tongSoNangDuoi15",
+        cellStyle: {
+            fontSize: "15px",
+            textAlign: "center"
+        }
     },
     {
-        field: "phuCapDocHai",
-        type: TYPE.NUMBER_FLOAT
-    },
-    {
-        field: "phuCapUuDai",
-        type: TYPE.NUMBER_FLOAT
-    },
-    {
-        field: "phuCapKhac",
-        type: TYPE.NUMBER_FLOAT
+        field: "congDonNang",
+        cellStyle: {
+            fontSize: "15px",
+            textAlign: "center"
+        }
     },
     {
         field: "tongSo",
-        type: TYPE.NUMBER_FLOAT
+        cellStyle: {
+            fontSize: "15px",
+            textAlign: "center"
+        }
     },
     {
-        field: "luongTheoNgachBac",
-        type: TYPE.NUMBER_FLOAT
+        field: "congDon",
+        cellStyle: {
+            fontSize: "15px",
+            textAlign: "center"
+        }
     },
     {
-        field: "tienPhuCapTnvk",
-        type: TYPE.NUMBER_FLOAT
+        field: "tongSoTuVong",
+        cellStyle: {
+            fontSize: "15px",
+            textAlign: "center"
+        }
     },
     {
-        field: "tongSoPhuCap",
-        type: TYPE.NUMBER_FLOAT
+        field: "tongSoTuVongDuoi15",
+        cellStyle: {
+            fontSize: "15px",
+            textAlign: "center"
+        }
     },
     {
-        field: "tienPhuCapChucVu",
-        type: TYPE.NUMBER_FLOAT
+        field: "congDonTuVong",
+        cellStyle: {
+            fontSize: "15px",
+            textAlign: "center"
+        }
     },
+    {
+        field: "congDon",
+        cellStyle: {
+            fontSize: "15px",
+            textAlign: "center"
+        }
+    }
 ];
+
+const listBaoCaoDiaPhuong: IDiaPhuong[] = [
+  {
+    tenDiaPhuong: "",
+    diaPhuongId: 0,
+    tongSo: 0,
+    tongSoDauHieu: 0,
+    tongSoDuoi15: 0,
+    tongSoNang: 0,
+    tongSoNangDuoi15: 0,
+    tongSoTuVong: 0,
+    tongSoTuVongDuoi15: 0,
+    congDon: 0,
+    congDonDauHieu: 0,
+    congDonNang: 0,
+    congDonTuVong: 0,
+  },
+];
+
+const tongCong: ITongCong = {
+    tenDiaPhuong: "",
+    diaPhuongId: 0,
+    tongSo: 0,
+    tongSoDauHieu: 0,
+    tongSoDuoi15: 0,
+    tongSoNang: 0,
+    tongSoNangDuoi15: 0,
+    tongSoTuVong: 0,
+    tongSoTuVongDuoi15: 0,
+    congDon: 0,
+    congDonDauHieu: 0,
+    congDonNang: 0,
+    congDonTuVong: 0
+};
+
+export const initBaoCao: IBaoCao = {
+    tenTuyenBaoCao: "",
+    listBaoCaoDiaPhuong: listBaoCaoDiaPhuong,
+    tongCong: tongCong
+};

@@ -447,3 +447,16 @@ export const convertListSearchObject = (
   }
   return null;
 };
+
+export const getListYear = (tuNam: number, denNam: number) => {
+  const listYear: any[] = [];
+
+  for (let year = denNam; year >= tuNam; year--) {
+    listYear.push({
+      code: year,
+      value: year
+    });
+  }
+
+  return listYear;
+};

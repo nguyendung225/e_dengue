@@ -1,9 +1,9 @@
 import moment from "moment";
 import { printStyles } from "../../utils/Constant";
-import { BaoCao } from "../model/model";
+import { IBaoCao } from "../model/model";
 
 type TProps = {
-    thongTinBaoCao?: BaoCao;
+    thongTinBaoCao?: IBaoCao;
 };
 
 const PhieuInBaoCao = ({ thongTinBaoCao }: TProps) => {
