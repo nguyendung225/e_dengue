@@ -97,3 +97,10 @@
         height: calc(100vh - 400px) !important;
     }
 }
+
+.noiDungTruongHopBenh {
+    .tab-content {
+        height: calc(100vh - 345px) !important;
+        overflow: auto;
+    }
+}

@@ -127,13 +127,12 @@ const NhapTruongHopBenhModal = (props: TProps) => {
             >
                 {formikProps => (
                     <Form noValidate>
-                        <Modal.Body>
+                        <Modal.Body className="noiDungTruongHopBenh">
                             <TabMenu
                                 danhsachTabs={tabTruongHopBenh}
                                 setCurrentTab={setActiveTab}
                                 defaultActiveKey={activeTab}
                             />
-
                         </Modal.Body>
                         <Modal.Footer>
                             <div className='d-flex justify-content-between w-100'>

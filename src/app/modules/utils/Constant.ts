@@ -399,6 +399,9 @@ export const printStyles = {
         _100persent: {
             width: "100%",
         },
+        _150: {
+            width: "150px"
+        },
         _100: {
             width: "100px"
         },

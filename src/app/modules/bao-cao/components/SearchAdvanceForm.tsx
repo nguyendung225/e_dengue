@@ -2,7 +2,7 @@ import { OCTKTSVG, OCTTextValidator } from "@oceantech/oceantech-ui"
 import { Button, Col, Row } from "react-bootstrap"
 import Autocomplete from "../../component/input-field/autocomplete/Autocomplete"
 import { useFormikContext } from "formik"
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ISearchBaoCao } from "../model/model";
 import { getListHuyenByTinhId, getListNgayTrongTuan, getListTinh, getListTuanTrongNam, getListXaByHuyenId } from "../../services";
 import LabelRequired from "../../component/LabelRequired";
@@ -17,13 +17,62 @@ const SearchAdvanceForm = () => {
     const userData = localStorageItem.get(KEY_LOCALSTORAGE.USER_INFOMATION)
     
     useEffect(() => {
-      setValues({
-        ...values,
-        tinhIds: userData?.tinhInfo && [userData?.tinhInfo],
-        huyenIds: userData?.huyenInfo && [userData?.huyenInfo],
-        xaIds: userData?.xaInfo && [userData?.xaInfo],
-      });
+        if (userData?.tinhInfo) {
+            const newValues = { ...values, tinhIds: [userData.tinhInfo] };
+
+            if (userData?.huyenInfo) {
+                newValues.huyenIds = [userData.huyenInfo];
+
+                if (userData?.xaInfo) {
+                    newValues.xaIds = [userData.xaInfo];
+                } else {
+                    getAllXa(userData.huyenInfo.id);
+                }
+            } else {
+                getAllHuyen(userData.tinhInfo.id);
+            }
+
+            setValues(newValues);
+        } else {
+            getAllTinh();
+        }
     }, []);
+
+    const getAllXa = async (id: number) => {
+        try {
+            const { data } = await getListXaByHuyenId(id);
+            setValues((prevValues) => ({
+                ...prevValues,
+                xaIds: data?.data || [],
+            }));
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const getAllHuyen = async (id: number) => {
+        try {
+            const { data } = await getListHuyenByTinhId(id);
+            setValues((prevValues) => ({
+                ...prevValues,
+                huyenIds: data?.data || [],
+            }));
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const getAllTinh = async () => {
+        try {
+            const {data} = await getListTinh()
+            setValues((prevValues) => ({
+                ...prevValues,
+                tinhIds: data?.data || [],
+            }));
+        } catch (error) {
+            console.error(error)
+        }
+    }
 
     const getNgayTrongTuan = async (nam: number, tuan: number) => {
       const { data } = await getListNgayTrongTuan({ nam, tuan });
@@ -82,9 +131,11 @@ const SearchAdvanceForm = () => {
                                 userData?.username === authRoles.HUYEN ||
                                 userData?.username === authRoles.XA
                             }
+                            
                             value={values?.tinhIds}
                             errors={errors?.tinhIds}
                             touched={touched?.tinhIds}
+                            valueSearch={"tenTinh"}
                         />
                     </Col>
                     <Col xs={12} sm={6} md={4} lg={3} className="spaces mt-5">
@@ -110,6 +161,7 @@ const SearchAdvanceForm = () => {
                             errors={errors?.huyenIds}
                             touched={touched?.huyenIds}
                             dependencies={[values?.tinhIds]}
+                            valueSearch={"tenHuyen"}
                         />
                     </Col>
                     <Col xs={12} sm={6} md={4} lg={3} className="spaces mt-5">
@@ -133,6 +185,7 @@ const SearchAdvanceForm = () => {
                             errors={errors?.xaIds}
                             touched={touched?.xaIds}
                             dependencies={[values?.huyenIds]}
+                            valueSearch={"tenXa"}
                         />
                     </Col>
                     <Col xs={12} sm={6} md={4} lg={3} className="spaces mt-5">
@@ -157,7 +210,7 @@ const SearchAdvanceForm = () => {
                     </Col>
                     <Col xs={12} sm={6} md={4} lg={3} className="spaces mt-5">
                         <Autocomplete
-                            lable="Tuân"
+                            lable="Tuần"
                             searchFunction={() =>
                                 values?.nam &&
                                 getListTuanTrongNam({nam: (values?.nam as number)})

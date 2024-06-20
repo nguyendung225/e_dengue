@@ -1,12 +1,14 @@
 import moment from "moment";
 import { printStyles } from "../../utils/Constant";
-import { IBaoCao } from "../model/model";
+import { IBaoCao, ISearchBaoCao } from "../model/model";
+import { useFormikContext } from "formik";
 
 type TProps = {
     thongTinBaoCao?: IBaoCao;
+    ngayBaoCao?: ISearchBaoCao;
 };
 
-const PhieuInBaoCao = ({ thongTinBaoCao }: TProps) => {
+const PhieuInBaoCao = ({ thongTinBaoCao, ngayBaoCao }: TProps) => {
     const {
         text_center,
         padding,
@@ -38,7 +40,7 @@ const PhieuInBaoCao = ({ thongTinBaoCao }: TProps) => {
             </div>
             <div style={{ ...text_center, ...fontWeight.bold }}>
                 <div style={{ ...color.dark_red, ...fontSize._18px, ...marginTop._20px }}>BÁO CÁO BỆNH SỐT XUẤT HUYẾT DENGUE </div>
-                <p style={{ ...fontWeight.normal }}>Tuần 19 từ ngày 05/06/2024 đến 12/05/2024 </p>
+                <p style={{ ...fontWeight.normal }}>Tuần {ngayBaoCao?.tuan || 0} từ ngày {moment(ngayBaoCao?.tuNgay).format("DD/MM/YYYY")} đến {moment(ngayBaoCao?.denNgay).format("DD/MM/YYYY")} </p>
             </div>
             <div>
                 <table style={{ ...border.black, ...text_center, ...margin_x_auto, ...border.collapse }}>
@@ -70,7 +72,7 @@ const PhieuInBaoCao = ({ thongTinBaoCao }: TProps) => {
                     <tbody>
                         {thongTinBaoCao?.listBaoCaoDiaPhuong.map((item, index) => (
                             <tr key={index} style={{ ...border.black }}>
-                                <td style={{ ...border.black }}>{index}</td>
+                                <td style={{ ...border.black }}>{index + 1}</td>
                                 <td style={{ ...border.black, ...width._100, ...text_start, ...padding._10 }}>{item?.tenDiaPhuong}</td>
                                 <td style={{ ...border.black, ...width._45 }}>{item.tongSoDauHieu}</td>
                                 <td style={{ ...border.black, ...width._45 }}>{item.tongSoDuoi15}</td>
@@ -110,7 +112,7 @@ const PhieuInBaoCao = ({ thongTinBaoCao }: TProps) => {
                 -Vui lòng nhập nhận xét báo cáo vào đây!
             </div>
             <div style={{ ...d_flex_j_between, ...marginTop._20px, ...marginBottom._80px, ...text_center }}>
-                <div>
+                <div style={{ ...width._150 }}>
                     <div style={{ ...fontWeight.bold }}>
                         Người báo cáo
                     </div>
