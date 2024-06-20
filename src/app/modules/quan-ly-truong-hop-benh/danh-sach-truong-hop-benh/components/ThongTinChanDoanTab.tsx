@@ -77,7 +77,7 @@ const ThongTinChanDoanTab = ({ onlyView }: Props) => {
 
     return (
         <>
-            <Row className='spaces mt-24'>
+            <Row className='pt-3'>
                 <Col xl={6}>
                     <OCTAutocomplete
                         lable="Phân độ lâm sàng/ Phân loại thể bệnh"
@@ -229,7 +229,10 @@ const ThongTinChanDoanTab = ({ onlyView }: Props) => {
                         options={SU_DUNG_VAXIN}
                         valueSearch={"code"}
                         value={values?.truongHopBenh?.suDungVacXin}
-                        onChange={(option) => setFieldValue("truongHopBenh.suDungVacXin", option?.code)}
+                        onChange={(option) => {
+                            setFieldValue("truongHopBenh.suDungVacXin", option?.code)
+                            setFieldValue("truongHopBenh.soLanSuDung", null)
+                        }}
                         isDisabled={onlyView}
                     />
                 </Col>

@@ -10,7 +10,7 @@ import { calculateAge } from '../../../utils/AppFunction';
 import { handleChangeHuyen, handleChangeTinh, handleChangeXa, handleSetConfigTable, haveInfomation } from '../../../utils/FunctionUtils';
 import { CheckTrungParams, INIT_VALUE_CHECK_TRUNG } from '../../models/TimKiemTruongHopBenhModels';
 import { checkTrungTruongHopBenh } from '../../tim-kiem-truong-hop-benh/services/TimKiemThbServices';
-import { GENDER_OPT } from '../constants/constant';
+import { CMND_CHECK_TRUNG, GENDER_OPT } from '../constants/constant';
 import { TruongHopBenh } from '../model/Model';
 import { toast } from 'react-toastify';
 import DanhSachTHBModal from './DanhSachTHB';
@@ -18,6 +18,8 @@ import { formatDataViewTHB } from './../../../utils/FunctionUtils';
 import { localStorageItem } from '../../../utils/LocalStorage';
 import { KEY_LOCALSTORAGE } from '../../../auth/core/_consts';
 import { authRoles } from '../../../auth/authRoles';
+import { regex } from '../../../constant';
+
 type Props = {
     onlyView?: boolean
 }
@@ -92,12 +94,18 @@ const ThongTinHanhChinhTab = ({ onlyView }: Props) => {
 
     const handleSetDataCheckTrung = (event: any, name: string) => {
         const newValue = event?.target?.value;
-        if (dataCheckTrung[name as keyof CheckTrungParams] !== newValue) {
-            setDataCheckTrung({
-                ...dataCheckTrung,
-                [name]: newValue
-            });
+        if (dataCheckTrung[name as keyof CheckTrungParams] === newValue) {
+            return;
         }
+
+        if (name === CMND_CHECK_TRUNG && (!new RegExp(regex?.cccd).test(newValue))) {
+            return;
+        }
+
+        setDataCheckTrung({
+            ...dataCheckTrung,
+            [name]: newValue
+        });
     };
 
     const handleChangeGioiTinh = (event: any) => {

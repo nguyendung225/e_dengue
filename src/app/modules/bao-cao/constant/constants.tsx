@@ -182,16 +182,7 @@ export const columnBaoCaoTuan: IColumns[] = [
                     fontSize: "16px"
                 }
             },
-            {
-                name: "Cộng dồn mắc",
-                field: "congDon",
-                headerStyle: {
-                    minWidth: "80px"
-                },
-                cellStyle: {
-                    fontSize: "16px"
-                }
-            },
+            
         ]
     },
 ];
@@ -286,13 +277,6 @@ export const columnTotalBaoCao: IColumnsTotal[] = [
             textAlign: "center"
         }
     },
-    {
-        field: "congDon",
-        cellStyle: {
-            fontSize: "15px",
-            textAlign: "center"
-        }
-    }
 ];
 
 const listBaoCaoDiaPhuong: IDiaPhuong[] = [

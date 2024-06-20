@@ -47,3 +47,5 @@ export const MODULE = {
 export const ROLE = {
   USER: "ROLE_USER",
 }
+
+export const MIN_DATE_200 = new Date().getFullYear() - 200;

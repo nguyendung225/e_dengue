@@ -14,7 +14,7 @@ import { exportToFile } from "../../../utils/FunctionUtils";
 import { TYPE } from "../../../utils/Constant";
 import { exportPdfFile, exportWordFile } from "../servives/Services";
 import { regex } from "../../../constant";
-import { isValidDate } from "../../../utils/ValidationSchema";
+import { MIN_DATE_200 } from "../../../../Constant";
 
 export const TRANG_THAI_PHAN_HOI = {
     QUA_7_NGAY_CHUA_XN: -1,
@@ -180,8 +180,8 @@ export const hanhChinhSchema = Yup.object().shape({
             .max(50, "Không được quá 50 ký tự"),
         ngaySinh: Yup.date()
             .nullable()
-            .test('isValidDate', 'Ngày không hợp lệ', isValidDate)
-            .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
+            .min(new Date(new Date().setFullYear(MIN_DATE_200)), `Phải từ năm ${MIN_DATE_200} trở đi`)
+            .max(new Date(), 'Không thể lớn hơn ngày hiện tại')
             .required("Bắt buộc nhập"),
         danToc: Yup.object().nullable().required("Bắt buộc nhập"),
         ngheNghiep: Yup.object().nullable().required("Bắt buộc nhập"),
@@ -216,26 +216,26 @@ export const chanDoanSchema = hanhChinhSchema.shape({
     truongHopBenh: Yup.object().shape({
         ngayNhapVien: Yup.date()
         .nullable()
-        .test('isValidDate', 'Ngày không hợp lệ', isValidDate)
+        .min(new Date(new Date().setFullYear(MIN_DATE_200)), `Phải từ năm ${MIN_DATE_200} trở đi`)
         .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
         .required("Bắt buộc nhập")
         .when("ngayRaVien", {
             is: ( ngayRaVien: string | null ) => ngayRaVien,
             then: Yup.date()
             .nullable()
-            .test('isValidDate', 'Ngày không hợp lệ', isValidDate)
+            .min(new Date(new Date().setFullYear(MIN_DATE_200)), `Phải từ năm ${MIN_DATE_200} trở đi`)
             .required("Bắt buộc nhập")
             .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
             .max(Yup.ref("ngayRaVien"), "Ngày không thể lớn hơn ngày ra viện/chuyển viện/tử vong"),
             otherwise: Yup.date()
             .nullable()
-            .test('isValidDate', 'Ngày không hợp lệ', isValidDate)
+            .min(new Date(new Date().setFullYear(MIN_DATE_200)), `Phải từ năm ${MIN_DATE_200} trở đi`)
             .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
             .required("Bắt buộc nhập")
         }),
         ngayRaVien: Yup.date()
             .nullable()
-            .test('isValidDate', 'Ngày không hợp lệ', isValidDate)
+            .min(new Date(new Date().setFullYear(MIN_DATE_200)), `Phải từ năm ${MIN_DATE_200} trở đi`)
             .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
             .when("tinhTrangHienNay", {
                 is: ( tinhTrangHienNay : number ) => 
@@ -249,7 +249,7 @@ export const chanDoanSchema = hanhChinhSchema.shape({
             }),
         ngayKhoiPhat: Yup.date()
             .nullable()
-            .test('isValidDate', 'Ngày không hợp lệ', isValidDate)
+            .min(new Date(new Date().setFullYear(MIN_DATE_200)), `Phải từ năm ${MIN_DATE_200} trở đi`)
             .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
             .required("Bắt buộc nhập")
             .max(Yup.ref("ngayNhapVien"), "Ngày không thể lớn hơn ngày nhập viện"),
@@ -258,7 +258,7 @@ export const chanDoanSchema = hanhChinhSchema.shape({
         ngayThucHienXn: Yup.date().when("layMauXetNghiem", {
             is: LAY_MAU_XN,
             then: Yup.date().nullable()
-            .test('isValidDate', 'Ngày không hợp lệ', isValidDate)
+            .min(new Date(new Date().setFullYear(MIN_DATE_200)), `Phải từ năm ${MIN_DATE_200} trở đi`)
             .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
             .required("Bắt buộc nhập"),
             otherwise: Yup.date().nullable().notRequired(),
@@ -268,7 +268,7 @@ export const chanDoanSchema = hanhChinhSchema.shape({
                 layMauXetNghiem === LAY_MAU_XN && ngayThucHienXn,
             then: Yup.date()
                 .nullable()
-                .test('isValidDate', 'Ngày không hợp lệ', isValidDate)
+                .min(new Date(new Date().setFullYear(MIN_DATE_200)), `Phải từ năm ${MIN_DATE_200} trở đi`)
                 .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại')
                 .min(Yup.ref("ngayThucHienXn"), "Ngày không thể nhỏ hơn ngày lấy mẫu"),
             otherwise: Yup.date().nullable().notRequired()
@@ -304,7 +304,7 @@ export const chanDoanSchema = hanhChinhSchema.shape({
             then: Yup.number()
                 .nullable()
                 .required("Bắt buộc nhập")
-                .typeError("Phải là giá trị số"),
+                .min(0, "Phải là số nguyên dương"),
             otherwise: Yup.number()
                 .nullable()
                 .notRequired()
@@ -668,7 +668,7 @@ export const INITIAL_TRUONG_HOP_BENH: truongHopBenh = {
     tinhTrangKhac: null,
     phanLoaiChanDoan: 0,
     layMauXetNghiem: 1,
-    suDungVacXin: 1,
+    suDungVacXin: 0,
     soLanSuDung: null,
     loaiXetNghiem: null,
     loaiXetNghiemKhac: "",
@@ -781,3 +781,5 @@ export const DanhSachTHBColumns = [
         },
     },
 ]
+
+export const CMND_CHECK_TRUNG = 'Cmnd'

@@ -2,7 +2,8 @@ import React from "react";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { IHuyen, ISearchBaoCao, ITinh, IXa } from "../model/model";
-import { isValidDate } from "../../utils/ValidationSchema";
+import { MIN_DATE_200 } from "../../../Constant";
+
 type Props = {
     children: React.ReactNode;
     searchObject: ISearchBaoCao;
@@ -25,17 +26,17 @@ const FilterSearchContainer = (props: Props) => {
     const validationSchema = Yup.object().shape({
       tuNgay: Yup.date()
         .nullable()
-        .max(new Date(), "Ngày không thể lớn hơn ngày hiện tại")
-        .test("isValidDate", "Ngày không hợp lệ", isValidDate),
+        .min(new Date(new Date().setFullYear(MIN_DATE_200)), `Phải từ năm ${MIN_DATE_200} trở đi`)
+        .max(new Date(), "Ngày không thể lớn hơn ngày hiện tại"),
       denNgay: Yup.date()
         .nullable()
         .max(new Date(), "Ngày không thể lớn hơn ngày hiện tại")
-        .test("isValidDate", "Ngày không hợp lệ", isValidDate)
+        .min(new Date(new Date().setFullYear(MIN_DATE_200)), `Phải từ năm ${MIN_DATE_200} trở đi`)
         .when("tuNgay", {
           is: (tuNgay: string | null) => tuNgay,
           then: Yup.date()
             .nullable()
-            .test("isValidDate", "Ngày không hợp lệ", isValidDate)
+            .min(new Date(new Date().setFullYear(MIN_DATE_200)), `Phải từ năm ${MIN_DATE_200} trở đi`)
             .min(Yup.ref("tuNgay"), "Ngày không được trước từ ngày"),
           otherwise: Yup.date().nullable().notRequired(),
         }),

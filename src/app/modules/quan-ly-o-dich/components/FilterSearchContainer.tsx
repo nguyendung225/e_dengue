@@ -3,7 +3,8 @@ import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { ISearchObjModel } from "../models/quanLyODichModels";
 import { SEARCH_OBJECT_INIT } from "../constants/constants";
-import { isValidDate } from "../../utils/ValidationSchema";
+import { MIN_DATE_200 } from "../../../Constant";
+
 type Props = {
     children: React.ReactNode;
     setSearchObj: React.Dispatch<React.SetStateAction<ISearchObjModel>>;
@@ -19,16 +20,16 @@ const FilterSearchContainer = (props: Props) => {
       ngayKhoiPhatTuNgay: Yup.date()
         .nullable()
         .max(new Date(), "Ngày không thể lớn hơn ngày hiện tại")
-        .test("isValidDate", "Ngày không hợp lệ", isValidDate),
+        .min(new Date(new Date().setFullYear(MIN_DATE_200)), `Phải từ năm ${MIN_DATE_200} trở đi`),
       ngayKhoiPhatDenNgay: Yup.date()
         .nullable()
         .max(new Date(), "Ngày không thể lớn hơn ngày hiện tại")
-        .test("isValidDate", "Ngày không hợp lệ", isValidDate)
+        .min(new Date(new Date().setFullYear(MIN_DATE_200)), `Phải từ năm ${MIN_DATE_200} trở đi`)
         .when("ngayKhoiPhatTuNgay", {
           is: (ngayKhoiPhatTuNgay: string | null) => ngayKhoiPhatTuNgay,
           then: Yup.date()
             .nullable()
-            .test("isValidDate", "Ngày không hợp lệ", isValidDate)
+            .min(new Date(new Date().setFullYear(MIN_DATE_200)), `Phải từ năm ${MIN_DATE_200} trở đi`)
             .min(
               Yup.ref("ngayKhoiPhatTuNgay"),
               "Ngày không được trước ngày khởi phát từ ngày"
@@ -38,16 +39,16 @@ const FilterSearchContainer = (props: Props) => {
       ngayBaoCaoTuNgay: Yup.date()
         .nullable()
         .max(new Date(), "Ngày không thể lớn hơn ngày hiện tại")
-        .test("isValidDate", "Ngày không hợp lệ", isValidDate),
+        .min(new Date(new Date().setFullYear(MIN_DATE_200)), `Phải từ năm ${MIN_DATE_200} trở đi`),
       ngayBaoCaoDenNgay: Yup.date()
         .nullable()
         .max(new Date(), "Ngày không thể lớn hơn ngày hiện tại")
-        .test("isValidDate", "Ngày không hợp lệ", isValidDate)
+        .min(new Date(new Date().setFullYear(MIN_DATE_200)), `Phải từ năm ${MIN_DATE_200} trở đi`)
         .when("ngayBaoCaoTuNgay", {
           is: (ngayBaoCaoTuNgay: string | null) => ngayBaoCaoTuNgay,
           then: Yup.date()
             .nullable()
-            .test("isValidDate", "Ngày không hợp lệ", isValidDate)
+            .min(new Date(new Date().setFullYear(MIN_DATE_200)), `Phải từ năm ${MIN_DATE_200} trở đi`)
             .min(
               Yup.ref("ngayBaoCaoTuNgay"),
               "Ngày không được trước ngày báo cáo từ ngày"
@@ -57,16 +58,16 @@ const FilterSearchContainer = (props: Props) => {
       ngayKetThucTuNgay: Yup.date()
         .nullable()
         .max(new Date(), "Ngày không thể lớn hơn ngày hiện tại")
-        .test("isValidDate", "Ngày không hợp lệ", isValidDate),
+        .min(new Date(new Date().setFullYear(MIN_DATE_200)), `Phải từ năm ${MIN_DATE_200} trở đi`),
       ngayKetThucDenNgay: Yup.date()
         .nullable()
         .max(new Date(), "Ngày không thể lớn hơn ngày hiện tại")
-        .test("isValidDate", "Ngày không hợp lệ", isValidDate)
+        .min(new Date(new Date().setFullYear(MIN_DATE_200)), `Phải từ năm ${MIN_DATE_200} trở đi`)
         .when("ngayKetThucTuNgay", {
           is: (ngayKetThucTuNgay: string | null) => ngayKetThucTuNgay,
           then: Yup.date()
             .nullable()
-            .test("isValidDate", "Ngày không hợp lệ", isValidDate)
+            .min(new Date(new Date().setFullYear(MIN_DATE_200)), `Phải từ năm ${MIN_DATE_200} trở đi`)
             .min(
               Yup.ref("ngayKetThucTuNgay"),
               "Ngày không được trước ngày kết thúc từ ngày"
