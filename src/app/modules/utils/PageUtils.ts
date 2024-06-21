@@ -1,3 +1,5 @@
+import { tablePagination } from "./models"
+
 export interface PageInfo {
   page: number
   rowOfPage: number
@@ -48,6 +50,15 @@ export const handleRowsPerPageChange = (
   setRowsPerPage: React.Dispatch<React.SetStateAction<number>>
 ) => {
   setRowsPerPage(parseInt(event.target.value))
+}
+
+export const handleChangePagination = (table: tablePagination, setSearchObject: React.Dispatch<React.SetStateAction<any>>) => {
+    setSearchObject((prev: any) => {
+        return {
+            ...prev, ...table,
+            pageNumber: table?.pageIndex,
+        }
+    })
 }
 
 export const ROWS_FOR_PAGE = [1, 2, 3, 5, 10, 15, 20, 50, 100]

@@ -17,6 +17,9 @@ const LichSuXacNhan = () => {
                 const res = await getThongTinXacNhan(id);
                 setdata(res?.data?.data?.lichSuXacNhanThbResp)
             }
+            else {
+                setdata([])
+            }
         } catch (error) {
             console.error(error);
             toast.error(error as string);
@@ -39,6 +42,7 @@ const LichSuXacNhan = () => {
                     notEdit={true}
                     noToolbar={true}
                     unSelectedAll={true}
+                    noPagination
                 />
             </div>
         </div>

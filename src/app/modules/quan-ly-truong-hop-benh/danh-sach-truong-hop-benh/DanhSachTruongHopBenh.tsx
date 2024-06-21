@@ -22,6 +22,7 @@ import { convertListSearchObject, formatDataViewTHB } from "../../utils/Function
 import { localStorageItem } from "../../utils/LocalStorage";
 import { KEY_LOCALSTORAGE } from "../../auth/core/_consts";
 import { authRoles } from "../../auth/authRoles";
+import { handleChangePagination } from "../../utils/PageUtils";
 
 const DanhSachTruongHopBenh = () => {
     const { setPageLoading } = useContext(AppContext);
@@ -111,7 +112,12 @@ const DanhSachTruongHopBenh = () => {
             id = dataTemp?.[0]?.truongHopBenhId
         }
         setTruongHopBenhList(dataTemp);
-        id && getThongTinChiTietTHB(String(id));
+        if (id) {
+            getThongTinChiTietTHB(String(id));
+        }
+        else {
+            setDataRow(INIT_TRUONG_HOP_BENH);
+        }
     };
 
     const handleDeleteTruongHopBenh = async () => {
@@ -162,7 +168,7 @@ const DanhSachTruongHopBenh = () => {
                     <div className="ds-header">
                         <div className="d-flex align-items-center">
                             <OCTKTSVG path={'/media/svg/icons/List ul.svg'} svgClassName="spaces w-14 h-14 mr-10" />
-                            <span className="title">
+                            <span className="title color-dark-red">
                                 Danh sách
                             </span>
                         </div>
@@ -198,24 +204,29 @@ const DanhSachTruongHopBenh = () => {
                         </Button>
                     </div>
                 </div>
-                <OCTTable
-                    id="danh-sach-thb"
-                    data={truongHopBenhList}
-                    columns={danhSachThbColumns}
-                    searchObject={searchObject}
-                    setSearchObject={setSearchObject}
-                    type={TYPE.SINGLE}
-                    fixedColumnsCount={0}
-                    setDataChecked={handleSelectTHB}
-                    notDelete={true}
-                    notEdit={true}
-                    noToolbar={true}
-                    totalPages={configTable?.totalPages}
-                    totalElements={configTable?.totalElements}
-                    numberOfElements={configTable?.numberOfElements}
-                    uniquePrefix="truongHopBenhId"
-                    unSelectedAll={true}
-                />
+                <div className="ds-thb">
+                    <OCTTable
+                        id="danh-sach-thb"
+                        data={truongHopBenhList}
+                        columns={danhSachThbColumns}
+                        searchObject={searchObject}
+                        setSearchObject={(table) => {
+                            handleChangePagination(table, setSearchObject)
+                        }}
+                        type={TYPE.SINGLE}
+                        justFilter={true}
+                        fixedColumnsCount={0}
+                        setDataChecked={handleSelectTHB}
+                        notDelete={true}
+                        notEdit={true}
+                        noToolbar={true}
+                        totalPages={configTable?.totalPages}
+                        totalElements={configTable?.totalElements}
+                        numberOfElements={configTable?.numberOfElements}
+                        uniquePrefix="truongHopBenhId"
+                        unSelectedAll={true}
+                    />
+                </div>
                 <div className="spaces px-10">
                     <strong>Chú thích: </strong>
                     <div className="d-flex align-items-center spaces mt-4 line-height-16">
@@ -251,7 +262,7 @@ const DanhSachTruongHopBenh = () => {
                 <div className="tt-header">
                     <div className="title-wrapper">
                         <OCTKTSVG path={"/media/svg/icons/info-square.svg"} svgClassName="spaces w-14 h-14 mr-10" />
-                        <span className="title">Thông tin trường hợp bệnh</span>
+                        <span className="title color-dark-red">Thông tin trường hợp bệnh</span>
                     </div>
                     <div className="d-flex spaces gap-10">
                         {(userData?.username === authRoles.HUYEN || userData?.username === authRoles.TINH)
@@ -264,30 +275,29 @@ const DanhSachTruongHopBenh = () => {
                                     Xác nhận
                                 </Button>
                         }                    
-                        <Button
-                            className="button-primary"
-                            onClick={() => {
-                                setDataForm(dataRow)
-                                setOpenTruongHopBenhForm(true)
-                            }}
-                        >
-                            <OCTKTSVG path='/media/svg/icons/pencil-square.svg' svgClassName='spaces h-14 w-14 color-white' />
-                            Sửa
-                        </Button>
-                        <Button
-                            className="button-delete"
-                            onClick={() => setOpenDeleteTruongHopBenh(true)}
-                        >
-                            <OCTKTSVG path='/media/svg/icons/trash.svg' svgClassName='spaces h-14 w-14 color-white' />
-                            Xoá
-                        </Button>
-                        <Button
-                            className="button-primary"
-                            onClick={() => {}}
-                        >
-                            <OCTKTSVG path='/media/svg/icons/plus.svg' svgClassName='spaces h-14 w-14 color-white' />
-                            Thêm
-                        </Button>
+                        {
+                            dataRow?.truongHopBenh?.trangThaiPhanHoi !== TRANG_THAI_PHAN_HOI.DA_XN_DUNG && (
+                                <>
+                                    <Button
+                                        className="button-primary"
+                                        onClick={() => {
+                                            setDataForm(dataRow)
+                                            setOpenTruongHopBenhForm(true)
+                                        }}
+                                    >
+                                        <OCTKTSVG path='/media/svg/icons/pencil-square.svg' svgClassName='spaces h-14 w-14 color-white' />
+                                        Sửa
+                                    </Button>
+                                    <Button
+                                        className="button-delete"
+                                        onClick={() => setOpenDeleteTruongHopBenh(true)}
+                                    >
+                                        <OCTKTSVG path='/media/svg/icons/trash.svg' svgClassName='spaces h-14 w-14 color-white' />
+                                        Xoá
+                                    </Button>
+                                </>
+                            )
+                        }
                         <DropdownButton 
                             title="Xuất báo cáo"
                             dropdownItems={exportedFileList}

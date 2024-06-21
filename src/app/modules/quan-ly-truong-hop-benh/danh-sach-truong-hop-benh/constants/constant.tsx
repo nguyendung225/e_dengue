@@ -52,22 +52,78 @@ const isDifferenceGreaterThan7Days = (ngayTao: string): boolean => {
     return differenceInDays > 7;
 };
 
-const randerTrangThaiPhanHoi = (trangThaiPhanHoi: number, ngayTao: any) => {
-    switch(trangThaiPhanHoi) {
-        case TRANG_THAI_PHAN_HOI.DA_XN_DUNG:
-            return <OCTKTSVG path="/media/svg/icons/check-circle-fill.svg" svgClassName="spaces w-16 h-16 mr-10 color-bright-cyan"/>
-        case TRANG_THAI_PHAN_HOI.CHUA_XAC_NHAN:
-           return isDifferenceGreaterThan7Days(ngayTao) 
-            ? <OCTKTSVG path="/media/svg/icons/exclamation-circle-fill.svg" svgClassName="spaces w-16 h-16 mr-10 color-red"/> 
-            : <OCTKTSVG path="/media/svg/icons/exclamation-triangle-fill.svg" svgClassName="spaces w-16 h-16 mr-10 color-dark-orange"/>
-        case TRANG_THAI_PHAN_HOI.XN_SAI_THONG_TIN_HANH_CHINH:
-            return <OCTKTSVG path="/media/svg/icons/question-circle-fill.svg" svgClassName="spaces w-16 h-16 mr-10 color-steel-blue"/>
-        case TRANG_THAI_PHAN_HOI.XN_SAI_THONG_TIN_CHAN_DOAN: 
-            return <OCTKTSVG path="/media/svg/icons/question-circle-fill.svg" svgClassName="spaces w-16 h-16 mr-10 color-green"/>
-        default:
-           return;
-    }
-}
+export const renderTrangThaiPhanHoi = (
+	trangThaiPhanHoi: number,
+	ngayTao: string,
+	showName?: boolean
+) => {
+	switch (trangThaiPhanHoi) {
+		case TRANG_THAI_PHAN_HOI.DA_XN_DUNG:
+			return (
+				<div className="d-flex gap-1">
+					<OCTKTSVG
+						path="/media/svg/icons/check-circle-fill.svg"
+						svgClassName="spaces w-16 h-16 color-bright-cyan"
+					/>
+					{showName && (
+						<span className="text-14 ">Đã xác nhận đúng</span>
+					)}
+				</div>
+			);
+		case TRANG_THAI_PHAN_HOI.CHUA_XAC_NHAN:
+			return isDifferenceGreaterThan7Days(ngayTao) ? (
+				<div className="d-flex gap-1">
+					<OCTKTSVG
+						path="/media/svg/icons/exclamation-circle-fill.svg"
+						svgClassName="spaces w-16 h-16 color-red"
+					/>
+					{showName && (
+						<span className="text-14 ">
+							Quá 7 ngày chưa xác nhận
+						</span>
+					)}
+				</div>
+			) : (
+				<>
+					<OCTKTSVG
+						path="/media/svg/icons/exclamation-triangle-fill.svg"
+						svgClassName="spaces w-16 h-16 color-dark-orange"
+					/>
+					{showName && <span className="text-14 ">Chờ xác nhận</span>}
+				</>
+			);
+		case TRANG_THAI_PHAN_HOI.XN_SAI_THONG_TIN_HANH_CHINH:
+			return (
+				<div className="d-flex gap-1">
+					<OCTKTSVG
+						path="/media/svg/icons/question-circle-fill.svg"
+						svgClassName="spaces w-16 h-16 color-steel-blue"
+					/>
+					{showName && (
+						<span className="text-14 ">
+							Sai thông tin hành chính
+						</span>
+					)}
+				</div>
+			);
+		case TRANG_THAI_PHAN_HOI.XN_SAI_THONG_TIN_CHAN_DOAN:
+			return (
+				<div className="d-flex gap-1">
+					<OCTKTSVG
+						path="/media/svg/icons/question-circle-fill.svg"
+						svgClassName="spaces w-16 h-16 color-green"
+					/>
+					{showName && (
+						<span className="text-14 ">
+							Sai thông tin chuẩn đoán
+						</span>
+					)}
+				</div>
+			);
+		default:
+			return;
+	}
+};
 
 export const danhSachThbColumns = [
   {
@@ -79,7 +135,7 @@ export const danhSachThbColumns = [
     name: "Họ và tên",
     field: "hoTen",
     headerStyle: {
-      minWidth: "140px"
+      minWidth: "160px",
     },
     cellStyle: {
       textAlign: "left",
@@ -90,29 +146,36 @@ export const danhSachThbColumns = [
     name: "GT",
     field: "gioiTinh",
     headerStyle: {
-      minWidth: "60px"
+      minWidth: "50px",
     },
     render: (row: any) => (
       <span>{convertGenderToString(row?.gioiTinh)}</span>
     )
   },
   {
+    name: "Tên bệnh",
+    field: "tenBenh",
+    headerStyle: {
+      minWidth: "120px",
+    },
+  },
+  {
     name: "Ngày trả KQXN",
     field: "ngayTraKetQuaXn",
     headerStyle: {
-      minWidth: "120px"
+      minWidth: "130px",
     },
     render: (row: any) => (
       <span>{formatDateToString(row?.ngayTraKetQuaXn)}</span>
     )
   },
   {
-    name: "Trạng thái",
+    name: "TT",
     field: "",
     headerStyle: {
-      minWidth: "100px"
+      width: "40px",
     },
-    render: (row: any) => <>{randerTrangThaiPhanHoi(row?.trangThaiPhanHoi,row?.ngayTao)}</>
+    render: (row: any) => <>{renderTrangThaiPhanHoi(row?.trangThaiPhanHoi,row?.ngayTao)}</>
   }
 ]
 
@@ -389,7 +452,7 @@ export const tabThongTinTruongHopBenh = [
 ];
 
 export const PHAN_LOAI_CHAN_DOAN = [
-    { code: 0, name: 'Nghi Ngờ' },
+    { code: 0, name: 'Nghi Ngờ (Lâm sàng)' },
     { code: 1, name: 'Xác Định Phòng Xét Nghiệm' },
     { code: 2, name: 'Có Thể' }
 ];
@@ -397,10 +460,10 @@ export const PHAN_LOAI_CHAN_DOAN = [
 export const PCLD_XAC_DINH_PHONG_XET_NGHIEM = PHAN_LOAI_CHAN_DOAN[1]?.code
 
 export const LOAI_XET_NGHIEM = [
-    { code: 0, name: 'Loại Test Nhanh' },
-    { code: 1, name: 'Loại Mac-Elisa' },
-    { code: 2, name: 'Loại PCR' },
-    { code: 3, name: 'Loại Khác' },
+    { code: 0, name: 'Test Nhanh' },
+    { code: 1, name: 'Mac-Elisa' },
+    { code: 2, name: 'PCR' },
+    { code: 3, name: 'Khác' },
 ];
 
 export const KQ_XET_NGHIEM = [
@@ -475,7 +538,7 @@ export const TienSuBenhColumns = [
         cellStyle: {
             textAlign: "center",
         },
-        render: (row: any, index: number, stt: number) => <span>{moment(row?.ngayCapNhat).format("DD/MM/YYYY")}</span>
+        render: (row: any, index: number, stt: number) => <span>{moment(row?.ngayCapNhat).format("DD/MM/YYYY HH:mm")}</span>
     },
     {
         name: "Tên bệnh",
@@ -518,7 +581,7 @@ export const LichSuXacNhanColumns = [
         cellStyle: {
             textAlign: "center",
         },
-        render: (row: any, index: number, stt: number) => <span>{moment(row?.ngayCapNhat).format("DD/MM/YYYY")}</span>
+        render: (row: any, index: number, stt: number) => <span>{moment(row?.ngayCapNhat).format("DD/MM/YYYY HH:mm")}</span>
     },
     {
         name: "Trạng thái",
@@ -551,14 +614,7 @@ export const LichSuXacNhanColumns = [
         headerStyle: {
             minWidth: "120px"
         },
-    },
-    {
-        name: "Email",
-        field: "emailNbc",
-        headerStyle: {
-            minWidth: "120px"
-        },
-    },
+    },   
 ]
 
 
@@ -577,7 +633,7 @@ export const LichSuTheoDoiColumns = [
         cellStyle: {
             textAlign: "center",
         },
-        render: (row: any, index: number, stt: number) => <span>{moment(row?.ngayCapNhat).format("DD/MM/YYYY")}</span>
+        render: (row: any, index: number, stt: number) => <span>{moment(row?.ngayCapNhat).format("DD/MM/YYYY HH:mm")}</span>
     },
     {
         name: "Cơ sở cập nhật",
@@ -659,32 +715,32 @@ export const INITIAL_TRUONG_HOP_BENH: truongHopBenh = {
     truongHopBenhId: null,
     doiTuongMacBenhId: null,
     capDoBenhId: null,
-    tinhTrangHienNay: 0,
-    ngayKhoiPhat: null,
-    ngayNhapVien: null,
-    ngayRaVien: null,
-    chanDoanRaVien: null,
+    tinhTrangHienNay: null,
+    ngayKhoiPhat: "",
+    ngayNhapVien: "",
+    ngayRaVien: "",
+    chanDoanRaVien: "",
     benhVienChuyenToiId: null,
-    tinhTrangKhac: null,
-    phanLoaiChanDoan: 0,
+    tinhTrangKhac: "",
+    phanLoaiChanDoan: null,
     layMauXetNghiem: 1,
     suDungVacXin: 0,
     soLanSuDung: null,
     loaiXetNghiem: null,
     loaiXetNghiemKhac: "",
     dinhLoaiXetNghiemKhac: null,
-    ketQuaXetNghiem: null,
-    ngayThucHienXn: null,
-    ngayTraKetQuaXn: null,
+    ketQuaXetNghiem: "",
+    ngayThucHienXn: "",
+    ngayTraKetQuaXn: "",
     donViXetNghiem: null,
-    benhChanDoanPhu: null,
-    chanDoanBienChung: null,
-    tienSuDichTe: null,
-    ghiChu: null,
-    tenNguoiBaoCao: null,
-    emailNguoiBaoCao: null,
+    benhChanDoanPhu: "",
+    chanDoanBienChung: "",
+    tienSuDichTe: "",
+    ghiChu: "",
+    tenNguoiBaoCao: "",
+    emailNguoiBaoCao: "",
     donViCongTacNbcId: null,
-    dienThoaiNguoiBaoCao: null,
+    dienThoaiNguoiBaoCao: "",
     noiPhatHien: null,
     coSoDieuTriId: null,
     coSoQuanLyId: null,
@@ -704,24 +760,24 @@ export const INITIAL_TRUONG_HOP_BENH: truongHopBenh = {
 
 export const INITIAL_DOI_TUONG_MAC_BENH: doiTuongMacBenh = {
     doiTuongMacBenhId: null,
-    hoTen: null,
-    ngaySinh: null,
+    hoTen: "",
+    ngaySinh: "",
     ngheNghiepId: null,
     danTocId: null,
     gioiTinh: 1,
     haveCmnd: true,
-    cmnd: null,
+    cmnd: "",
     haveDienThoai: true,
-    dienThoai: null,
-    noiLamViecHocTap: null,
+    dienThoai: "",
+    noiLamViecHocTap: "",
     tinhIdHienNay: null,
     huyenIdHienNay: null,
     xaIdHienNay: null,
-    diaChiHienNay: null,
+    diaChiHienNay: "",
     tinhIdThuongTru: null,
     huyenIdThuongTru: null,
     xaIdThuongTru: null,
-    diaChiThuongTru: null,
+    diaChiThuongTru: "",
     //object
     ngheNghiep: null,
     danToc: null,

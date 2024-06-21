@@ -17,6 +17,9 @@ const TienSuBenh = () => {
                 const res = await getThongTinTienSuBenh(id);
                 setdata(res?.data?.data?.tienSuBenhThbResps)
             }
+            else {
+                setdata([])
+            }
         } catch (error) {
             console.error(error);
             toast.error(error as string);
@@ -39,6 +42,7 @@ const TienSuBenh = () => {
                     notEdit={true}
                     noToolbar={true}
                     unSelectedAll={true}
+                    noPagination
                 />
             </div>
         </div>
