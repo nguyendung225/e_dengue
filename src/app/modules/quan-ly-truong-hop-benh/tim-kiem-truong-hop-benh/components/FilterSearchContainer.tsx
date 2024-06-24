@@ -140,17 +140,17 @@ const FilterSearchContainer = (props: Props) => {
         }),
     });
 
-    return (
-            <Formik
-                initialValues={searchObject}
-                onSubmit={handleSubmit}
-                validationSchema={validationSchema}
-            >
-                <Form noValidate>
-                    {children}
-                </Form>
-            </Formik>
-    );
+  return (
+    <Formik
+      initialValues={searchObject}
+      onSubmit={handleSubmit}
+      validationSchema={validationSchema}
+    >
+      <Form noValidate>
+        {children}
+      </Form>
+    </Formik>
+  );
 };
 
 export default FilterSearchContainer;

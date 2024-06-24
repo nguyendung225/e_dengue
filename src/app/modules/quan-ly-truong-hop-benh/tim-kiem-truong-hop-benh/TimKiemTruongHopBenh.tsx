@@ -12,6 +12,7 @@ import SearchAdvanceForm from "./components/SearchAdvanceForm";
 import { convertListSearchObject } from "../../utils/FunctionUtils";
 import { localStorageItem } from "../../utils/LocalStorage";
 import { KEY_LOCALSTORAGE } from "../../auth/core/_consts";
+import { handleChangePagination } from "../../utils/PageUtils";
 type Props = {};
 
 const TimKiemTruongHopBenh = (props: Props) => {
@@ -40,15 +41,6 @@ const TimKiemTruongHopBenh = (props: Props) => {
   };
 
   useEffect(() => {
-    setSearchObj((prev) => ({
-      ...prev,
-      tinhId: userData?.tinhInfo,
-      huyenId: userData?.huyenInfo,
-      xaId: userData?.xaInfo,
-    }));
-  }, []);
-
-  useEffect(() => {
     let {
       listTinhTrangHienNay,
       tinh,
@@ -74,14 +66,14 @@ const TimKiemTruongHopBenh = (props: Props) => {
       gioiTinh,
       ngheNghiepId: ngheNghiep?.id,
       phanLoaiQuanLy: phanLoaiQuanLy?.code,
-      tinhId: tinh?.id,
-      huyenId: huyen?.id,
-      xaId: xa?.xaId,
+      tinhId: userData?.tinhId ? userData?.tinhId : tinh?.id,
+      huyenId: userData?.huyenId ? userData?.huyenId : huyen?.id,
+      xaId: userData?.xaId ? userData?.xaId : xa?.xaId,
       coSoGhiNhanId: coSoGhiNhan?.id,
       kqXetNghiem,
       donViThucHienXn: donViThucHienXn?.id,
       coSoDieuTriId: coSoDieuTri?.id,
-    }; 
+    };
     updatePageData(searchObjTemp);
   }, [searchObj]);
 
@@ -126,7 +118,9 @@ const TimKiemTruongHopBenh = (props: Props) => {
           totalPages={configTable?.totalPages}
           numberOfElements={configTable.numberOfElements}
           searchObject={searchObj}
-          setSearchObject={setSearchObj}
+          setSearchObject={(table) => {
+            handleChangePagination(table, setSearchObj)
+          }}
         />
 
         <div className="bg-white border-top spaces mt-10 py-14 px-10">
