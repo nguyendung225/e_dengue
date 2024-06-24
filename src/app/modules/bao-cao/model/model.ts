@@ -33,24 +33,33 @@ export interface iConfigTable {
 
 export interface ITinh {
   id: number;
-  tenTinh: string;
+  tenTinh?: string;
 }
 
 export interface IHuyen {
   id: number;
-  tenHuyen: string;
+  tenHuyen?: string;
 }
 
 export interface IXa {
-  xaId: number;
-  tenXa: string;
+  id: number;
+  xaId?: number;
+  tenXa?: string;
+}
+
+export interface ITuan {
+  disabled?: boolean;
+  group?: string | null;
+  selected?: boolean;
+  text: string;
+  value: string | number;
 }
 
 export interface ISearchBaoCao {
   tinhIds?: ITinh[] | null;
   huyenIds?: IHuyen[] | null;
   xaIds?: IXa[] | null;
-  tuan?: number | null;
+  tuan?: ITuan | null;
   nam?: number | null;
   tuNgay?: string | null;
   denNgay?: string | null;

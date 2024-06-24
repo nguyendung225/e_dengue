@@ -115,7 +115,7 @@ export const columnBaoCaoTuan: IColumns[] = [
                         }
                     },
                     {
-                        name: "cdNang",
+                        name: "CD",
                         field: "congDonNang",
                         headerStyle: {
                             minWidth: "80px"
