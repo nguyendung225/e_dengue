@@ -4,7 +4,7 @@ import Autocomplete from "../../component/input-field/autocomplete/Autocomplete"
 import { useFormikContext } from "formik"
 import { useEffect, useState } from "react";
 import { ISearchBaoCao } from "../model/model";
-import { getListHuyenByTinhId, getListNgayTrongTuan, getListTinh, getListTuanTrongNam, getListXaByHuyenId } from "../../services";
+import { getListHuyenByTinhId, getListNgayTrongTuan, getListTinh, getListTuanByNam, getListXaByHuyenId } from "../../services";
 import LabelRequired from "../../component/LabelRequired";
 import { authRoles } from "../../auth/authRoles";
 import { localStorageItem } from "../../utils/LocalStorage";
@@ -15,79 +15,47 @@ import { getListYear } from "../../utils/FunctionUtils";
 const SearchAdvanceForm = () => {
     const { values, handleChange, errors, touched, setFieldValue, setValues } = useFormikContext<ISearchBaoCao>();
     const userData = localStorageItem.get(KEY_LOCALSTORAGE.USER_INFOMATION)
-    
+    const [listTuan, setListTuan] = useState<any[]>([]);
+
     useEffect(() => {
-        if (userData?.tinhInfo) {
-            const newValues = { ...values, tinhIds: [userData.tinhInfo] };
+        if (values?.nam) {
+            handleGetApiYear(values?.nam as number);
+        }
+    }, [values?.nam]);
 
-            if (userData?.huyenInfo) {
-                newValues.huyenIds = [userData.huyenInfo];
+    useEffect(() => {
+        if (values?.tuan && values?.nam) {
+            getNgayTrongTuan(values?.nam as number, values?.tuan?.value as number);
+        }
+    }, [values?.tuan])
 
-                if (userData?.xaInfo) {
-                    newValues.xaIds = [userData.xaInfo];
-                } else {
-                    getAllXa(userData.huyenInfo.id);
-                }
-            } else {
-                getAllHuyen(userData.tinhInfo.id);
+    const getNgayTrongTuan = async (nam: number, tuan: number | string) => {
+        try {
+            const { data } = await getListNgayTrongTuan({ nam, tuan });
+            setValues((prevValues) => ({
+                ...prevValues,
+                tuNgay: data?.tungay && moment(data?.tungay, "DD-MM-YYYY").format("YYYY-MM-DD"),
+                denNgay: data?.denngay && moment(data?.denngay, "DD-MM-YYYY").format("YYYY-MM-DD"),
+            }))
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const handleGetApiYear = async (param?: number | null) => {
+        try {
+            const { data } = await getListTuanByNam({ nam: param });
+            setListTuan(data || []);
+            if (data?.length) {
+                setValues((prevValues) => ({
+                    ...prevValues,
+                    tuan: data[data?.length - 1]
+                }))
             }
-
-            setValues(newValues);
-        } else {
-            getAllTinh();
-        }
-    }, []);
-
-    const getAllXa = async (id: number) => {
-        try {
-            const { data } = await getListXaByHuyenId(id);
-            setValues((prevValues) => ({
-                ...prevValues,
-                xaIds: data?.data || [],
-            }));
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    const getAllHuyen = async (id: number) => {
-        try {
-            const { data } = await getListHuyenByTinhId(id);
-            setValues((prevValues) => ({
-                ...prevValues,
-                huyenIds: data?.data || [],
-            }));
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    const getAllTinh = async () => {
-        try {
-            const {data} = await getListTinh()
-            setValues((prevValues) => ({
-                ...prevValues,
-                tinhIds: data?.data || [],
-            }));
         } catch (error) {
             console.error(error)
         }
     }
-
-    const getNgayTrongTuan = async (nam: number, tuan: number) => {
-      const { data } = await getListNgayTrongTuan({ nam, tuan });
-      setValues({
-        ...values,
-        tuNgay: data?.tungay && moment(data?.tungay, "DD-MM-YYYY").format("YYYY-MM-DD"),
-        denNgay: data?.denngay && moment(data?.denngay, "DD-MM-YYYY").format("YYYY-MM-DD"),
-      });
-    };
-
-    useEffect(() => {
-      if (values?.nam && values?.tuan) {
-        getNgayTrongTuan(values?.nam as number, values?.tuan as number);
-      }
-    }, [values?.nam, values?.tuan]);
 
     return (
         <div className="spaces mt-15">
@@ -127,11 +95,8 @@ const SearchAdvanceForm = () => {
                                 });
                             }}
                             isDisabled={
-                                userData?.username === authRoles.TINH ||
-                                userData?.username === authRoles.HUYEN ||
-                                userData?.username === authRoles.XA
+                                !!userData?.tinhId
                             }
-                            
                             value={values?.tinhIds}
                             errors={errors?.tinhIds}
                             touched={touched?.tinhIds}
@@ -151,11 +116,15 @@ const SearchAdvanceForm = () => {
                             name='huyenIds'
                             searchObject={{}}
                             onChange={(selectedOption) => {
-                                setValues({...values,huyenIds: selectedOption, xaIds: null}) 
+                                setValues({
+                                    ...values,
+                                    huyenIds: selectedOption,
+                                    xaIds: null
+                                }) 
                             }}
-                            isDisabled={(userData?.username === authRoles.HUYEN ||
-                                userData?.username === authRoles.XA) ||
-                                Boolean(values?.tinhIds && values?.tinhIds?.length > 1)
+                            isDisabled={
+                                !!userData?.huyenId ||
+                                Boolean(values?.tinhIds?.length !== 1)
                             }
                             value={values?.huyenIds}
                             errors={errors?.huyenIds}
@@ -176,10 +145,14 @@ const SearchAdvanceForm = () => {
                             options={[]}
                             name='xaIds'
                             searchObject={{}}
-                            onChange={(selectedOption) => { setFieldValue("xaIds",selectedOption) }}
-                            isDisabled={(userData?.username === authRoles.XA) ||
-                                Boolean((values?.tinhIds && values?.tinhIds?.length > 1) ||
-                                (values?.huyenIds && values?.huyenIds?.length > 1))
+                            onChange={(selectedOption) => {
+                                setFieldValue("xaIds", selectedOption)
+                            }}
+                            isDisabled={
+                                !!userData?.xaId ||
+                                (values?.huyenIds === null
+                                    ? true :
+                                    Boolean(values?.huyenIds?.length !== 1))
                             }
                             value={values?.xaIds}
                             errors={errors?.xaIds}
@@ -200,7 +173,6 @@ const SearchAdvanceForm = () => {
                                 setValues({
                                   ...values,
                                   nam: selectedOption?.code,
-                                  tuan: null,
                                 });
                             }}
                             value={values?.nam}
@@ -211,17 +183,14 @@ const SearchAdvanceForm = () => {
                     <Col xs={12} sm={6} md={4} lg={3} className="spaces mt-5">
                         <Autocomplete
                             lable="Tuần"
-                            searchFunction={() =>
-                                values?.nam &&
-                                getListTuanTrongNam({nam: (values?.nam as number)})
-                            }
                             urlData='data'
-                            getOptionLabel={(option) => option?.value}
-                            options={[]}
+                            getOptionLabel={(option) => option?.text}
+                            getOptionValue={(option) => option?.value}
+                            options={listTuan || []}
                             name='tuan'
                             searchObject={{}}
                             onChange={(selectedOption) => {
-                                setFieldValue("tuan", selectedOption?.value as number);
+                                setFieldValue("tuan", selectedOption);
                             }}
                             value={values?.tuan}
                             errors={errors?.tuan}

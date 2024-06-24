@@ -132,3 +132,9 @@ export const getListNgayTrongTuan = (params: any) => {
     let url = API_URL + `common/day-in-week`;
     return axios.get(url, paramsConfig(params));
 }
+
+export const getListTuanByNam = (params: any) => {
+  const url = API_URL + "common/number-week-of-year";
+
+  return axios.get(url, paramsConfig(params));
+};

@@ -13,7 +13,7 @@ import { localStorageItem } from "../utils/LocalStorage"
 import { KEY_LOCALSTORAGE } from "../auth/core/_consts"
 import ModalPhieuIn from "../component/ModalPhieuIn"
 import PhieuInBaoCao from "./components/PhieuInBaoCao"
-import { getListHuyenByTinhId, getListTinh, getListXaByHuyenId } from "../services"
+import { getListHuyenByTinhId, getListTinh, getListTuanByNam, getListXaByHuyenId } from "../services"
 
 const BaoCaoTuan = () => {
     const [baoCaoTuanList, setBaoCaoTuanList] = useState<any>([]);
@@ -30,9 +30,9 @@ const BaoCaoTuan = () => {
   const setSearchObject = () => {
     setSearchObj({
       ...searchObject,
-      tinhIds: [userData?.tinhInfo?.id],
-      huyenIds: [userData?.huyenInfo?.id],
-      xaIds: [userData?.xaInfo?.xaId],
+      tinhIds: userData?.tinhInfo ? [userData?.tinhInfo] : [],
+      huyenIds: userData?.huyenInfo ? [userData?.huyenInfo] : [],
+      xaIds: userData?.xaInfo ? [userData?.xaInfo] : [],
     });
   };
 
@@ -60,11 +60,9 @@ const BaoCaoTuan = () => {
       const { data } = await getListXaByHuyenId(id);
       setSearchObj((prevValues) => ({
         ...prevValues,
-        tinhIds: userData?.tinhInfo ? [userData.tinhInfo.id] : null,
-        huyenIds: userData?.huyenInfo ? [userData.huyenInfo.id] : null,
-        xaIds: data?.data.map((item: any) => {
-          return item.maXa
-        }) || [],
+        tinhIds: userData?.tinhInfo ? [userData?.tinhInfo] : null,
+        huyenIds: userData?.huyenInfo ? [userData?.huyenInfo] : null,
+        xaIds: data?.data || [],
       }));
     } catch (error) {
       console.error(error);
@@ -76,10 +74,8 @@ const BaoCaoTuan = () => {
       const { data } = await getListHuyenByTinhId(id);
       setSearchObj((prevValues) => ({
         ...prevValues,
-        tinhIds: userData?.tinhInfo ? [userData.tinhInfo.id] : null,
-        huyenIds: data?.data.map((item: any) => {
-          return item.maHuyen
-        }) || [],
+        tinhIds: userData?.tinhInfo ? [userData?.tinhInfo] : null,
+        huyenIds: data?.data || [],
       }));
     } catch (error) {
       console.error(error);
@@ -91,9 +87,7 @@ const BaoCaoTuan = () => {
       const { data } = await getListTinh()
       setSearchObj((prevValues) => ({
         ...prevValues,
-        tinhIds: data?.data.map((item: any) => {
-          return item.maTinh
-        }) || [],
+        tinhIds: data?.data || [],
       }));
     } catch (error) {
       console.error(error)
@@ -103,7 +97,13 @@ const BaoCaoTuan = () => {
     const updatePageData = async (searchData: ISearchBaoCao) => {
         try {
           setPageLoading(true);
-          const { data } = await getDataBaoCao(searchData);
+          const { data } = await getDataBaoCao({
+            ...searchData,
+            tuan: Number(searchData?.tuan?.value),
+            tinhIds: searchData?.tinhIds === null ? [] : searchData?.tinhIds?.map((item) => item.id) || null,
+            huyenIds: searchData?.huyenIds === null ? [] : searchData?.huyenIds?.map((item) => item.id) || null,
+            xaIds: searchData?.xaIds === null ? [] : searchData?.xaIds?.map((item) => item.xaId),
+          });
           if (data?.code === RESPONSE_STATUS_CODE.SUCCESS) {
             setBaoCaoTuanList(data?.data?.listBaoCaoDiaPhuong || []);
             setThongTinBaoCao(data?.data)
@@ -117,22 +117,51 @@ const BaoCaoTuan = () => {
         }
     };
   
-    useEffect(() => {
-      if (searchObject?.tinhIds || searchObject?.huyenIds || searchObject?.xaIds) {
-        updatePageData(searchObject);
-      }
-    }, [searchObject]);
+  useEffect(() => {
+    if ((searchObject?.tinhIds || searchObject?.huyenIds || searchObject?.xaIds) && searchObject?.tuan !== null) {
+      updatePageData(searchObject);
+    }
+  }, [searchObject]);
+  
+  useEffect(() => {
+    if (searchObject?.nam) {
+      handleGetApiYear(searchObject?.nam as number);
+    }
+  }, [searchObject?.nam])
 
-    return (
-      <div className="spaces mt-15 search-container">
-        <div className="position-relative spaces z-index-4">
-          <FilterSearchContainer
-            setSearchObject={setSearchObj}
-            searchObject={searchObject}
+  const handleGetApiYear = async (param?: number | null) => {
+    try {
+      const { data } = await getListTuanByNam({ nam: param });
+      if (data?.length) {
+        setSearchObj((prevValues) => ({
+          ...prevValues,
+          tuan: data[data?.length - 1]
+        }));
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  return (
+    <div className="spaces mt-15 search-container">
+      <div className="position-relative spaces z-index-4">
+        <FilterSearchContainer
+          searchObject={searchObject}
+          handleSearch={updatePageData}
+        >
+          <SearchAdvanceForm />
+          <ModalPhieuIn
+            show={openModalPhieuIn}
+            handleCloseDialog={() => setOpenModalPhieuIn(false)}
+            size="lg"
           >
-            <SearchAdvanceForm />
-          </FilterSearchContainer>
-        </div>
+            <PhieuInBaoCao
+              thongTinBaoCao={thongTinBaoCao}
+            />
+          </ModalPhieuIn>
+        </FilterSearchContainer>
+      </div>
         <div className="section-container spaces mt-15">
           <div className="d-flex align-items-center justify-content-between my-4">
             <div className="spaces fs-18 fw-bold text-uppercase color-dark-red">
@@ -142,7 +171,7 @@ const BaoCaoTuan = () => {
               className="button-primary"
               onClick={() => setOpenModalPhieuIn(true)}
             >
-              In Báo cáo
+              In báo cáo
             </Button>
           </div>
           <TableGrouping
@@ -155,18 +184,9 @@ const BaoCaoTuan = () => {
           />
         </div>
 
-        <ModalPhieuIn
-          show={openModalPhieuIn}
-          handleCloseDialog={() => setOpenModalPhieuIn(false)}
-          size="lg"
-        >
-          <PhieuInBaoCao
-            thongTinBaoCao={thongTinBaoCao}
-            ngayBaoCao={searchObject}
-          />
-        </ModalPhieuIn>
-      </div>
-    )
+        
+    </div>
+  )
 }
 
 export default BaoCaoTuan

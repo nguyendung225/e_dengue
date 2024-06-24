@@ -29,8 +29,6 @@ const SearchAdvanceForm = () => {
       });
     }, [isReSetForm]);
 
-    console.log("234234",values.tuNgayNhapBaoCao);
-    
     return (
         <>
             {location.pathname === "/tim-kiem-truong-hop-benh" && (

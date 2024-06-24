@@ -5,10 +5,9 @@ import { useFormikContext } from "formik";
 
 type TProps = {
     thongTinBaoCao?: IBaoCao;
-    ngayBaoCao?: ISearchBaoCao;
 };
 
-const PhieuInBaoCao = ({ thongTinBaoCao, ngayBaoCao }: TProps) => {
+const PhieuInBaoCao = ({ thongTinBaoCao }: TProps) => {
     const {
         text_center,
         padding,
@@ -25,6 +24,8 @@ const PhieuInBaoCao = ({ thongTinBaoCao, ngayBaoCao }: TProps) => {
         marginBottom
     } = printStyles;
 
+    const { values } = useFormikContext<ISearchBaoCao>()
+    
     return (
         <div className="spaces px-75" style={{ ...margin_x_auto }}>
             <div style={{ ...color.primary, ...marginBottom._10px }}>Báo cáo theo Thông tư 54/2015/TT-BYT</div>
@@ -40,7 +41,7 @@ const PhieuInBaoCao = ({ thongTinBaoCao, ngayBaoCao }: TProps) => {
             </div>
             <div style={{ ...text_center, ...fontWeight.bold }}>
                 <div style={{ ...color.dark_red, ...fontSize._18px, ...marginTop._20px }}>BÁO CÁO BỆNH SỐT XUẤT HUYẾT DENGUE </div>
-                <p style={{ ...fontWeight.normal }}>Tuần {ngayBaoCao?.tuan || 0} từ ngày {moment(ngayBaoCao?.tuNgay).format("DD/MM/YYYY")} đến {moment(ngayBaoCao?.denNgay).format("DD/MM/YYYY")} </p>
+                <p style={{ ...fontWeight.normal }}>Tuần {values?.tuan?.value || 0} từ ngày {moment(values?.tuNgay).format("DD/MM/YYYY")} đến {moment(values?.denNgay).format("DD/MM/YYYY")} </p>
             </div>
             <div>
                 <table style={{ ...border.black, ...text_center, ...margin_x_auto, ...border.collapse }}>
