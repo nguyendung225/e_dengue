@@ -5,7 +5,7 @@ import "./style.scss"
 type VariationPlacement = "top-start" | "top-end" | "bottom-start" | "bottom-end" | "right-start" | "right-end" | "left-start" | "left-end";
 type BasePlacement = "top" | "bottom" | "right" | "left";
 type AutoPlacement = "auto" | "auto-start" | "auto-end";
-type Placement = AutoPlacement | BasePlacement | VariationPlacement;
+export type Placement = AutoPlacement | BasePlacement | VariationPlacement;
 
 interface IProps {
     children: any;

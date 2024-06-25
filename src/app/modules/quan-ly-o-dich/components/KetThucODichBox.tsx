@@ -2,6 +2,7 @@ import { OCTTextValidator } from "@oceantech/oceantech-ui"
 import { useFormikContext } from "formik"
 import { Col, Row } from "react-bootstrap"
 import { IThongTinODich } from "../models/quanLyODichModels"
+import TextValidator from "../../component/input-field/TextValidator"
 
 const KetThucODichBox = () => {
     const { values, errors, touched, handleChange } = useFormikContext<IThongTinODich>()
@@ -14,7 +15,7 @@ const KetThucODichBox = () => {
             <div className="border-top">
                 <Row>
                     <Col xs={3} className="spaces mt-16">
-                        <OCTTextValidator
+                        <TextValidator
                             lable="Ngày khởi phát trường hợp bệnh đầu tiên"
                             name="oDich.ngayKhoiPhatThbDauTien"
                             value={values?.oDich?.ngayKhoiPhatThbDauTien}
@@ -25,7 +26,7 @@ const KetThucODichBox = () => {
                         />
                     </Col>
                     <Col xs={3} className="spaces mt-16">
-                        <OCTTextValidator
+                        <TextValidator
                             lable="Ngày nhận báo cáo ổ dịch bệnh đầu tiên"
                             name="oDich.ngayNhanBaoCao"
                             value={values?.oDich?.ngayNhanBaoCao}
@@ -37,7 +38,7 @@ const KetThucODichBox = () => {
                         />
                     </Col>
                     <Col xs={3} className="spaces mt-16">
-                        <OCTTextValidator
+                        <TextValidator
                             lable="Ngày khởi phát trường hợp bệnh cuối cùng"
                             name="oDich.ngayKhoiPhatThbCuoiCung"
                             value={values?.oDich?.ngayKhoiPhatThbCuoiCung}
@@ -48,7 +49,7 @@ const KetThucODichBox = () => {
                             type="date" />
                     </Col>
                     <Col xs={3} className="spaces mt-16">
-                        <OCTTextValidator
+                        <TextValidator
                             lable="Ngày ổ dịch kết thúc hoạt động"
                             name="oDich.ngayKetThucODich"
                             value={values?.oDich?.ngayKetThucODich}

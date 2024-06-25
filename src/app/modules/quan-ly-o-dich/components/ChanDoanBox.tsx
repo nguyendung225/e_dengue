@@ -7,6 +7,7 @@ import { CONFIG_BY_TYPE_TEST } from "../../quan-ly-truong-hop-benh/danh-sach-tru
 import { KHONG_LAY_MAU_XN, KQ_XET_NGHIEM, LAY_MAU_XN, LOAI_XET_NGHIEM, PCLD_XAC_DINH_PHONG_XET_NGHIEM, PHAN_LOAI_CHAN_DOAN, YES_NO_OPT } from "../../quan-ly-truong-hop-benh/danh-sach-truong-hop-benh/constants/constant";
 import { getListCoSoDieuTri } from "../../services";
 import { IThongTinODich } from "../models/quanLyODichModels";
+import TextValidator from "../../component/input-field/TextValidator";
 
 const ChanDoanBox = () => {
     const { values, handleChange, errors, touched, setFieldValue, setValues } = useFormikContext<IThongTinODich>()
@@ -119,7 +120,7 @@ const ChanDoanBox = () => {
                                     <div className="spaces my-5 fw-bold">Thời gian, đơn vị thực hiện</div>
                                     <Row>
                                         <Col xs={12} sm={6} md={6} lg={6} className="spaces mt-10">
-                                            <OCTTextValidator
+                                            <TextValidator
                                                 lable="Ngày lấy mẫu"
                                                 type="date"
                                                 name="truongHopBenh.ngayThucHienXn"
@@ -147,7 +148,7 @@ const ChanDoanBox = () => {
                                             />
                                         </Col>
                                         <Col xs={12} sm={6} md={6} lg={6} className="spaces mt-10">
-                                            <OCTTextValidator
+                                            <TextValidator
                                                 lable="Ngày trả kết quả"
                                                 type="date"
                                                 name="truongHopBenh.ngayTraKetQuaXn"

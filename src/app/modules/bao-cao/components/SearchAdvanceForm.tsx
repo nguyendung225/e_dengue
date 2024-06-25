@@ -1,4 +1,4 @@
-import { OCTKTSVG, OCTTextValidator } from "@oceantech/oceantech-ui"
+import { OCTKTSVG } from "@oceantech/oceantech-ui"
 import { Button, Col, Row } from "react-bootstrap"
 import Autocomplete from "../../component/input-field/autocomplete/Autocomplete"
 import { useFormikContext } from "formik"
@@ -11,6 +11,7 @@ import { localStorageItem } from "../../utils/LocalStorage";
 import { KEY_LOCALSTORAGE } from "../../auth/core/_consts";
 import moment from "moment";
 import { getListYear } from "../../utils/FunctionUtils";
+import TextValidator from "../../component/input-field/TextValidator";
 
 const SearchAdvanceForm = () => {
     const { values, handleChange, errors, touched, setFieldValue, setValues } = useFormikContext<ISearchBaoCao>();
@@ -202,7 +203,7 @@ const SearchAdvanceForm = () => {
                             label="Từ ngày"
                             className="fw-500"
                         />
-                        <OCTTextValidator
+                        <TextValidator
                             name="tuNgay"
                             type="date"
                             onChange={handleChange}
@@ -217,7 +218,7 @@ const SearchAdvanceForm = () => {
                             label="Đến ngày"
                             className="fw-500"
                         />
-                        <OCTTextValidator
+                        <TextValidator
                             name="denNgay"
                             type="date"
                             onChange={handleChange}

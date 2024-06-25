@@ -7,6 +7,7 @@ import { getListCoSoDieuTri, getListDmCapDoBenh } from '../../../services';
 import { CONFIG_BY_CURRENT_STATUS, CONFIG_BY_TYPE_TEST } from '../config/config';
 import { CO_SU_DUNG_VAXIN, KHONG_LAY_MAU_XN, KQ_XET_NGHIEM, LAY_MAU_XN, LOAI_XET_NGHIEM, PCLD_XAC_DINH_PHONG_XET_NGHIEM, PHAN_LOAI_CHAN_DOAN, SU_DUNG_VAXIN, TINH_TRANG_HIEN_NAY, YES_NO_OPT } from '../constants/constant';
 import { TruongHopBenh } from '../model/Model';
+import TextValidator from '../../../component/input-field/TextValidator';
 
 type Props = {
     onlyView?: boolean
@@ -120,7 +121,7 @@ const ThongTinChanDoanTab = ({ onlyView }: Props) => {
                     />
                 </Col>
                 <Col xl={2}>
-                    <OCTTextValidator
+                    <TextValidator
                         lable="Ngày khởi phát"
                         type="date"
                         name="truongHopBenh.ngayKhoiPhat"
@@ -133,7 +134,7 @@ const ThongTinChanDoanTab = ({ onlyView }: Props) => {
                     />
                 </Col>
                 <Col xl={2}>
-                    <OCTTextValidator
+                    <TextValidator
                         lable="Ngày N.Viện/khám"
                         type="date"
                         isRequired
@@ -146,7 +147,7 @@ const ThongTinChanDoanTab = ({ onlyView }: Props) => {
                     />
                 </Col>
                 <Col xl={3}>
-                    <OCTTextValidator
+                    <TextValidator
                         lable="Ngày ra viện/chuyển viện/tử vong"
                         type="date"
                         name="truongHopBenh.ngayRaVien"
@@ -303,7 +304,7 @@ const ThongTinChanDoanTab = ({ onlyView }: Props) => {
                         />
                     </Col>
                     <Col xl={3}>
-                        <OCTTextValidator
+                        <TextValidator
                             lable="Ngày lấy mẫu"
                             type="date"
                             name="truongHopBenh.ngayThucHienXn"
@@ -317,7 +318,7 @@ const ThongTinChanDoanTab = ({ onlyView }: Props) => {
                         />
                     </Col>
                     <Col xl={3}>
-                        <OCTTextValidator
+                        <TextValidator
                             lable="Ngày trả kết quả"
                             type="date"
                             name="truongHopBenh.ngayTraKetQuaXn"

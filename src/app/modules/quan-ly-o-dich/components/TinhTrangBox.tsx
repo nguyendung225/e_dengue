@@ -7,6 +7,7 @@ import { CONFIG_BY_CURRENT_STATUS } from "../../quan-ly-truong-hop-benh/danh-sac
 import { TINH_TRANG_HIEN_NAY } from "../../quan-ly-truong-hop-benh/danh-sach-truong-hop-benh/constants/constant"
 import { getListCoSoDieuTri } from "../../services"
 import { IThongTinODich } from "../models/quanLyODichModels"
+import TextValidator from "../../component/input-field/TextValidator"
 
 const TinhTrangBox = () => {
     const { values, handleChange, errors, touched, setFieldValue, setValues } = useFormikContext<IThongTinODich>()
@@ -46,7 +47,7 @@ const TinhTrangBox = () => {
                     </Col>
                     <Col xs={12} sm={6} md={6} lg={6}>
                         <div>
-                            <OCTTextValidator
+                            <TextValidator
                                 lable="Ngày khởi phát"
                                 type="date"
                                 name="truongHopBenh.ngayKhoiPhat"
@@ -59,7 +60,7 @@ const TinhTrangBox = () => {
                             />
                         </div>
                         <div className="spaces mt-10">
-                            <OCTTextValidator
+                            <TextValidator
                                 lable="Ngày N.Viện/khám"
                                 type="date"
                                 isRequired
@@ -72,7 +73,7 @@ const TinhTrangBox = () => {
                             />
                         </div>
                         <div className="spaces mt-10">
-                            <OCTTextValidator
+                            <TextValidator
                                 lable="Ngày ra viện/chuyển viện/tử vong"
                                 type="date"
                                 name="truongHopBenh.ngayRaVien"

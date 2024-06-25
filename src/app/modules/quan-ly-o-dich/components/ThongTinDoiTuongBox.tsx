@@ -8,6 +8,7 @@ import { calculateAge } from "../../utils/AppFunction"
 import { IThongTinODich } from "../models/quanLyODichModels"
 import { getListDanToc, getListHuyenByTinhId, getListNgheNghiep, getListTinh, getListXaByHuyenId } from "../../services"
 import { handleChangeHuyen, handleChangeTinh, handleChangeXa, haveInfomation } from "../../utils/FunctionUtils"
+import TextValidator from "../../component/input-field/TextValidator"
 
 
 const ThongTinDoiTuongBox = () => {
@@ -47,7 +48,7 @@ const ThongTinDoiTuongBox = () => {
                     </Col>
                     <Col xs={12} sm={6} md={6} lg={6} className="spaces mt-10">
                         <div className="d-flex spaces gap-15">
-                            <OCTTextValidator
+                            <TextValidator
                                 lable="Ngày sinh"
                                 type="date"
                                 isRequired

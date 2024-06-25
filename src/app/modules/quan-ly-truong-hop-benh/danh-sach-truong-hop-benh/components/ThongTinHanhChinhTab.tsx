@@ -19,6 +19,7 @@ import { localStorageItem } from '../../../utils/LocalStorage';
 import { KEY_LOCALSTORAGE } from '../../../auth/core/_consts';
 import { authRoles } from '../../../auth/authRoles';
 import { regex } from '../../../constant';
+import TextValidator from '../../../component/input-field/TextValidator';
 
 type Props = {
     onlyView?: boolean
@@ -203,7 +204,7 @@ const ThongTinHanhChinhTab = ({ onlyView }: Props) => {
                 />
             </Col>
             <Col xl={2}>
-                <OCTTextValidator
+                <TextValidator
                     lable="Ngày sinh"
                     type="date"
                     isRequired
