@@ -15,6 +15,7 @@ import { TYPE } from "../../../utils/Constant";
 import { exportPdfFile, exportWordFile } from "../servives/Services";
 import { regex } from "../../../constant";
 import { MIN_DATE_200 } from "../../../../Constant";
+import ToaDoCaBenh from "../components/ToaDoCaBenh";
 
 export const TRANG_THAI_PHAN_HOI = {
     QUA_7_NGAY_CHUA_XN: -1,
@@ -449,6 +450,11 @@ export const tabThongTinTruongHopBenh = [
         title: "Lịch sử xác nhận",
         component: <LichSuXacNhan />
     },
+    {
+        eventKey: "6",
+        title: "Tọa độ ca bệnh",
+        component: <ToaDoCaBenh />
+    },
 ];
 
 export const PHAN_LOAI_CHAN_DOAN = [
@@ -729,9 +735,9 @@ export const INITIAL_TRUONG_HOP_BENH: truongHopBenh = {
     loaiXetNghiem: null,
     loaiXetNghiemKhac: "",
     dinhLoaiXetNghiemKhac: null,
-    ketQuaXetNghiem: null,
-    ngayThucHienXn: null,
-    ngayTraKetQuaXn: null,
+    ketQuaXetNghiem: "",
+    ngayThucHienXn: "",
+    ngayTraKetQuaXn: "",
     donViXetNghiem: null,
     benhChanDoanPhu: "",
     chanDoanBienChung: "",
@@ -800,6 +806,9 @@ export interface BenhReport {
     trangThaiXacNhanThb: number | null;
     dienThoaiNguoiBaoCao: string | null;
     moTa: string | null;
+    kinhDo: string | null;
+    viDo: string | null;
+
 }
 
 export const INITIAL_BENH_REPORT: BenhReport = {
@@ -807,7 +816,10 @@ export const INITIAL_BENH_REPORT: BenhReport = {
     hoTenNguoiBaoCao: null,
     trangThaiXacNhanThb: null,
     dienThoaiNguoiBaoCao: null,
-    moTa: null
+    moTa: null,
+    kinhDo: null,
+    viDo: null
+
 };
 
 export const DanhSachTHBColumns = [
@@ -839,3 +851,19 @@ export const DanhSachTHBColumns = [
 ]
 
 export const CMND_CHECK_TRUNG = 'Cmnd'
+
+export const HINH_THUC_CO_SO = {
+    TuyenTrungUong: 0,
+    BenhVienTrungUong: 1,
+    TuyenTinh: 2,
+    BenhVienTuyenTinh: 3,
+    TuyenHuyen: 4,
+    BenhVienTuyenHuyen: 5,
+    TuyenXa: 6,
+    YTeThon: 7,
+    YTeTuNhan: 8,
+    TrungTamCapTinh: 9,
+    TrungTamYTeHuyen: 10,
+    BenhVien: 11,
+    QuanYBoNganh: 12,
+}
