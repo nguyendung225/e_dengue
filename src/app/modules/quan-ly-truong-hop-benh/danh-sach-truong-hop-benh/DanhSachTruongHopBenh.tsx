@@ -37,19 +37,16 @@ const DanhSachTruongHopBenh = () => {
     const [configTable, setConfigTable] = useState<any>({});
     const [searchKeyword, setsSearchKeyword] = useState<string>("");
     const [exportedFileList, setExportedFileList] = useState<IDropdownButton[]>([]);
-    const [userStatus, setUserStatus] = useState<boolean>(false);
     const userData = localStorageItem.get(KEY_LOCALSTORAGE.USER_INFOMATION);
 
     useEffect(() => {
-      setUserStatus(true);
-      userStatus &&
         setSearchObject((prev) => ({
-          ...prev,
-          tinhId: userData?.tinhInfo,
-          huyenId: userData?.huyenInfo,
-          xaId: userData?.xaInfo,
+            ...prev,
+            tinh: userData?.tinhInfo ? userData?.tinhInfo : null,
+            huyen: userData?.huyenInfo ? userData?.huyenInfo : null,
+            xa: userData?.xaInfo ? userData?.xaInfo : null,
         }));
-    }, [userStatus]);
+    }, []);
 
     const getTruongHopBenhList = async (selectFirstRow?: boolean) => {
         try {

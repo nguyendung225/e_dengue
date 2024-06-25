@@ -22,17 +22,18 @@ type TFilterSearchContainerChildProps = {
 
 const FilterSearchContainerChild = ({ handleClose }: TFilterSearchContainerChildProps) => {
   const { setValues } = useFormikContext<ISearchObjectModel>();
-  const [isReSetForm,setIsResetForm] = useState<boolean>(false)
   const userData = localStorageItem.get(KEY_LOCALSTORAGE.USER_INFOMATION);
   
-  useEffect(() => {
+  const handleResetForm = () => {
     setValues({
       ...SEARCH_OBJECT_INIT,
       tinh: userData?.tinhInfo || null,
       huyen: userData?.huyenInfo || null,
       xa: userData?.xaInfo || null,
+      gioiTinh: null,
+      ngheNghiep: null,
     });
-  }, [isReSetForm]);
+  }
 
   return (
     <>
@@ -55,7 +56,7 @@ const FilterSearchContainerChild = ({ handleClose }: TFilterSearchContainerChild
         </Button>
         <Button
           className="button-primary spaces height-100 d-flex align-items-center"
-          onClick={() => setIsResetForm(prev=>!prev)}
+          onClick={handleResetForm}
         >
           <OCTKTSVG
             path="/media/svg/icons/recycle.svg"

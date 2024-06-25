@@ -10,24 +10,33 @@ import LabelRequired from "../../../component/LabelRequired";
 import { getListCoSoBaoCao, getListCoSoDieuTri, getListCoSoXetNghiem, getListHuyenByTinhId, getListNgheNghiep, getListTinh, getListXaByHuyenId } from "../../../services";
 import { localStorageItem } from "../../../utils/LocalStorage";
 import { KEY_LOCALSTORAGE } from "../../../auth/core/_consts";
-import { authRoles } from "../../../auth/authRoles";
 import AsyncAutoComplete from "../../../component/input-field/AsyncAutoComplete";
 
 const SearchAdvanceForm = () => {
     const [openSearchAdvance, setOpenSearchAdvance] = useState<boolean>(false);
     const location = useLocation();
     const { values, handleChange, errors, touched, setFieldValue, setValues } = useFormikContext<ISearchObjectModel>();
-    const [isReSetForm,setIsResetForm] = useState(false)
     const userData = localStorageItem.get(KEY_LOCALSTORAGE.USER_INFOMATION)
-    
+
+    const handleResetForm = () => {
+        setValues({
+            ...SEARCH_OBJECT_INIT,
+            tinh: userData?.tinhInfo || null,
+            huyen: userData?.huyenInfo || null,
+            xa: userData?.xaInfo || null,
+            gioiTinh: null,
+            ngheNghiep: null,
+        });
+    }
+
     useEffect(() => {
-      setValues({
-        ...SEARCH_OBJECT_INIT,
-        tinh: userData?.tinhInfo || null,
-        huyen: userData?.huyenInfo || null,
-        xa: userData?.xaInfo || null,
-      });
-    }, [isReSetForm]);
+        setValues({
+            ...values,
+            tinh: userData?.tinhInfo || null,
+            huyen: userData?.huyenInfo || null,
+            xa: userData?.xaInfo || null,
+        })
+    }, [])
 
     return (
         <>
@@ -38,7 +47,7 @@ const SearchAdvanceForm = () => {
                     </div>
                     <div>
                         <Row>
-                            <Col xs={12} lg={9}>
+                            <Col xs={12} lg={8}>
                                 <div className="flex flex-middle">
                                     <OCTTextValidator
                                         name="keyword"
@@ -49,7 +58,7 @@ const SearchAdvanceForm = () => {
                                     />
                                 </div>
                             </Col>
-                            <Col xs={12} lg={3}>
+                            <Col xs={12} lg={4}>
                                 <div className="flex flex-middle flex-wrap gap-2 search-action">
                                     <Button className="button-primary spaces height-100 flex flex-middle" type='submit'>
                                         <KTSVG
@@ -77,7 +86,7 @@ const SearchAdvanceForm = () => {
                                     </Button>
                                     <Button
                                         className="button-primary spaces height-100 flex flex-middle"
-                                        onClick={() => { setIsResetForm(prev => !prev) }}
+                                        onClick={handleResetForm}
                                     >
                                         <KTSVG
                                             path="/media/svg/icons/recycle.svg"
@@ -97,8 +106,8 @@ const SearchAdvanceForm = () => {
                     <Col
                         xs={12}
                         sm={6}
-                        md={location.pathname === "/danh-sach-truong-hop-benh" ? 6 : 4}
-                        xl={location.pathname === "/danh-sach-truong-hop-benh" ? 3 : 2}
+                        md={location.pathname === "/danh-sach-truong-hop-benh" ? 4 : 4}
+                        xl={location.pathname === "/danh-sach-truong-hop-benh" ? 4 : 2}
                     >
                         <LabelRequired
                             label="Họ tên"
@@ -111,13 +120,15 @@ const SearchAdvanceForm = () => {
                             value={values.hoTen || ""}
                             errors={errors?.hoTen}
                             touched={touched?.hoTen}
+                            placeholder="Họ tên"
                         />
                     </Col>
                     <Col 
                         xs={12} 
                         sm={6} 
-                        md={location.pathname === "/danh-sach-truong-hop-benh" ? 6 : 4} 
-                        lg={2}
+                        md={location.pathname === "/danh-sach-truong-hop-benh" ? 6 : 2} 
+                        lg={4}
+                        xl={location.pathname === "/danh-sach-truong-hop-benh" ? 4 : 2}
                     >
                         <LabelRequired
                             label="Giới tính"
@@ -131,7 +142,8 @@ const SearchAdvanceForm = () => {
                             className="spaces h-30"
                             name="gioiTinh"
                             options={GENDER_OPTION}
-                            value={values?.gioiTinh || ""}
+                            valueSearch={"code"}
+                            value={values?.gioiTinh || null}
                         />
                     </Col>
                     <Col 
@@ -139,7 +151,7 @@ const SearchAdvanceForm = () => {
                         sm={6} 
                         md={location.pathname === "/danh-sach-truong-hop-benh" ? 6 : 4} 
                         lg={4} 
-                        xl={location.pathname === "/danh-sach-truong-hop-benh" ? 3 : 2}
+                        xl={location.pathname === "/danh-sach-truong-hop-benh" ? 4 : 2}
                     >
                         <LabelRequired
                             label="Nghề nghiệp"
@@ -153,7 +165,7 @@ const SearchAdvanceForm = () => {
                             className="spaces h-30"
                             name="ngheNghiep"
                             options={[]}
-                            value={values?.ngheNghiep || ""}
+                            value={values?.ngheNghiep || null}
                             getOptionLabel={(option) => option?.tenNghe}
                             searchObject={{}}
                             searchFunction={getListNgheNghiep}
@@ -163,9 +175,9 @@ const SearchAdvanceForm = () => {
                     <Col 
                         xs={12} 
                         sm={6} 
-                        md={location.pathname === "/danh-sach-truong-hop-benh" ? 6 : 4} 
-                        lg={location.pathname === "/danh-sach-truong-hop-benh" ? 3: 4} 
-                        xl={location.pathname === "/danh-sach-truong-hop-benh" ? 2 : 2}
+                        md={location.pathname === "/danh-sach-truong-hop-benh" ? 4 : 4} 
+                        lg={location.pathname === "/danh-sach-truong-hop-benh" ? 4: 4} 
+                        xl={location.pathname === "/danh-sach-truong-hop-benh" ? 4 : 2}
                     >
                         <LabelRequired
                             label="Phân loại quản lý"
@@ -185,9 +197,9 @@ const SearchAdvanceForm = () => {
                     <Col 
                         xs={12} 
                         sm={6} 
-                        md={location.pathname === "/danh-sach-truong-hop-benh" ? 6 : 4} 
-                        lg={location.pathname === "/danh-sach-truong-hop-benh" ? 3: 4} 
-                        xl={location.pathname === "/danh-sach-truong-hop-benh" ? 2 : 2}
+                        md={location.pathname === "/danh-sach-truong-hop-benh" ? 8 : 4} 
+                        lg={location.pathname === "/danh-sach-truong-hop-benh" ? 8 : 4} 
+                        xl={location.pathname === "/danh-sach-truong-hop-benh" ? 8 : 4}
                     >
                         <LabelRequired
                             label="Tình trạng hiện nay"
@@ -213,7 +225,7 @@ const SearchAdvanceForm = () => {
                         Nơi ở hiện nay của bệnh nhân/ Địa chỉ cơ sở báo cáo
                     </div>
                     <Row>
-                        <Col xs={12} sm={6} md={4} lg={3} xl={2}>
+                        <Col xs={12} sm={6} md={4} lg={4} xl={location.pathname === "/danh-sach-truong-hop-benh" ? 4 : 2}>
                             <LabelRequired
                                 label="Tỉnh/Thành phố"
                                 className="spaces fw-500"
@@ -234,9 +246,7 @@ const SearchAdvanceForm = () => {
                                 options={[]}
                                 value={values.tinh}
                                 isDisabled={
-                                    userData?.username === authRoles.TINH ||
-                                    userData?.username === authRoles.HUYEN ||
-                                    userData?.username === authRoles.XA
+                                    !!userData?.tinhId
                                 }
                                 getOptionLabel={(option) => option?.tenTinh}
                                 searchObject={{}}
@@ -244,7 +254,7 @@ const SearchAdvanceForm = () => {
                                 urlData='data.data'
                             />
                         </Col>
-                        <Col xs={12} sm={6} md={4} lg={3} xl={2}>
+                        <Col xs={12} sm={6} md={4} lg={4} xl={location.pathname === "/danh-sach-truong-hop-benh" ? 4 : 2}>
                             <LabelRequired
                                 label="Huyện/Quận"
                                 className="spaces fw-500"
@@ -264,9 +274,7 @@ const SearchAdvanceForm = () => {
                                 options={[]}
                                 value={values?.huyen}
                                 isDisabled={
-                                    userData?.username === authRoles.HUYEN ||
-                                    userData?.username === authRoles.XA ||
-                                    !values?.tinh?.id
+                                    !!userData?.huyenId || !Boolean(values?.tinh)
                                 }
                                 getOptionLabel={(option) => option.tenHuyen}
                                 searchObject={{}}
@@ -278,7 +286,7 @@ const SearchAdvanceForm = () => {
                                 urlData='data.data'
                             />
                         </Col>
-                        <Col xs={12} sm={6} md={4} lg={3} xl={2}>
+                        <Col xs={12} sm={6} md={4} lg={4} xl={location.pathname === "/danh-sach-truong-hop-benh" ? 4 : 2}>
                             <LabelRequired
                                 label="Xã/Phường"
                                 className="spaces fw-500"
@@ -294,8 +302,7 @@ const SearchAdvanceForm = () => {
                                 options={[]}
                                 value={values?.xa}
                                 isDisabled={
-                                    userData?.username === authRoles.XA ||
-                                    !values?.huyen?.id
+                                    !!userData?.xaId || !Boolean(values?.huyen)
                                 }
                                 getOptionLabel={(option) => option.tenXa}
                                 searchObject={{}}
@@ -307,7 +314,7 @@ const SearchAdvanceForm = () => {
                                 urlData='data.data'
                             />
                         </Col>
-                        <Col xs={12} sm={6} md={4} lg={3} xl={2}>
+                        <Col xs={12} sm={6} md={4} lg={4} xl={location.pathname === "/danh-sach-truong-hop-benh" ? 4 : 2}>
                             <LabelRequired
                                 label="Ngày nhập báo cáo từ"
                                 className="spaces fw-500"
@@ -321,7 +328,7 @@ const SearchAdvanceForm = () => {
                                 touched={touched?.tuNgayNhapBaoCao}
                             />
                         </Col>
-                        <Col xs={12} sm={6} md={4} lg={3} xl={2}>
+                        <Col xs={12} sm={6} md={4} lg={4} xl={location.pathname === "/danh-sach-truong-hop-benh" ? 4 : 2}>
                             <LabelRequired
                                 label="Ngày nhập báo cáo đến"
                                 className="fw-500"
@@ -347,6 +354,7 @@ const SearchAdvanceForm = () => {
                                 params={{}}
                                 label="Cơ sở báo cáo"
                                 displayField='tenCoSo'
+                                placeholder="Cơ sở báo cáo"
                                 service={getListCoSoBaoCao}
                                 handleChange={(value) => setFieldValue("coSoGhiNhan", value)}
                                 value={values?.coSoGhiNhan || ""}
@@ -502,7 +510,7 @@ const SearchAdvanceForm = () => {
                                         touched={touched?.denNgayTraKetQuaXn}
                                     />
                                 </Col>
-                                <Col xs={12} sm={6} md={4} lg={2}>
+                                <Col xs={12} sm={6} md={4} lg={location.pathname === "/danh-sach-truong-hop-benh" ? 4 : 2}>
                                     <LabelRequired
                                         label="Kết quả xét nghiệm"
                                         className="spaces fw-500"
