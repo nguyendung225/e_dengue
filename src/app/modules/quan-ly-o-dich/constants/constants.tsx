@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { GENDER_OPT, INITIAL_DOI_TUONG_MAC_BENH, INITIAL_TRUONG_HOP_BENH } from "../../quan-ly-truong-hop-benh/danh-sach-truong-hop-benh/constants/constant";
 import { getListHoatDongChongDich } from "../../services";
 import { BienPhapTrienKhai, ISearchObjModel, IThongTinODich, ODich, SoCaMac, TienSuDichTe, XetNghiem, IConfigTable } from "../models/quanLyODichModels";
+import TextValidator from "../../component/input-field/TextValidator";
 
 export const TRANG_THAI_O_DICH = [
     {
@@ -187,7 +188,7 @@ export const dsSoMauXetNghiemColumns = ({ handleDeleteRow, handleChange, values,
                 minWidth: "60px"
             },
             render: (row: any, index: number, stt: number) => (
-                <OCTTextValidator
+                <TextValidator
                     type="date"
                     isRequired
                     className="spaces min-h-54"
@@ -299,7 +300,7 @@ export const dsSoMacTuVongColumns = ({ handleDeleteRow, handleChangeField, value
                 padding: "8px",
             },
             render: (row: any, index: number, stt: number) => (
-                <OCTTextValidator
+                <TextValidator
                     type="date"
                     className="spaces min-h-54"
                     isRequired
@@ -420,7 +421,7 @@ export const dsBienPhapPhongChongColumns = ({ handleDeleteRow, handleChange, val
             },
             render: (row: any, index: number) => {
                 return (
-                    <OCTTextValidator
+                    <TextValidator
                         className="flex-row min-w-80 spaces min-h-54"
                         type="date"
                         name={`bienPhapTrienKhaiList[${index}].ngayCapNhat`}

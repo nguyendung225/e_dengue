@@ -15,6 +15,7 @@ import { IThongTinODich } from "../models/quanLyODichModels"
 import { TruongHopBenh } from "../../quan-ly-truong-hop-benh/danh-sach-truong-hop-benh/model/Model"
 import { handleChangeHuyen, handleChangeTinh, handleChangeXa } from "../../utils/FunctionUtils"
 import { useParams } from "react-router-dom"
+import TextValidator from "../../component/input-field/TextValidator"
 
 export const ThongTinODichBox = () => {
     const { id } = useParams();
@@ -268,7 +269,7 @@ export const ThongTinODichBox = () => {
                             />
                         </Col>
                         <Col xs={12} sm={6} md={3} lg={3} className="spaces mt-5">
-                            <OCTTextValidator
+                            <TextValidator
                                 lable="Ngày khởi phát ổ dịch"
                                 type="date"
                                 isRequired

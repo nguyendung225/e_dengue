@@ -11,6 +11,7 @@ import { getListCoSoBaoCao, getListCoSoDieuTri, getListCoSoXetNghiem, getListHuy
 import { localStorageItem } from "../../../utils/LocalStorage";
 import { KEY_LOCALSTORAGE } from "../../../auth/core/_consts";
 import AsyncAutoComplete from "../../../component/input-field/AsyncAutoComplete";
+import TextValidator from "../../../component/input-field/text-validator";
 
 const SearchAdvanceForm = () => {
     const [openSearchAdvance, setOpenSearchAdvance] = useState<boolean>(false);
@@ -319,7 +320,7 @@ const SearchAdvanceForm = () => {
                                 label="Ngày nhập báo cáo từ"
                                 className="spaces fw-500"
                             />
-                            <OCTTextValidator
+                            <TextValidator
                                 name="tuNgayNhapBaoCao"
                                 type="date"
                                 onChange={handleChange}
@@ -333,7 +334,7 @@ const SearchAdvanceForm = () => {
                                 label="Ngày nhập báo cáo đến"
                                 className="fw-500"
                             />
-                            <OCTTextValidator
+                            <TextValidator
                                 name="denNgayNhapBaoCao"
                                 type="date"
                                 onChange={handleChange}
@@ -371,7 +372,7 @@ const SearchAdvanceForm = () => {
                                         label="Ngày khởi phát từ"
                                         className="fw-500"
                                     />
-                                    <OCTTextValidator
+                                    <TextValidator
                                         name="tuNgayKhoiPhat"
                                         type="date"
                                         onChange={handleChange}
@@ -385,7 +386,7 @@ const SearchAdvanceForm = () => {
                                         label="Ngày khởi phát đến"
                                         className="fw-500"
                                     />
-                                    <OCTTextValidator
+                                    <TextValidator
                                         name="denNgayKhoiPhat"
                                         type="date"
                                         onChange={handleChange}
@@ -399,7 +400,7 @@ const SearchAdvanceForm = () => {
                                         label="Ngày nhập viện từ"
                                         className="fw-500"
                                     />
-                                    <OCTTextValidator
+                                    <TextValidator
                                         name="tuNgayNhapVien"
                                         type="date"
                                         onChange={handleChange}
@@ -413,7 +414,7 @@ const SearchAdvanceForm = () => {
                                         label="Ngày nhập viện đến"
                                         className="fw-500"
                                     />
-                                    <OCTTextValidator
+                                    <TextValidator
                                         name="denNgayNhapVien"
                                         type="date"
                                         onChange={handleChange}
@@ -427,7 +428,7 @@ const SearchAdvanceForm = () => {
                                         label="Ngày ra viện/tử vong từ"
                                         className="fw-500"
                                     />
-                                    <OCTTextValidator
+                                    <TextValidator
                                         name="tuNgayRaVien"
                                         type="date"
                                         onChange={handleChange}
@@ -441,7 +442,7 @@ const SearchAdvanceForm = () => {
                                         label="Ngày ra viện/tử vong đến"
                                         className="fw-500"
                                     />
-                                    <OCTTextValidator
+                                    <TextValidator
                                         name="denNgayRaVien"
                                         type="date"
                                         onChange={handleChange}
@@ -459,7 +460,7 @@ const SearchAdvanceForm = () => {
                                         label="Ngày lấy mẫu xét nghiệm từ"
                                         className="fw-500"
                                     />
-                                    <OCTTextValidator
+                                    <TextValidator
                                         name="tuNgayLayMau"
                                         type="date"
                                         onChange={handleChange}
@@ -473,7 +474,7 @@ const SearchAdvanceForm = () => {
                                         label="Ngày lấy mẫu xét nghiệm đến"
                                         className="fw-500"
                                     />
-                                    <OCTTextValidator
+                                    <TextValidator
                                         name="denNgayLayMau"
                                         type="date"
                                         onChange={handleChange}
@@ -487,7 +488,7 @@ const SearchAdvanceForm = () => {
                                         label="Ngày trả kết quả từ"
                                         className="fw-500"
                                     />
-                                    <OCTTextValidator
+                                    <TextValidator
                                         name="tuNgayTraKetQuaXn"
                                         type="date"
                                         onChange={handleChange}
@@ -501,7 +502,7 @@ const SearchAdvanceForm = () => {
                                         label="Ngày trả kết quả đến"
                                         className="fw-500"
                                     />
-                                    <OCTTextValidator
+                                    <TextValidator
                                         name="denNgayTraKetQuaXn"
                                         type="date"
                                         onChange={handleChange}
