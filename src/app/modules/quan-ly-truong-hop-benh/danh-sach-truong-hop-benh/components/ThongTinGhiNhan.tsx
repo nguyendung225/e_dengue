@@ -49,7 +49,6 @@ const ThongTinGhiNhanTab = ({ onlyView }: Props) => {
                     <OCTTextValidator
                         lable="Email"
                         type="text"
-                        isRequired
                         name="truongHopBenh.emailNguoiBaoCao"
                         value={values.truongHopBenh?.emailNguoiBaoCao}
                         onChange={handleChange}
@@ -109,7 +108,6 @@ const ThongTinGhiNhanTab = ({ onlyView }: Props) => {
                 <Col xl={4}>
                     <AsyncAutoComplete
                         params={{}}
-                        required
                         displayField='tenCoSo'
                         label="Trạm y tế"
                         service={getListCoSoDieuTri}

@@ -13,7 +13,8 @@ import { localStorageItem } from "../utils/LocalStorage"
 import { KEY_LOCALSTORAGE } from "../auth/core/_consts"
 import ModalPhieuIn from "../component/ModalPhieuIn"
 import PhieuInBaoCao from "./components/PhieuInBaoCao"
-import { getListHuyenByTinhId, getListTinh, getListTuanByNam, getListXaByHuyenId } from "../services"
+import { getListHuyenByTinhId, getListTinh, getListXaByHuyenId } from "../services"
+import { getDayAndWeekByYear } from "./utils/functionUtils"
 
 const BaoCaoTuan = () => {
     const [baoCaoTuanList, setBaoCaoTuanList] = useState<any>([]);
@@ -37,6 +38,7 @@ const BaoCaoTuan = () => {
   };
 
   const checkAndSetSearchObject = () => {
+    getDayAndWeekByYear(searchObject?.nam as number,setSearchObj);
     if (userData?.tinhInfo && userData?.huyenInfo && userData?.xaInfo) {
       setSearchObject();
       return;
@@ -116,32 +118,12 @@ const BaoCaoTuan = () => {
           setPageLoading(false);
         }
     };
-  
-  useEffect(() => {
-    if ((searchObject?.tinhIds || searchObject?.huyenIds || searchObject?.xaIds) && searchObject?.tuan !== null) {
-      updatePageData(searchObject);
-    }
-  }, [searchObject]);
-  
-  useEffect(() => {
-    if (searchObject?.nam) {
-      handleGetApiYear(searchObject?.nam as number);
-    }
-  }, [searchObject?.nam])
 
-  const handleGetApiYear = async (param?: number | null) => {
-    try {
-      const { data } = await getListTuanByNam({ nam: param });
-      if (data?.length) {
-        setSearchObj((prevValues) => ({
-          ...prevValues,
-          tuan: data[data?.length - 1]
-        }));
-      }
-    } catch (error) {
-      console.error(error)
-    }
-  }
+    useEffect(() => {
+        if (searchObject?.tuan && searchObject?.tuNgay && searchObject?.denNgay) {
+            updatePageData(searchObject);
+        }
+    }, [searchObject]);
 
   return (
     <div className="spaces mt-15 search-container">

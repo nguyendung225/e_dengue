@@ -104,6 +104,10 @@ const NhapTruongHopBenhModal = (props: TProps) => {
         }
     };
 
+    const handleCheckIsValid = (isValid: boolean) => {
+        !isValid && toast.warning("Nhập đầy đủ và đúng định dạng các trường có dấu (*)")
+    }
+
     return (
         <Modal
             show
@@ -126,7 +130,7 @@ const NhapTruongHopBenhModal = (props: TProps) => {
                 onSubmit={handleSubmit}
                 enableReinitialize
             >
-                {formikProps => (
+                {({ isValid }) => (
                     <Form noValidate>
                         <Modal.Body className="noiDungTruongHopBenh">
                             <TabMenu
@@ -150,6 +154,9 @@ const NhapTruongHopBenhModal = (props: TProps) => {
                                         </Button>
                                     }
                                     <Button
+                                        onClick={() => {
+                                            handleCheckIsValid(isValid)
+                                        }}
                                         className="button-primary"
                                         type="submit">
                                         {activeTab === KeyTab.TT_GHI_NHAN ? "Lưu" : "Tiếp tục"}

@@ -10,6 +10,7 @@ import { RESPONSE_STATUS_CODE } from "./Constant";
 import generatePDF, { Options } from "react-to-pdf";
 import debounce from 'lodash/debounce';
 import * as echarts from "echarts";
+import * as Yup from "yup";
 import { TruongHopBenh } from "../quan-ly-truong-hop-benh/danh-sach-truong-hop-benh/model/Model";
 import { configTable } from "./models";
 
@@ -485,3 +486,13 @@ export function cmpNormalizeString(str1, str2) {
     const normalizedStr2 = normalizeString(formattedName2);
     return normalizedStr1 === normalizedStr2;
 }
+
+export const heightMenuAutocomplete = (height: string) => {
+    return {
+        menu: (baseStyles: any, state: any) => ({
+            ...baseStyles,
+            height: `${height} !important`,
+            overflow: "hidden",
+        }),
+    }
+};

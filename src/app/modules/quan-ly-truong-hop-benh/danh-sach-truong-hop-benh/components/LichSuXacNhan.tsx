@@ -28,7 +28,7 @@ const LichSuXacNhan = () => {
 
     useEffect(() => {
         getData();
-    }, [id])
+    }, [id, values?.truongHopBenh?.trangThaiPhanHoi])
 
     return (
         <div className="spaces mt-15">

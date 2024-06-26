@@ -56,6 +56,7 @@ export interface truongHopBenh {
 }
 
 export interface doiTuongMacBenh {
+    daTuVong?: number | null,
     doiTuongMacBenhId: number | null;
     maSo?: string | null;
     hoTen: string | null;

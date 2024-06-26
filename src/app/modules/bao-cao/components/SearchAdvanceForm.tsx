@@ -6,34 +6,22 @@ import { useEffect, useState } from "react";
 import { ISearchBaoCao } from "../model/model";
 import { getListHuyenByTinhId, getListNgayTrongTuan, getListTinh, getListTuanByNam, getListXaByHuyenId } from "../../services";
 import LabelRequired from "../../component/LabelRequired";
-import { authRoles } from "../../auth/authRoles";
 import { localStorageItem } from "../../utils/LocalStorage";
 import { KEY_LOCALSTORAGE } from "../../auth/core/_consts";
 import moment from "moment";
 import { getListYear } from "../../utils/FunctionUtils";
 import TextValidator from "../../component/input-field/TextValidator";
+import { getDayAndWeekByYear } from "../utils/functionUtils";
 
 const SearchAdvanceForm = () => {
     const { values, handleChange, errors, touched, setFieldValue, setValues } = useFormikContext<ISearchBaoCao>();
     const userData = localStorageItem.get(KEY_LOCALSTORAGE.USER_INFOMATION)
-    const [listTuan, setListTuan] = useState<any[]>([]);
 
-    useEffect(() => {
-        if (values?.nam) {
-            handleGetApiYear(values?.nam as number);
-        }
-    }, [values?.nam]);
-
-    useEffect(() => {
-        if (values?.tuan && values?.nam) {
-            getNgayTrongTuan(values?.nam as number, values?.tuan?.value as number);
-        }
-    }, [values?.tuan])
-
-    const getNgayTrongTuan = async (nam: number, tuan: number | string) => {
+    const handleChangWeek = async (nam: number, tuan: number | string) => {
+        setFieldValue("tuan", tuan);
         try {
             const { data } = await getListNgayTrongTuan({ nam, tuan });
-            setValues((prevValues) => ({
+            setValues((prevValues: ISearchBaoCao) => ({
                 ...prevValues,
                 tuNgay: data?.tungay && moment(data?.tungay, "DD-MM-YYYY").format("YYYY-MM-DD"),
                 denNgay: data?.denngay && moment(data?.denngay, "DD-MM-YYYY").format("YYYY-MM-DD"),
@@ -42,21 +30,6 @@ const SearchAdvanceForm = () => {
             console.error(err);
         }
     };
-
-    const handleGetApiYear = async (param?: number | null) => {
-        try {
-            const { data } = await getListTuanByNam({ nam: param });
-            setListTuan(data || []);
-            if (data?.length) {
-                setValues((prevValues) => ({
-                    ...prevValues,
-                    tuan: data[data?.length - 1]
-                }))
-            }
-        } catch (error) {
-            console.error(error)
-        }
-    }
 
     return (
         <div className="spaces mt-15">
@@ -171,10 +144,7 @@ const SearchAdvanceForm = () => {
                             name='nam'
                             searchObject={{}}
                             onChange={(selectedOption) => {
-                                setValues({
-                                  ...values,
-                                  nam: selectedOption?.code,
-                                });
+                                getDayAndWeekByYear(selectedOption?.value, setValues);
                             }}
                             value={values?.nam}
                             errors={errors?.nam}
@@ -187,11 +157,11 @@ const SearchAdvanceForm = () => {
                             urlData='data'
                             getOptionLabel={(option) => option?.text}
                             getOptionValue={(option) => option?.value}
-                            options={listTuan || []}
+                            options={values?.listTuan || []}
                             name='tuan'
                             searchObject={{}}
                             onChange={(selectedOption) => {
-                                setFieldValue("tuan", selectedOption);
+                                handleChangWeek(values.nam, selectedOption?.value);
                             }}
                             value={values?.tuan}
                             errors={errors?.tuan}

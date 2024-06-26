@@ -131,7 +131,7 @@ const TimKiemTruongHopBenh = (props: Props) => {
               svgClassName="spaces h-14 w-14 mr-4 color-green"
             />
             <span className="spaces mt-4">
-              Thời gian báo cáo trường hợp bệnh đúng theo quy định (trước 24h hoặc48h).
+              Thời gian báo cáo trường hợp bệnh đúng theo quy định (trước 24h hoặc 48h).
             </span>
           </div>
           <div className="d-flex align-items-center">

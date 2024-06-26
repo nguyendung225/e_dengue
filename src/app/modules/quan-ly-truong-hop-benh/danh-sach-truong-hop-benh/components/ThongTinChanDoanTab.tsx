@@ -3,7 +3,7 @@ import { useFormikContext } from 'formik';
 import { Col, Row } from '../../../component/Grid';
 import AsyncAutoComplete from '../../../component/input-field/AsyncAutoComplete';
 import RadioGroup from '../../../component/input-field/RadioGroup';
-import { getListCoSoDieuTri, getListDmCapDoBenh } from '../../../services';
+import { getListCoSoDieuTri, getListCoSoXetNghiem, getListDmCapDoBenh } from '../../../services';
 import { CONFIG_BY_CURRENT_STATUS, CONFIG_BY_TYPE_TEST } from '../config/config';
 import { CO_SU_DUNG_VAXIN, KHONG_LAY_MAU_XN, KQ_XET_NGHIEM, LAY_MAU_XN, LOAI_XET_NGHIEM, PCLD_XAC_DINH_PHONG_XET_NGHIEM, PHAN_LOAI_CHAN_DOAN, SU_DUNG_VAXIN, TINH_TRANG_HIEN_NAY, YES_NO_OPT } from '../constants/constant';
 import { TruongHopBenh } from '../model/Model';
@@ -332,10 +332,9 @@ const ThongTinChanDoanTab = ({ onlyView }: Props) => {
                     <Col xl={3}>
                         <AsyncAutoComplete
                         params={{}}
-                        required
                         displayField='tenCoSo'
                         label="Đơn vị xét nghiệm"
-                        service={getListCoSoDieuTri}
+                        service={getListCoSoXetNghiem}
                         handleChange={(value) => setFieldValue("truongHopBenh.donViXetNghiemObject", value)}
                         nameErrorMessage={errors?.truongHopBenh?.donViXetNghiemObject as string}
                         touched={touched?.truongHopBenh?.donViXetNghiemObject}

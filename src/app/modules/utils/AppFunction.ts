@@ -58,7 +58,7 @@ export const RomanNumeralsConverter = (number: number) => {
         const birth = moment(birthdate);
         const today = moment();
         let age = today.year() - birth.year();
-        if (today.month() > birth.month() || (today.month() === birth.month() && today.date() >= birth.date())) {
+        if (today.year() === birth.year()) {
             age++;
         }
 

@@ -8,14 +8,14 @@ export const INITIAL_CONFIG_TABLE: iConfigTable = {
     numberOfElements: 0,
 }
 
-export const SEARCH_OBJECT_INIT : ISearchBaoCao = {
+export const SEARCH_OBJECT_INIT: ISearchBaoCao = {
     tinhIds: null,
     huyenIds: null,
     xaIds: null,
     tuan: null,
     nam: moment().year(),
-    tuNgay: moment().subtract(1, 'months').startOf('month').format('YYYY-MM-DD'),
-    denNgay: moment().format('YYYY-MM-DD'),
+    tuNgay: null,
+    denNgay: null,
     capDoRoot: null,
 }
 
