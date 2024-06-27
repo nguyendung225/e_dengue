@@ -1,7 +1,7 @@
 import { OCTKTSVG, OCTTable } from "@oceantech/oceantech-ui";
 import "./styles/danhSachThb.scss";
 import { TYPE } from "../../utils/Constant";
-import { danhSachThbColumns, getExportedFileList,TRANG_THAI_PHAN_HOI, INIT_TRUONG_HOP_BENH, HINH_THUC_CO_SO } from "./constants/constant";
+import { danhSachThbColumns, getExportedFileList,TRANG_THAI_PHAN_HOI, INIT_TRUONG_HOP_BENH, HINH_THUC_CO_SO, TU_VONG_STATUS } from "./constants/constant";
 import { Button } from "react-bootstrap";
 import InputSearch from "../../component/input-field/InputSearch";
 import ThongTinThb from "./components/ThongTinThb";
@@ -21,7 +21,6 @@ import DropdownButton from "../../component/button/DropdownButton";
 import { convertListSearchObject, formatDataViewTHB } from "../../utils/FunctionUtils";
 import { localStorageItem } from "../../utils/LocalStorage";
 import { KEY_LOCALSTORAGE } from "../../auth/core/_consts";
-import { authRoles } from "../../auth/authRoles";
 import { handleChangePagination } from "../../utils/PageUtils";
 
 const DanhSachTruongHopBenh = () => {
@@ -124,6 +123,7 @@ const DanhSachTruongHopBenh = () => {
             id && await deleteTruongHopBenh(id);
             getTruongHopBenhList(true);
             setOpenDeleteTruongHopBenh(false);
+            toast.success("Xóa thành công")
         } catch (error) {
             console.error(error);
             toast.error(error as string);
@@ -148,6 +148,11 @@ const DanhSachTruongHopBenh = () => {
 
     const handleSelectTHB = (row: any[]) => {
         getThongTinChiTietTHB(row[0]?.truongHopBenhId);
+    }
+
+    const handleEditTHB = () => {
+        setDataForm(dataRow)
+        setOpenTruongHopBenhForm(true)
     }
 
     useEffect(() => {
@@ -278,16 +283,16 @@ const DanhSachTruongHopBenh = () => {
                         {
                             dataRow?.truongHopBenh?.trangThaiPhanHoi !== TRANG_THAI_PHAN_HOI.DA_XN_DUNG && (
                                 <>
-                                    <Button
-                                        className="button-primary"
-                                        onClick={() => {
-                                            setDataForm(dataRow)
-                                            setOpenTruongHopBenhForm(true)
-                                        }}
-                                    >
-                                        <OCTKTSVG path='/media/svg/icons/pencil-square.svg' svgClassName='spaces h-14 w-14 color-white' />
-                                        Sửa
-                                    </Button>
+                                    {
+                                        dataRow?.doiTuongMacBenh?.daTuVong === TU_VONG_STATUS.CHUA_TV && (
+                                            <Button
+                                                className="button-primary"
+                                                onClick={handleEditTHB}
+                                            >
+                                                <OCTKTSVG path='/media/svg/icons/pencil-square.svg' svgClassName='spaces h-14 w-14 color-white' />
+                                                Sửa
+                                            </Button>)
+                                    }
                                     <Button
                                         className="button-delete"
                                         onClick={() => setOpenDeleteTruongHopBenh(true)}

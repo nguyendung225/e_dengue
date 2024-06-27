@@ -140,8 +140,9 @@ const handleError = (error: AxiosError<ResponseModel>): Promise<AxiosError<Respo
 export function setupAxios(axios: any) {
   axios.defaults.timeout = 15000
   axios.defaults.headers.common = {
-    Accept: 'application/json',
+    Accept: 'application/json charset=UTF-8',
       'Content-Type': 'application/json charset=UTF-8',
+      "Accept-Language":'vi'
   }
   axios.interceptors.request.use(handleRequest, handleError)
   axios.interceptors.response.use(handleResponse, handleError)

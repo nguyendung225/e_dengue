@@ -7,7 +7,7 @@ import { Col, Row } from '../../../component/Grid';
 import RadioGroup from '../../../component/input-field/RadioGroup';
 import { getListDanToc, getListHuyenByTinhId, getListNgheNghiep, getListTinh, getListXaByHuyenId } from '../../../services';
 import { calculateAge } from '../../../utils/AppFunction';
-import { handleChangeHuyen, handleChangeTinh, handleChangeXa, handleSetConfigTable, haveInfomation } from '../../../utils/FunctionUtils';
+import { handleChangeHuyen, handleChangeTinh, handleChangeXa, handleSetConfigTable, haveInfomation, heightMenuAutocomplete } from '../../../utils/FunctionUtils';
 import { CheckTrungParams, INIT_VALUE_CHECK_TRUNG } from '../../models/TimKiemTruongHopBenhModels';
 import { checkTrungTruongHopBenh } from '../../tim-kiem-truong-hop-benh/services/TimKiemThbServices';
 import { CMND_CHECK_TRUNG, GENDER_OPT, renderTrangThaiPhanHoi } from '../constants/constant';
@@ -17,7 +17,6 @@ import DanhSachTHBModal from './DanhSachTHB';
 import { formatDataViewTHB } from './../../../utils/FunctionUtils';
 import { localStorageItem } from '../../../utils/LocalStorage';
 import { KEY_LOCALSTORAGE } from '../../../auth/core/_consts';
-import { authRoles } from '../../../auth/authRoles';
 import { regex } from '../../../constant';
 import TextValidator from '../../../component/input-field/TextValidator';
 
@@ -40,37 +39,6 @@ const ThongTinHanhChinhTab = ({ onlyView }: Props) => {
     const [openModalDS, setOpenModalDS] = useState(false)
     const [configTable, setConfigTable] = useState<any>({});
     const userData = localStorageItem.get(KEY_LOCALSTORAGE.USER_INFOMATION)
-    
-    useEffect(() => {
-      setDataCheckTrung({
-        ...dataCheckTrung,
-        TinhId: dataCheckTrung?.TinhId
-          ? dataCheckTrung?.TinhId
-          : userData?.tinhInfo?.id,
-        HuyenId: dataCheckTrung?.HuyenId
-          ? dataCheckTrung?.HuyenId
-          : userData?.huyenInfo?.id,
-        XaId: dataCheckTrung?.XaId
-          ? dataCheckTrung?.XaId
-          : userData?.xaInfo?.xaId,
-      });
-
-      setValues({
-        ...values,
-        doiTuongMacBenh: {
-          ...values?.doiTuongMacBenh,
-          tinhHienNay: values?.doiTuongMacBenh?.tinhHienNay
-            ? values?.doiTuongMacBenh?.tinhHienNay
-            : userData?.tinhInfo,
-          huyenHienNay: values?.doiTuongMacBenh?.huyenHienNay
-            ? values?.doiTuongMacBenh?.huyenHienNay
-            : userData?.huyenInfo,
-          xaHienNay: values?.doiTuongMacBenh?.xaHienNay
-            ? values?.doiTuongMacBenh?.xaHienNay
-            : userData?.xaInfo,
-        },
-      });
-    }, []);
 
     const handleCheckTrung = async (params: CheckTrungParams) => {
         try {
@@ -148,6 +116,9 @@ const ThongTinHanhChinhTab = ({ onlyView }: Props) => {
     }
 
     const handleSelectTHBTrung = (data: TruongHopBenh) => {
+        data.doiTuongMacBenh.doiTuongMacBenhId = null
+        data.truongHopBenh.doiTuongMacBenhId = null
+        data.truongHopBenh.truongHopBenhId = null
         setValues(formatDataViewTHB(data))
     }
 
@@ -162,7 +133,7 @@ const ThongTinHanhChinhTab = ({ onlyView }: Props) => {
 
         }
 
-        if (dataCheckTrung.HoTen && dataCheckTrung.NgaySinh && dataCheckTrung.XaId) {
+        if (dataCheckTrung.HoTen && dataCheckTrung.NgaySinh && dataCheckTrung.XaId && !dataCheckTrung.HaveCmnd) {
             handleCheckTrung(dataCheckTrung);
             return;
         }
@@ -171,6 +142,28 @@ const ThongTinHanhChinhTab = ({ onlyView }: Props) => {
     useEffect(() => {
         checkTrungCondition(values, dataCheckTrung);
     }, [dataCheckTrung]);
+ 
+    useEffect(() => {
+        if (!values?.doiTuongMacBenh?.doiTuongMacBenhId) {
+            setValues({
+                ...values,
+                doiTuongMacBenh: {
+                    ...values?.doiTuongMacBenh,
+                    tinhHienNay: userData?.tinhInfo,
+                    huyenHienNay: userData?.huyenInfo,
+                    xaHienNay: userData?.xaInfo
+                }
+            })
+        }
+
+        setDataCheckTrung({
+            ...dataCheckTrung,
+            TinhId: userData?.tinhInfo?.id,
+            HuyenId: userData?.huyenInfo?.id,
+            XaId: userData?.xaInfo?.xaId
+        })
+
+    }, [])
 
     return (
         <Row>
@@ -348,7 +341,8 @@ const ThongTinHanhChinhTab = ({ onlyView }: Props) => {
             <Col xl={3}>
                 <OCTAutocomplete
                     lable="Tỉnh/TP hiện nay"
-                    menuPlacement="top"
+                    menuPlacement="bottom"
+                    styles={{ ...heightMenuAutocomplete("200px") }}
                     searchFunction={getListTinh}
                     urlData='data.data'
                     getOptionLabel={(option) => option?.tenTinh}
@@ -360,21 +354,22 @@ const ThongTinHanhChinhTab = ({ onlyView }: Props) => {
                     value={values.doiTuongMacBenh?.tinhHienNay}
                     errors={errors.doiTuongMacBenh?.tinhHienNay || ""}
                     touched={touched.doiTuongMacBenh?.tinhHienNay}
-                    isDisabled={userData?.username === authRoles.TINH || userData?.username === authRoles.HUYEN || userData?.username === authRoles.XA || onlyView}
+                    isDisabled={onlyView || !!userData?.tinhId}
 
                 />
             </Col>
             <Col xl={3}>
                 <OCTAutocomplete
-                    menuPlacement="top"
+                    menuPlacement="bottom"
                     lable="Quận/Huyện hiện nay"
+                    styles={{ ...heightMenuAutocomplete("200px") }}
                     searchFunction={() => getListHuyenByTinhId(values.doiTuongMacBenh?.tinhHienNay?.id)}
                     urlData='data.data'
                     getOptionLabel={(option) => option?.tenHuyen}
                     options={[]}
                     searchObject={{}}
                     value={values.doiTuongMacBenh?.huyenHienNay}
-                    isDisabled={userData?.username === authRoles.HUYEN || userData?.username === authRoles.XA || !values.doiTuongMacBenh?.tinhHienNay?.id || onlyView}
+                    isDisabled={onlyView || !values?.doiTuongMacBenh?.tinhHienNay}
                     onChange={(option) => handleChangeHuyenHienNay(option)}
                     dependencies={[values.doiTuongMacBenh?.tinhHienNay]}
                     isRequired
@@ -384,7 +379,8 @@ const ThongTinHanhChinhTab = ({ onlyView }: Props) => {
             </Col>
             <Col xl={3}>
                 <OCTAutocomplete
-                    menuPlacement="top"
+                    menuPlacement="bottom"
+                    styles={{ ...heightMenuAutocomplete("200px") }}
                     lable="Phường/Xã hiện nay"
                     searchFunction={() => getListXaByHuyenId(values.doiTuongMacBenh?.huyenHienNay?.id)}
                     urlData='data.data'
@@ -392,7 +388,7 @@ const ThongTinHanhChinhTab = ({ onlyView }: Props) => {
                     options={[]}
                     searchObject={{}}
                     value={values.doiTuongMacBenh?.xaHienNay}
-                    isDisabled={userData?.username === authRoles.XA || !values.doiTuongMacBenh?.huyenHienNay?.id || onlyView}
+                    isDisabled={onlyView || !values?.doiTuongMacBenh?.huyenHienNay}
                     onChange={handleChangeXaHienNay}
                     dependencies={[values?.doiTuongMacBenh?.huyenHienNay]}
                     isRequired
@@ -411,7 +407,6 @@ const ThongTinHanhChinhTab = ({ onlyView }: Props) => {
                     value={values.doiTuongMacBenh?.diaChiThuongTru}
                     name="doiTuongMacBenh.diaChiThuongTru"
                     onChange={handleChange}
-                    isRequired
                     errors={errors.doiTuongMacBenh?.diaChiThuongTru}
                     touched={touched.doiTuongMacBenh?.diaChiThuongTru}
                     disabled={onlyView}
@@ -430,7 +425,7 @@ const ThongTinHanhChinhTab = ({ onlyView }: Props) => {
                     onChange={(option) => {
                         handleChangeTinh(setValues, 'doiTuongMacBenh', 'tinhThuongTru', 'huyenThuongTru', "xaThuongTru", option)
                     }}
-                    isRequired
+                    isRequired={!!values?.doiTuongMacBenh?.diaChiThuongTru}
                     isDisabled={onlyView}
                     value={values.doiTuongMacBenh?.tinhThuongTru}
                     errors={errors.doiTuongMacBenh?.tinhThuongTru}
@@ -451,7 +446,7 @@ const ThongTinHanhChinhTab = ({ onlyView }: Props) => {
                     onChange={(option) => {
                         handleChangeHuyen(setValues, 'doiTuongMacBenh', 'huyenThuongTru', 'xaThuongTru', option)
                     }}
-                    isRequired
+                    isRequired={!!values?.doiTuongMacBenh?.diaChiThuongTru}
                     errors={errors.doiTuongMacBenh?.huyenThuongTru}
                     touched={touched.doiTuongMacBenh?.huyenThuongTru}
                     dependencies={[values.doiTuongMacBenh?.tinhThuongTru]}
@@ -471,7 +466,7 @@ const ThongTinHanhChinhTab = ({ onlyView }: Props) => {
                     onChange={(option) => {
                         handleChangeXa(setValues, 'doiTuongMacBenh', 'xaThuongTru', option)
                     }}
-                    isRequired
+                    isRequired={!!values?.doiTuongMacBenh?.diaChiThuongTru}
                     errors={errors.doiTuongMacBenh?.xaThuongTru}
                     touched={touched.doiTuongMacBenh?.xaThuongTru}
                     dependencies={[values.doiTuongMacBenh?.huyenThuongTru]}

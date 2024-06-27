@@ -25,3 +25,11 @@ export const checkInvalidDate = (intl: any) => {
         return value ? newDate <= maxDate && newDate >= minDate : true;
     });
 }
+
+export const addressValidation = (fieldDependencies: string) => {
+    return Yup.object().when(fieldDependencies, {
+        is: (field: string) => Boolean(field),
+        then: Yup.object().nullable().required("Bắt buộc chọn"),
+        otherwise: Yup.object().nullable().notRequired()
+    });
+};

@@ -9,7 +9,6 @@ import { ISearchObjModel } from "../models/quanLyODichModels";
 import AsyncAutoComplete from "../../component/input-field/AsyncAutoComplete";
 import { localStorageItem } from "../../utils/LocalStorage";
 import { KEY_LOCALSTORAGE } from "../../auth/core/_consts";
-import { authRoles } from "../../auth/authRoles";
 import TextValidator from "../../component/input-field/text-validator";
 
 export const FilterSearchBox = () => {
@@ -88,11 +87,6 @@ export const FilterSearchBox = () => {
                                 searchFunction={getListTinh}
                                 getOptionLabel={(option) => option?.tenTinh}
                                 value={values.tinh}
-                                isDisabled={
-                                    userData?.username === authRoles.TINH ||
-                                    userData?.username === authRoles.HUYEN ||
-                                    userData?.username === authRoles.XA
-                                }
                                 searchObject={{}}
                                 onChange={(selectedOption) =>
                                     setValues({
@@ -117,11 +111,6 @@ export const FilterSearchBox = () => {
                                 searchFunction={() => values?.tinh?.id && getListHuyenByTinhId(values?.tinh?.id)}
                                 getOptionLabel={(option) => option?.tenHuyen}
                                 value={values.huyen}
-                                isDisabled={
-                                    userData?.username === authRoles.HUYEN ||
-                                    userData?.username === authRoles.XA ||
-                                    !values?.tinh?.id
-                                }
                                 searchObject={{}}
                                 onChange={(selectedOption) =>
                                     setValues({
@@ -145,10 +134,6 @@ export const FilterSearchBox = () => {
                                 searchFunction={() => values?.huyen?.id && getListXaByHuyenId(values?.huyen?.id)}
                                 getOptionLabel={(option) => option?.tenXa}
                                 value={values.xa}
-                                isDisabled={
-                                    userData?.username === authRoles.XA ||
-                                    !values?.huyen?.id
-                                }
                                 searchObject={{}}
                                 onChange={(value) => setFieldValue("xa", value)}
                                 dependencies={[values?.huyen]}

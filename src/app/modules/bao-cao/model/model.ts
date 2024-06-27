@@ -60,7 +60,8 @@ export interface ISearchBaoCao {
   huyenIds?: IHuyen[] | null;
   xaIds?: IXa[] | null;
   tuan?: ITuan | null;
-  nam?: number | null;
+  nam: number;
+  listTuan?: ITuan[] | null;
   tuNgay?: string | null;
   denNgay?: string | null;
   capDoRoot?: number | null;

@@ -130,7 +130,7 @@ const CustomMap = (props: Iprops) => {
 
 	const hanldeZoomend = (map: L.Map) => {
 		const tenTinh = (geoJsonRef.current?.toGeoJSON() as any)?.features?.[0].properties?.[FIELD_NAME_GS_TINH];
-		if (map.getZoom() <= CONFIG_MAP_BY_CAP.QUOC_GIA.ZOOM_DEFAULT) {
+		if (map.getZoom() <= CONFIG_MAP_BY_CAP.QUOC_GIA.ZOOM_DEFAULT && !defaultMakerPostion) {
 			handleGetData();
 			return;
 		}
@@ -138,7 +138,7 @@ const CustomMap = (props: Iprops) => {
 		if (
 			map.getZoom() > CONFIG_MAP_BY_CAP.TINH.ZOOM_DEFAULT &&
 			map.getZoom() < CONFIG_MAP_BY_CAP.HUYEN.ZOOM_DEFAULT &&
-			tenTinh
+			tenTinh && !defaultMakerPostion
 		) {
 			handleGetData(tenTinh);
 			return;
@@ -212,6 +212,20 @@ const CustomMap = (props: Iprops) => {
 		}
 	}, []);
 
+    useEffect(() => {
+        if (mapRef.current) {
+            mapRef?.current?.setView(defaultMakerPostion, ZOOM_MAKER);
+        } else {
+            const timeout = setTimeout(() => {
+                if (mapRef.current) {
+                    mapRef?.current?.setView(defaultMakerPostion, ZOOM_MAKER);
+                }
+            }, 100);
+
+            return () => clearTimeout(timeout);
+        }
+    }, [defaultMakerPostion])
+
 	return (
 		<MapContainer
 			doubleClickZoom={false}
@@ -226,7 +240,7 @@ const CustomMap = (props: Iprops) => {
 			/>
 			<HandleMapEvents />
 			<GeoJSON data={tinhGeojson as any} style={style} ref={geoJsonRef} onEachFeature={onEachFeature} />
-			<CenterControl position="topright" center={center} />
+            <CenterControl position="topright" center={defaultMakerPostion || center} />
 			{positionMaker && (
 				<Marker
 					position={positionMaker}

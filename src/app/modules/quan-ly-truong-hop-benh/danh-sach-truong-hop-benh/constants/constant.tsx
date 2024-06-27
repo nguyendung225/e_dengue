@@ -16,6 +16,7 @@ import { exportPdfFile, exportWordFile } from "../servives/Services";
 import { regex } from "../../../constant";
 import { MIN_DATE_200 } from "../../../../Constant";
 import ToaDoCaBenh from "../components/ToaDoCaBenh";
+import { addressValidation } from "../../../utils/ValidationSchema";
 
 export const TRANG_THAI_PHAN_HOI = {
     QUA_7_NGAY_CHUA_XN: -1,
@@ -61,7 +62,7 @@ export const renderTrangThaiPhanHoi = (
 	switch (trangThaiPhanHoi) {
 		case TRANG_THAI_PHAN_HOI.DA_XN_DUNG:
 			return (
-				<div className="d-flex gap-1">
+				<div className="d-flex gap-2 align-items-center">
 					<OCTKTSVG
 						path="/media/svg/icons/check-circle-fill.svg"
 						svgClassName="spaces w-16 h-16 color-bright-cyan"
@@ -73,7 +74,7 @@ export const renderTrangThaiPhanHoi = (
 			);
 		case TRANG_THAI_PHAN_HOI.CHUA_XAC_NHAN:
 			return isDifferenceGreaterThan7Days(ngayTao) ? (
-				<div className="d-flex gap-1">
+				<div className="d-flex gap-2 align-items-center">
 					<OCTKTSVG
 						path="/media/svg/icons/exclamation-circle-fill.svg"
 						svgClassName="spaces w-16 h-16 color-red"
@@ -85,17 +86,17 @@ export const renderTrangThaiPhanHoi = (
 					)}
 				</div>
 			) : (
-				<>
+				<div className="d-flex gap-2 align-items-center">
 					<OCTKTSVG
 						path="/media/svg/icons/exclamation-triangle-fill.svg"
 						svgClassName="spaces w-16 h-16 color-dark-orange"
 					/>
 					{showName && <span className="text-14 ">Chờ xác nhận</span>}
-				</>
+				</div>
 			);
 		case TRANG_THAI_PHAN_HOI.XN_SAI_THONG_TIN_HANH_CHINH:
 			return (
-				<div className="d-flex gap-1">
+				<div className="d-flex gap-2 align-items-center">
 					<OCTKTSVG
 						path="/media/svg/icons/question-circle-fill.svg"
 						svgClassName="spaces w-16 h-16 color-steel-blue"
@@ -109,7 +110,7 @@ export const renderTrangThaiPhanHoi = (
 			);
 		case TRANG_THAI_PHAN_HOI.XN_SAI_THONG_TIN_CHAN_DOAN:
 			return (
-				<div className="d-flex gap-1">
+				<div className="d-flex gap-2 align-items-center">
 					<OCTKTSVG
 						path="/media/svg/icons/question-circle-fill.svg"
 						svgClassName="spaces w-16 h-16 color-green"
@@ -265,14 +266,11 @@ export const hanhChinhSchema = Yup.object().shape({
             otherwise: Yup.string().nullable().notRequired()
         }),
         diaChiHienNay: Yup.string().nullable().required("Bắt buộc nhập")
-            .matches(regex.address,"Địa chỉ không hợp lệ")
+            .matches(regex.address, "Địa chỉ không hợp lệ")
             .max(250, "Không được quá 250 ký tự"),
-        diaChiThuongTru: Yup.string().nullable().required("Bắt buộc nhập")
-            .matches(regex.address,"Địa chỉ không hợp lệ")
-            .max(250, "Không được quá 250 ký tự"),
-        tinhThuongTru: Yup.object().nullable().required("Bắt buộc chọn"),
-        huyenThuongTru: Yup.object().nullable().required("Bắt buộc chọn"),
-        xaThuongTru: Yup.object().nullable().required("Bắt buộc chọn")
+        tinhThuongTru: addressValidation("diaChiThuongTru"),
+        huyenThuongTru: addressValidation("tinhThuongTru"),
+        xaThuongTru: addressValidation("huyenThuongTru"),
     })
 });
 
@@ -337,12 +335,6 @@ export const chanDoanSchema = hanhChinhSchema.shape({
                 .min(Yup.ref("ngayThucHienXn"), "Ngày không thể nhỏ hơn ngày lấy mẫu"),
             otherwise: Yup.date().nullable().notRequired()
         }),
-        donViXetNghiemObject: Yup.object().when("layMauXetNghiem", {
-            is: LAY_MAU_XN,
-            then: Yup.object().nullable()
-            .required("Bắt buộc nhập"),
-            otherwise: Yup.object().nullable().notRequired()
-        }),
         loaiXetNghiemKhac: Yup.string().when("loaiXetNghiem", {
             is: TYPE_TEST_CODE.LOAI_KHAC,
             then: Yup.string().nullable().required("Bắt buộc nhập"),
@@ -379,7 +371,7 @@ export const chanDoanSchema = hanhChinhSchema.shape({
 
 export const ghiNhanSchema = chanDoanSchema.shape({
     truongHopBenh: Yup.object().shape({
-        ...(hanhChinhSchema.fields.truongHopBenh as Yup.ObjectSchema<any>)?.fields,
+        ...( chanDoanSchema.fields.truongHopBenh as Yup.ObjectSchema<any>)?.fields,
         tenNguoiBaoCao: Yup.string().required("Bắt buộc nhập").nullable()
             .matches(regex.name,"Tên không được chứa ký số hoặc ký tự đặc biệt")
             .max(50, "Không được quá 50 ký tự"),
@@ -387,11 +379,8 @@ export const ghiNhanSchema = chanDoanSchema.shape({
             .required("Bắt buộc nhập")
             .nullable()
             .matches(regex.phone, "Số điện thoại không hợp lệ"),
-        emailNguoiBaoCao: Yup.string().required("Bắt buộc nhập").nullable()
-            .email("Định dạng email không hợp lệ"),
         donViCongTacNbc: Yup.object().required("Bắt buộc nhập").nullable(),
         coSoDieuTri: Yup.object().required("Bắt buộc nhập").nullable(),
-        coSoQuanLy: Yup.object().required("Bắt buộc nhập").nullable(),
         noiPhatHien: Yup.string().required("Bắt buộc nhập").nullable(),
     })
 })
@@ -722,31 +711,31 @@ export const INITIAL_TRUONG_HOP_BENH: truongHopBenh = {
     doiTuongMacBenhId: null,
     capDoBenhId: null,
     tinhTrangHienNay: null,
-    ngayKhoiPhat: "",
-    ngayNhapVien: "",
-    ngayRaVien: "",
-    chanDoanRaVien: "",
+    ngayKhoiPhat: null,
+    ngayNhapVien: null,
+    ngayRaVien: null,
+    chanDoanRaVien: null,
     benhVienChuyenToiId: null,
-    tinhTrangKhac: "",
+    tinhTrangKhac: null,
     phanLoaiChanDoan: null,
     layMauXetNghiem: 1,
     suDungVacXin: 0,
     soLanSuDung: null,
     loaiXetNghiem: null,
-    loaiXetNghiemKhac: "",
+    loaiXetNghiemKhac: null,
     dinhLoaiXetNghiemKhac: null,
-    ketQuaXetNghiem: "",
-    ngayThucHienXn: "",
-    ngayTraKetQuaXn: "",
+    ketQuaXetNghiem: null,
+    ngayThucHienXn: null,
+    ngayTraKetQuaXn: null,
     donViXetNghiem: null,
-    benhChanDoanPhu: "",
-    chanDoanBienChung: "",
-    tienSuDichTe: "",
-    ghiChu: "",
-    tenNguoiBaoCao: "",
-    emailNguoiBaoCao: "",
+    benhChanDoanPhu: null,
+    chanDoanBienChung: null,
+    tienSuDichTe: null,
+    ghiChu: null,
+    tenNguoiBaoCao: null,
+    emailNguoiBaoCao: null,
     donViCongTacNbcId: null,
-    dienThoaiNguoiBaoCao: "",
+    dienThoaiNguoiBaoCao: null,
     noiPhatHien: null,
     coSoDieuTriId: null,
     coSoQuanLyId: null,
@@ -766,24 +755,24 @@ export const INITIAL_TRUONG_HOP_BENH: truongHopBenh = {
 
 export const INITIAL_DOI_TUONG_MAC_BENH: doiTuongMacBenh = {
     doiTuongMacBenhId: null,
-    hoTen: "",
-    ngaySinh: "",
+    hoTen: null,
+    ngaySinh: null,
     ngheNghiepId: null,
     danTocId: null,
     gioiTinh: 1,
     haveCmnd: true,
-    cmnd: "",
+    cmnd: null,
     haveDienThoai: true,
-    dienThoai: "",
-    noiLamViecHocTap: "",
+    dienThoai: null,
+    noiLamViecHocTap: null,
     tinhIdHienNay: null,
     huyenIdHienNay: null,
     xaIdHienNay: null,
-    diaChiHienNay: "",
+    diaChiHienNay: null,
     tinhIdThuongTru: null,
     huyenIdThuongTru: null,
     xaIdThuongTru: null,
-    diaChiThuongTru: "",
+    diaChiThuongTru: null,
     //object
     ngheNghiep: null,
     danToc: null,
@@ -866,4 +855,14 @@ export const HINH_THUC_CO_SO = {
     TrungTamYTeHuyen: 10,
     BenhVien: 11,
     QuanYBoNganh: 12,
+}
+
+export const LOAI_DVQL = {
+    TUYEN: 0,
+    BENH_VIEN: 1
+}
+
+export const TU_VONG_STATUS = {
+    DA_TV: 1,
+    CHUA_TV: 0
 }
